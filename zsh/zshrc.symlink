@@ -1,0 +1,72 @@
+# 設定中文
+export LANG=zh_TW.UTF-8
+export LC_ALL=zh_TW.UTF-8
+
+# shortcut to this dotfiles path is $ZDOTFILES
+export ZDOTFILES=$HOME/.dotfiles
+
+# your project folder that we can `c [tab]` to
+export PROJECTS=~/Code
+
+# Stash your environment variables in ~/.localrc. This means they'll stay out
+# of your main dotfiles repository (which may be public, like this one), but
+# you'll have access to them in your scripts.
+if [[ -a ~/.localrc ]]
+then
+  source ~/.localrc
+fi
+
+# all of our zsh files
+typeset -U config_files
+config_files=($ZDOTFILES/**/*.zsh)
+
+# load the path files
+for file in ${(M)config_files:#*/path.zsh}
+do
+  source $file
+done
+
+# load everything but the path and completion files
+for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
+do
+  source $file
+done
+
+# initialize autocomplete here, otherwise functions won't be loaded
+autoload -U compinit
+compinit
+
+# load every completion after autocomplete loads
+for file in ${(M)config_files:#*/completion.zsh}
+do
+  source $file
+done
+
+unset config_files
+
+# ============================ 我的個人設定 ============================
+
+# 終端機支援 Home 鍵
+bindkey '^[[H' beginning-of-line  # 對應 Home 鍵行為
+bindkey '^[[1~' beginning-of-line # 對應另一種可能的 Home 鍵
+
+# 終端機支援 End 鍵
+bindkey '^[[F' end-of-line        # 對應 End 鍵行為
+bindkey '^[[4~' end-of-line       # 對應另一種可能的 End 鍵
+
+# 關閉 zsh 自動修正
+unsetopt correct
+
+# 加入系統路徑
+export PATH="/Users/leo/.local/bin:$PATH"
+
+# 關閉 homebrew 每次安裝套件時的自動更新
+export HOMEBREW_NO_AUTO_UPDATE=1
+
+# 自動刷新 GPG 終端檢測
+export GPG_TTY=$(tty)
+
+# 設定別名
+alias vv=nvim
+alias lg=lazygit
+alias hnc='hugo new content'

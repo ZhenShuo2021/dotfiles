@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+#
+# Run all dotfiles installers.
+
+cd "$(dirname $0)"/..
+
+# 先處理 shell 腳本，因為 brew bundle 耗時過久
+# 優先處理 defaults 資料夾
+set -e
+find ./defaults -name install.sh | while read installer_script ; do sh -c "${installer_script}" ; done
+
+find . -path ./defaults -prune -o -name install.sh -print | while read installer_script; do 
+    sh -c "${installer_script}"
+done
+
+# 安裝 Brewfile
+set +e
+echo "› brew bundle"
+brew bundle > /dev/tty

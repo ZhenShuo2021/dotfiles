@@ -1,0 +1,22 @@
+# 關於 topic 的設定
+git/gitconfig.local.symlink
+Brewfile.lock.json
+
+# 基本設定
+*.env*
+*.key*
+*.pem*
+*cookies*
+
+# 關於 .config 的設定
+config.symlink/*
+!config.symlink/update-modules.sh
+!config.symlink/alacritty/
+!config.symlink/gallery-dl/
+!config.symlink/helix/
+!config.symlink/nvim/
+!config.symlink/nvim.bak/
+config.symlink/gallery-dl/*.txt
+!config.symlink/pip/
+!config.symlink/wezterm/
+!config.symlink/yt-dlp/

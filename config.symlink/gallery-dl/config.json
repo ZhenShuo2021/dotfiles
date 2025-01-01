@@ -1,0 +1,231 @@
+{
+    "extractor": {
+        "base-directory": "~/gallery-dl/",
+        "parent-directory": false,
+        "postprocessors": null,
+        "archive": null,
+        "cookies": null,
+        "cookies-update": true,
+        "proxy": null,
+        "skip": true,
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "browser": "chrome:macos",
+        "retries": 4,
+        "timeout": 30.0,
+        "verify": true,
+        "fallback": true,
+        "sleep": 0,
+        "sleep-request": 0,
+        "sleep-extractor": 0,
+        "path-restrict": "auto",
+        "path-replace": "_",
+        "path-remove": "\\u0000-\\u001f\\u007f",
+        "path-strip": "auto",
+        "path-extended": true,
+        "extension-map": {
+            "jpeg": "jpg",
+            "JPG": "jpg",
+            "jpe": "jpg",
+            "jfif": "jpg",
+            "jif": "jpg",
+            "jfi": "jpg",
+            "PNG": "png"
+        },
+        "kemonoparty": {
+            "postprocessors": [
+                "mtime"
+            ],
+            "archive-format": "{service}_{user}_{id}_{num}_{hash}",
+            "archive": "/Users/leo/gallery-dl/archive/kemono.sqlite",
+            "directory": [
+                "kemonoparty",
+                "{service}",
+                "{user}"
+            ],
+            "filename": "id{id}_{title}_img{num:>03}.{extension}",
+            "retries": -1,
+            "retry-codes": [
+                429,
+                430
+            ]
+        },
+        "twitter": {
+            "cookies": "/Users/leo/.config/gallery-dl/cookies_twitter.txt",
+            "archive": "/Users/leo/gallery-dl/archive/twitter.sqlite",
+            "filename": "[{date:%Y%m%d}]-{tweet_id}-{num:02d}.{extension}",
+            "directory": [
+                "{author[nick]}-{author[id]}"
+            ],
+            "__base-directory": "/Volumes/photo/download/photoprism/",
+            "base-directory": "/Users/leo/gallery-dl/twitter/",
+            "__directory": [
+                "others",
+                "twitter_backup",
+                "{author['name']}"
+            ],
+            "locked": "wait",
+            "unavailable": true,
+            "size": "orig",
+            "cards": false,
+            "conversations": false,
+            "pinned": false,
+            "quoted": false,
+            "replies": true,
+            "strategy": null,
+            "text-tweets": false,
+            "twitpic": true,
+            "unique": true,
+            "users": "user",
+            "videos": true,
+            "sleep": [
+                1,
+                3.5
+            ],
+            "postprocessors": [
+                {
+                    "name": "python",
+                    "event": "after",
+                    "function": "/Users/leo/.config/gallery-dl/postprocess_twitter.py:update_user_log"
+                },
+                {
+                    "name": "exec",
+                    "event": "finalize",
+                    "command": [
+                        "python3",
+                        "/Users/leo/.config/gallery-dl/postprocess_twitter.py",
+                        "{author[id]}",
+                        "{author[nick]}",
+                        "{_directory}"
+                    ]
+                }
+            ]
+        },
+        "instagram": {
+            "api": "rest",
+            "base-directory": "/Volumes/photo/download",
+            "archive": "/Users/leo/gallery-dl/archive/instagram.sqlite",
+            "cookies": "/Users/leo/.config/gallery-dl/cookies_ig.txt",
+            "include": [
+                "posts"
+            ],
+            "filename": "[{date:%Y%m%d}]-{post_shortcode}-{num}.{extension}",
+            "order-files": "asc",
+            "order-posts": "asc",
+            "previews": false,
+            "sleep-request": [
+                6.0,
+                12.0
+            ],
+            "sleep": [
+                1,
+                3.5
+            ],
+            "videos": true
+        },
+        "danbooru": {
+            "username": null,
+            "password": null,
+            "archive": "/Users/leo/gallery-dl/archive/danbooru.sqlite",
+            "explain": "Get the first **.split()[RANGE]** tags. The other strings must with **f'FILE_NAME'** to get the variables.",
+            "_filename": "\fE f'[{tag_string_artist}](danbooru-{id}-pixiv-{pixiv_id}),' + ','.join(tag_string.split()[1:10]) + f'.{extension}'",
+            "filename": "\fE f'[{tag_string_artist}](danbooru-{id}-pixiv-{pixiv_id}),' + ','.join(tag_string.split()[1:10]) + f'.{extension}'",
+            "external": false,
+            "metadata": false,
+            "ugoira": true
+        },
+        "nhentai": {
+            "archive": "/Users/leo/gallery-dl/archive/nhentai.sqlite",
+            "base-directory": "/Volumes/photo/download/lanraragi/ehentai/",
+            "command1": "This two are equivalent, note that the gallery_id is a int.",
+            "command2": "The f-string inside means retrieve the value of the variable",
+            "command3": "You should always notice the type of each character in python",
+            "directory": [
+                "\fE title + f' {{{gallery_id}}}' if not title_ja else title_ja + f' {{{gallery_id}}}'"
+            ],
+            "__directory": [
+                "\fE f'{title}' + f'str({gallery_id})' if not f'{title_ja}' else f'{title_ja}' + f'str({gallery_id})'"
+            ],
+            "filename": "\fE f'{filename}' + f'.{extension}'",
+            "command4": "Download the metadata to dir/metadata/*, move the first *.json file to dir/, and delete the dir/metadata/",
+            "command5": "metadata_dir=\"$(dirname \"{_path}\")/metadata\": define metadata_dir",
+            "command6": "first_json=$(find \"$metadata_dir\" -maxdepth 1 -name '*.json' -print | head -n 1): find first json file",
+            "command7": "if [ -n \"$first_json\" ]; then mv \"$first_json\" \"$(dirname \"{_path}\")\"; fi: move it to same dir as _path",
+            "command8": "rm -rf \"$metadata_dir\": delete the metadata dir",
+            "postprocessors": [
+                {
+                    "name": "metadata",
+                    "directory": [
+                        "metadata"
+                    ]
+                },
+                {
+                    "name": "exec",
+                    "async": false,
+                    "command": [
+                        "bash",
+                        "-c",
+                        "metadata_dir=\"$(dirname \"{_path}\")/metadata\"; first_json=$(find \"$metadata_dir\" -maxdepth 1 -name '*.json' -print | head -n 1); if [ -n \"$first_json\" ]; then mv \"$first_json\" \"$(dirname \"{_path}\")\"; fi; rm -rf \"$metadata_dir\""
+                    ],
+                    "event": "post-after"
+                },
+                {
+                    "name": "zip",
+                    "async": true,
+                    "compression": "store",
+                    "event": "post-after"
+                }
+            ]
+        }
+    },
+    "downloader": {
+        "filesize-min": null,
+        "filesize-max": null,
+        "mtime": true,
+        "part": true,
+        "part-directory": null,
+        "progress": 3.0,
+        "rate": null,
+        "retries": 4,
+        "timeout": 30.0,
+        "verify": true,
+        "http": {
+            "adjust-extensions": true,
+            "chunk-size": 32768,
+            "headers": null,
+            "validate": true
+        },
+        "ytdl": {
+            "format": null,
+            "forward-cookies": false,
+            "logging": true,
+            "module": null,
+            "outtmpl": null,
+            "raw-options": null
+        }
+    },
+    "output": {
+        "mode": "auto",
+        "progress": true,
+        "shorten": true,
+        "logfile": {
+            "path": "/Users/leo/gallery-dl/latest_run.log",
+            "mode": "w",
+            "level": "info",
+            "format": {
+                "debug": "[{asctime}][{levelname}][{name}] {message}",
+                "info": "[{asctime}][{levelname}][{name}] {message}",
+                "warning": "[{asctime}][{levelname}][{name}] {message} [Source URL: {extractor.url}]",
+                "error": "[{asctime}][{levelname}][{name}] {message} [Source URL: {extractor.url}]"
+            },
+            "__format-date": "%Y-%m-%dT%H:%M:%S",
+            "format-date": "%H:%M:%S"
+        },
+        "__unsupportedfile": {
+            "path": "unsupported.txt",
+            "mode": "a",
+            "format": "{asctime} {message}",
+            "format-date": "%Y-%m-%d-%H-%M-%S"
+        }
+    },
+    "netrc": false
+}
