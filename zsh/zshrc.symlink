@@ -2,6 +2,28 @@
 export LANG=zh_TW.UTF-8
 export LC_ALL=zh_TW.UTF-8
 
+# 自動刷新 GPG 終端檢測
+export GPG_TTY=$(tty)
+
+# ============================ 我的個人設定 ============================
+
+# 終端機支援 Home/End 鍵
+bindkey '^[[H' beginning-of-line
+bindkey '^[[F' end-of-line
+
+# 加入系統路徑
+export PATH="/Users/leo/.local/bin:$PATH"
+
+# 關閉 homebrew 每次安裝套件時的自動更新
+export HOMEBREW_NO_AUTO_UPDATE=1
+
+# 設定別名
+alias vv=nvim
+alias lg=lazygit
+alias hnc='hugo new content'
+
+# ============================ 載入.dotfiles ============================
+
 # shortcut to this dotfiles path is $ZDOTFILES
 export ZDOTFILES=$HOME/.dotfiles
 
@@ -44,29 +66,3 @@ done
 
 unset config_files
 
-# ============================ 我的個人設定 ============================
-
-# 終端機支援 Home 鍵
-bindkey '^[[H' beginning-of-line  # 對應 Home 鍵行為
-bindkey '^[[1~' beginning-of-line # 對應另一種可能的 Home 鍵
-
-# 終端機支援 End 鍵
-bindkey '^[[F' end-of-line        # 對應 End 鍵行為
-bindkey '^[[4~' end-of-line       # 對應另一種可能的 End 鍵
-
-# 關閉 zsh 自動修正
-unsetopt correct
-
-# 加入系統路徑
-export PATH="/Users/leo/.local/bin:$PATH"
-
-# 關閉 homebrew 每次安裝套件時的自動更新
-export HOMEBREW_NO_AUTO_UPDATE=1
-
-# 自動刷新 GPG 終端檢測
-export GPG_TTY=$(tty)
-
-# 設定別名
-alias vv=nvim
-alias lg=lazygit
-alias hnc='hugo new content'

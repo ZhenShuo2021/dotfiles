@@ -28,6 +28,9 @@ setopt INC_APPEND_HISTORY SHARE_HISTORY  # adds history incrementally and share 
 setopt HIST_IGNORE_ALL_DUPS  # don't record dupes in history
 setopt HIST_REDUCE_BLANKS
 
+# 關閉 zsh 自動修正
+unsetopt correct
+
 # don't expand aliases _before_ completion has finished
 #   like: git comm-[tab]
 setopt complete_aliases
@@ -45,13 +48,14 @@ export EDITOR='code'
 
 alias reload!=". ~/.zshrc"
 
-alias cls="clear"
+alias "cls"="clear"
+alias ".."="cd .."
+alias "..."="cd ../.."
+alias "...."="cd ../../.."
+alias "cd-"="cd -"
 alias "cd.."="cd .."
-
-alias "cd..."="cd .. && cd .."
-alias "cd...."="cd .. && cd .. && cd .."
-alias "cd ..."="cd .. && cd .."
-alias "cd ...."="cd .. && cd .. && cd .."
+alias "cd..."="cd ../.."
+alias "cd...."="cd ../../.."
 
 alias ls="ls -F"
 alias l="ls -lAh"
