@@ -57,7 +57,7 @@ find . -type f -name "*.sh" -exec sudo chmod +x {} \;
 script/bootstrap
 ```
 
-你應該首先修改 `zsh/zshrc.symlink` 以調整路徑和個人偏好設定。
+你應該首先修改 `zsh/zshrc.symlink` 以調整路徑和個人偏好設定。成功安裝後系統會增加 `dot` 指令可以更新所有
 
 ## 程式說明
 
@@ -80,6 +80,65 @@ script/bootstrap
 - wezterm 主題預設的圖片沒有刪掉只是放到子資料夾，移出來就可以有隨機背景圖片。
 
 ## 縮寫列表
+
+### Neovim
+
+這其實是一個速查表，我基本上沒改什麼東西大部分都是預設
+
+<table>
+  <tr>
+    <th>按鍵</th>
+    <th>說明</th>
+  </tr>
+  <tr>
+    <td><code>a</code>/<code>s</code></td>
+    <td>在光標前/後插入</td>
+  </tr>
+  <tr>
+    <td><code>Ctrl+d</code></td>
+    <td>黑洞刪除</td>
+  </tr>
+  <tr>
+    <td><code>Ctrl+o</code></td>
+    <td>回到上一個位置 (等同 vscode Ctrl+-)</td>
+  </tr>
+  <tr>
+    <td><code>Home</code></td>
+    <td>仿照 vscode 的智慧 Home 鍵</td>
+  </tr>
+  <tr>
+    <td><code>*</code></td>
+    <td>下一個文字出現位置</td>
+  </tr>
+  <tr>
+    <td><code>g-d</code></td>
+    <td>跳到變數定義位置</td>
+  </tr>
+  <tr>
+    <td><code>Ctrl-o</code></td>
+    <td>回到前一個位置</td>
+  </tr>
+  <tr>
+    <td><code>Space-e</code></td>
+    <td>開啟檔案瀏覽器</td>
+  </tr>
+  <tr>
+    <td><code>Ctrl+H/L</code></td>
+    <td>切換檔案瀏覽器聚焦位置</td>
+  </tr>
+  <tr>
+    <td><code>Shift+H/L</code></td>
+    <td>切換檔案瀏覽器中開啟的檔案</td>
+  </tr>
+  <tr>
+    <td><code>Space-b-d</code></td>
+    <td>光標切換檔案/檔案瀏覽器</td>
+  </tr>
+  <tr>
+    <td><code>h</code></td>
+    <td>在檔案瀏覽器中回到上一層</td>
+  </tr>
+</table>
 
 ### Git
 
@@ -205,18 +264,18 @@ script/bootstrap
     <td>清理終端</td>
   </tr>
   <tr>
-    <td>cd..</td>
+    <td><code>..</code> <code>cd..</code></td>
     <td>cd ..</td>
     <td>回上一層</td>
   </tr>
   <tr>
-    <td>cd...</td>
-    <td>cd .. && cd ..</td>
+    <td><code>...</code> <code>cd...</code></td>
+    <td>cd ../..</td>
     <td>回兩層</td>
   </tr>
   <tr>
-    <td>cd....</td>
-    <td>cd .. && cd .. && cd ..</td>
+    <td><code>....</code> <code>cd....</code></td>
+    <td>cd ../../..</td>
     <td>回三層</td>
   </tr>
   <tr>
