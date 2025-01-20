@@ -9,7 +9,6 @@ fi
 
 export ZDOTFILES=$HOME/.dotfiles   # shortcut to this dotfiles
 source $ZDOTFILES/src/zsh/constant.zsh
-source $PLUGIN_DIR/zsh-defer/zsh-defer.plugin.zsh   # 提前載入 zsh-defer 讓整個腳本都能使用
 
 
 # User Preferences

@@ -1,60 +1,66 @@
 # Load plugins
 # ============================================================================
-# 載入插件的函式，預設啟用 zsh-defer，在載入後面加上 false 可以關閉該功能
-# 由於 zsh-defer 遮蔽錯誤訊息，所以新增插件請先關閉延遲載入功能測試是否報錯需要額外依賴
-# 
-# Example:
-#   load_plugin zsh-z             # load zsh-z with delay=0s
-#   load_plugin zsh-z 0.5         # load zsh-z with delay=0.5s
-#   load_plugin zsh-z 0 false     # load zsh-z without delay
-#   load_plugin zsh-z         # load zsh-z without delay
-#   load_plugin zsh-z 0 1         # load zsh-z without delay
+# Theme
+zinit ice depth=1; zinit light romkatv/powerlevel10k
 
-load_omz_lib() {
-  local lib_name=$1
-  local delay=${2:-0}
-  local use_defer=${3:-true}
 
-  if [[ $# -eq 2 && "$2" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
-    delay=$2
-  fi
+# Load plugins
+# ============================================================================
 
-  if [[ $use_defer == true ]]; then
-    zsh-defer -t $delay source "$OMZ_DIR/lib/$lib_name.zsh"
-  else
-    source "$OMZ_DIR/lib/$lib_name.zsh"
-  fi
-}
+zinit snippet OMZL::git.zsh
+zinit snippet OMZL::history.zsh
 
-load_omz_plugin() {
-  local plugin_name=$1
-  local delay=${2:-0}
-  local use_defer=${3:-true}
+zinit snippet OMZP::docker
+zinit snippet OMZP::docker-compose
+zinit snippet OMZP::extract
+zinit snippet OMZP::git
 
-  if [[ $# -eq 2 && "$2" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
-    delay=$2
-  fi
+zinit light zsh-users/zsh-autosuggestions; bindkey ',' autosuggest-accept
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-syntax-highlighting
+zinit light agkozak/zsh-z
 
-  if [[ $use_defer == true ]]; then
-    # echo $delay
-    zsh-defer -t $delay source "$OMZ_DIR/plugins/$plugin_name/$plugin_name.plugin.zsh"
-  else
-    source "$OMZ_DIR/plugins/$plugin_name/$plugin_name.plugin.zsh"
-  fi
-}
+# Furthermore, instant prompt is indeed faster than zsh-defer
+# https://github.com/zimfw/zimfw/issues/372
+# zinit wait lucid for \
+#   OMZL::git.zsh \
+#   OMZL::history.zsh
 
-load_plugin() {
-  local plugin_name=$1
-  local delay=${2:-0}
-  local use_defer=${3:-true}
+# zinit wait lucid for \
+#   OMZP::docker \
+#   OMZP::docker-compose \
+#   OMZP::extract \
+#   OMZP::git
 
-  if [[ $# -eq 2 && "$2" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
-    delay=$2
-  fi
+# zinit wait lucid for \
+#   zsh-users/zsh-autosuggestions \
+#   zsh-users/zsh-completions \
+#   zsh-users/zsh-syntax-highlighting \
+#   agkozak/zsh-z
 
-  if [[ "$use_defer" == true ]]; then
-    zsh-defer -t $delay source "$PLUGIN_DIR/$plugin_name/$plugin_name.plugin.zsh"
-  else
-    source "$PLUGIN_DIR/$plugin_name/$plugin_name.plugin.zsh"
-  fi
-}
+# colored manpage
+export LESS_TERMCAP_mb=$'\e[1;32m'
+export LESS_TERMCAP_md=$'\e[1;32m'
+export LESS_TERMCAP_me=$'\e[0m'
+export LESS_TERMCAP_se=$'\e[0m'
+export LESS_TERMCAP_so=$'\e[01;33m'
+export LESS_TERMCAP_ue=$'\e[0m'
+export LESS_TERMCAP_us=$'\e[1;4;31m'
+
+
+# Conflict: use either `zsh-history-substring-search` or `key-bindings`. Also, I don't like substring search
+
+zinit snippet OMZL::key-bindings.zsh
+# zinit snippet OMZL::key-bindings.zsh
+# zinit light zsh-users/zsh-history-substring-search
+# bindkey '^[[A' history-substring-search-up
+# bindkey '^[[B' history-substring-search-down
+
+
+# optional plugins
+# zinit light lukechilds/zsh-better-npm-completion
+
+
+# deprecated plugins
+# zinit snippet OMZL::completion   # brew fpath and zsh-completions are better
+

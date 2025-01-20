@@ -1,46 +1,18 @@
 #!/bin/bash
 set -e
 
-# 預設安裝到 $HOME/.local/share/zsh/plugins
-# 直接執行可以在指令前設定路徑，例如 PLUGIN_DIR="/path/to/dir"
-PLUGIN_DIR="${PLUGIN_DIR:-$HOME/.local/share/zsh/plugins}"
+PLUGIN_DIR="${PLUGIN_DIR:-$HOME/.local/share/zinit/plugins}"
 
-install_plugins() {
-    mkdir -p "$PLUGIN_DIR"
-    echo "Start installing plugins"
-    echo "Plugin directory: $PLUGIN_DIR"
+### Added by Zinit's installer
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone --depth=1 -q https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        echo -e "\033[33m \033[34mzinit installation successful.\033[0m" || \
+        echo -e "\033[160m zinit clone has failed.\033[0m"
+fi
 
-    # Themes
-    install_plugin "https://github.com/romkatv/powerlevel10k"
-    install_plugin "https://github.com/sindresorhus/pure"
-
-    # Plugins
-    install_plugin "https://github.com/zsh-users/zsh-autosuggestions"
-    install_plugin "https://github.com/zsh-users/zsh-completions"
-    install_plugin "https://github.com/zsh-users/zsh-syntax-highlighting"
-    install_plugin "https://github.com/zsh-users/zsh-history-substring-search"
-    install_plugin "https://github.com/agkozak/zsh-z.git"
-    install_plugin "https://github.com/ohmyzsh/ohmyzsh.git"
-    install_plugin "https://github.com/romkatv/zsh-defer.git"
-    install_plugin "https://github.com/lukechilds/zsh-better-npm-completion"
-}
-
-install_plugin() {
-    # clone插件，如果已經安裝則會顯示插件安裝位置
-    # Example：
-    #   install_plugin "https://github.com/zsh-users/zsh-autosuggestions"
-    #   install_plugin "https://github.com/zsh-users/zsh-syntax-highlighting.git"
-
-    local plugin_url="$1"
-    local plugin_name=$(basename -s .git "$plugin_url")
-    local plugin_path="$PLUGIN_DIR/$plugin_name"
-
-    if [ ! -d "$plugin_path" ]; then
-        git clone --depth=1 -q "$plugin_url" "$plugin_path"
-        echo "$plugin_name successfully installed"
-    else
-        echo "$plugin_name is already installed"
-    fi
-}
-
-install_plugins
+# Manual install example for zinit.
+# Respect zinit convention, source it in zshrc with "$HOME/.local/share/zinit/plugins/romkatv---zsh-defer"
+# command git clone --depth=1 -q https://github.com/romkatv/zsh-defer $HOME/.local/share/zinit/plugins/romkatv---zsh-defer && \
+#         echo -e "\033[33m \033[34mzsh-defer installation successful.\033[0m" || \
+#         echo -e "\033[160m zsh-defer clone has failed.\033[0m"
