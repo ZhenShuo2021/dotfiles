@@ -1,46 +1,66 @@
 #!/bin/bash
 set -e
 
-# 預設安裝到 $HOME/.local/share/zsh/plugins
-# 直接執行可以在指令前設定路徑，例如 PLUGIN_DIR="/path/to/dir"
-PLUGIN_DIR="${PLUGIN_DIR:-$HOME/.local/share/zsh/plugins}"
+# 預設安裝到 $HOME/.oh-my-zsh
+OHMYZSH_DIR="${OHMYZSH_DIR:-$HOME/.oh-my-zsh}"
+THEME_DIR="${THEME_DIR:-${OHMYZSH_DIR}/custom/themes}"
+PLUGINS_DIR="${PLUGINS_DIR:-${OHMYZSH_DIR}/custom/plugins}"
+
+install_ohmyzsh() {
+    echo "Installing Oh-My-Zsh..."
+    RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" --unattended
+
+    echo "Oh-My-Zsh installed successfully!"
+    backup_zshrc
+}
 
 install_plugins() {
-    mkdir -p "$PLUGIN_DIR"
-    echo "Start installing plugins"
-    echo "Plugin directory: $PLUGIN_DIR"
+    mkdir -p "$PLUGINS_DIR" "$THEME_DIR"
+    echo "Installing plugins and themes..."
+    echo "Plugins directory: $PLUGINS_DIR"
 
-    # Themes
-    install_plugin "https://github.com/romkatv/powerlevel10k"
-    install_plugin "https://github.com/sindresorhus/pure"
+    install_plugin "https://github.com/romkatv/powerlevel10k.git" "$THEME_DIR"/powerlevel10k
+    install_plugin "https://github.com/zsh-users/zsh-autosuggestions" "${PLUGINS_DIR}/zsh-autosuggestions"
+    install_plugin "https://github.com/zsh-users/zsh-completions" "${PLUGINS_DIR}/zsh-completions"
+    install_plugin "https://github.com/zsh-users/zsh-history-substring-search" "${PLUGINS_DIR}/zsh-history-substring-search"
+    install_plugin "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${PLUGINS_DIR}/zsh-syntax-highlighting"
+    install_plugin "https://github.com/romkatv/zsh-defer" "${PLUGINS_DIR}/zsh-defer"
+    install_plugin "https://github.com/agkozak/zsh-z" "${PLUGINS_DIR}/zsh-z"
 
-    # Plugins
-    install_plugin "https://github.com/zsh-users/zsh-autosuggestions"
-    install_plugin "https://github.com/zsh-users/zsh-completions"
-    install_plugin "https://github.com/zsh-users/zsh-syntax-highlighting"
-    install_plugin "https://github.com/zsh-users/zsh-history-substring-search"
-    install_plugin "https://github.com/agkozak/zsh-z.git"
-    install_plugin "https://github.com/ohmyzsh/ohmyzsh.git"
-    install_plugin "https://github.com/romkatv/zsh-defer.git"
-    install_plugin "https://github.com/lukechilds/zsh-better-npm-completion"
+    echo "Plugins and themes installed successfully!"
 }
 
 install_plugin() {
-    # clone插件，如果已經安裝則會顯示插件安裝位置
-    # Example：
-    #   install_plugin "https://github.com/zsh-users/zsh-autosuggestions"
-    #   install_plugin "https://github.com/zsh-users/zsh-syntax-highlighting.git"
-
     local plugin_url="$1"
+    local plugin_path="$2"
     local plugin_name=$(basename -s .git "$plugin_url")
-    local plugin_path="$PLUGIN_DIR/$plugin_name"
 
     if [ ! -d "$plugin_path" ]; then
         git clone --depth=1 -q "$plugin_url" "$plugin_path"
         echo "$plugin_name successfully installed"
     else
-        echo "$plugin_name is already installed"
+        echo "$(basename "$plugin_path") is already installed."
     fi
 }
 
-install_plugins
+backup_zshrc() {
+    if [ -f "$HOME/.zshrc" ]; then
+        sed '1i\
+# Backup .zshrc as oh-my-zsh overwrites it' "$HOME/.zshrc" > "$HOME/.zshrc.new" && mv "$HOME/.zshrc.new" "$HOME/.zshrc"
+        mv "$HOME/.zshrc" "$HOME/.zshrc.backup-omz"
+        echo "Backup .zshrc to as oh-my-zsh overwrites it"
+        echo "Note: the backed-up file should be the .zshrc of oh-my-zsh"
+        echo "Note: oh-my-zsh back your file to .zshrc.pre-oh-my-zsh"
+    fi
+}
+
+main() {
+    if [ ! -d "$OHMYZSH_DIR" ]; then
+        install_ohmyzsh
+        install_plugins
+    else
+        echo "Oh-My-Zsh is already installed at $OHMYZSH_DIR. Skipping installation."
+    fi
+}
+
+main
