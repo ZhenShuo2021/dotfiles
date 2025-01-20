@@ -165,11 +165,6 @@ ask_for_sudo() {
 
 ask_for_sudo
 setup_gitconfig
-link_files
-
-printf "\n  All linked! Don't forget to restart your terminal.\n\n"
-
-sleep 1
 
 info "installing dependencies"
 if source installer/main | while read -r data; do info "$data"; done
@@ -180,3 +175,7 @@ else
 fi
 
 printf '\n  All installed!\n'
+
+# omz overwrites zshrc, so overwrite it again
+link_files
+printf "\n  All linked! Don't forget to restart your terminal.\n\n"
