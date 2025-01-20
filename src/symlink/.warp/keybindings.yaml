@@ -1,0 +1,12 @@
+---
+"pane_group:resize_up": cmd-meta-up
+"pane_group:resize_right": cmd-meta-right
+"pane_group:resize_down": cmd-meta-down
+"terminal:scroll_down_one_line": ctrl-d
+"editor:previous_find_match": none
+"pane_group:resize_left": cmd-meta-left
+"pane_group:navigate_right": ctrl-cmd-right
+"pane_group:navigate_up": ctrl-cmd-up
+"pane_group:navigate_down": ctrl-cmd-down
+"pane_group:navigate_left": ctrl-cmd-left
+"terminal:scroll_up_one_line": ctrl-f

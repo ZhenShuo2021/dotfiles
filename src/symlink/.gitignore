@@ -1,0 +1,16 @@
+.vscode
+*~
+*.swp
+
+# Python
+*.pyc
+
+# System generete
+.DS_Store
+.Spotlight-V100
+.Trashes
+Thumbs.db
+Desktop.ini
+
+# Thumbnail cache files
+._*

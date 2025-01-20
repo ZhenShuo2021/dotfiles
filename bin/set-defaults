@@ -1,5 +1,0 @@
-#!/bin/sh
-#
-# Sets macOS defaults by running $ZDOTFILES/macos/set-defaults.sh.
-
-exec $ZDOTFILES/macos/set-defaults.sh

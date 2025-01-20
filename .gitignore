@@ -1,5 +1,4 @@
-# 關於 topic 的設定
-git/gitconfig.local.symlink
+.gitconfig.local
 Brewfile.lock.json
 
 # 基本設定
@@ -8,15 +7,27 @@ Brewfile.lock.json
 *.pem*
 *cookies*
 
-# 關於 .config 的設定
-config.symlink/*
-!config.symlink/update-modules.sh
-!config.symlink/alacritty/
-!config.symlink/gallery-dl/
-!config.symlink/helix/
-!config.symlink/nvim/
-!config.symlink/nvim.bak/
-config.symlink/gallery-dl/*.txt
-!config.symlink/pip/
-!config.symlink/wezterm/
-!config.symlink/yt-dlp/
+# symlink
+symlink/.config/*
+!symlink/.config/update-modules.sh
+!symlink/.config/alacritty
+!symlink/.config/gallery-dl
+!symlink/.config/helix
+!symlink/.config/nvim
+symlink/.config/gallery-dl/*.txt
+!symlink/.config/pip
+!symlink/.config/wezterm
+!symlink/symlink/.config/yazi
+!symlink/.config/yt-dlp
+
+src/symlink/.config/*
+!src/symlink/.config/update-modules.sh
+!src/symlink/.config/alacritty
+!src/symlink/.config/gallery-dl
+!src/symlink/.config/helix
+!src/symlink/.config/nvim
+src/symlink/.config/gallery-dl/*.txt
+!src/symlink/.config/pip
+!src/symlink/.config/wezterm
+!src/symlink/.config/yazi
+!src/symlink/.config/yt-dlp

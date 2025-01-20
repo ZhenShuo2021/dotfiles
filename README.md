@@ -1,87 +1,98 @@
 # Dotfiles
 
-MacOS dotfiles inspired by [holman/dotfiles](https://github.com/holman/dotfiles) and [DanielThomas/oh-your-dotfiles](https://github.com/DanielThomas/oh-your-dotfiles).
+不用手動安裝程式的 dotfile 才是好 dotfile。
 
-這份 dotfiles 包含自動安裝和 symlink 檔案，從 gitconfig、oh-my-zsh、macos 以及 .config 資料夾全部都設定好了，基本上是一個開箱及用的狀態。所有設定都基於 keep it simple 觀念，外觀盡量遵照 vscode 預設主題，一律使用 MesloLGS NF 字體：
+修改自 [holman/dotfiles](https://github.com/holman/dotfiles) 並且參考熱門的 dotfiles 設定，可自動化安裝套件和 symlink 檔案，你只需要在安裝過程中輸入密碼，不需要一一手動安裝每個套件，是開箱即用的狀態。設定基於簡單原則完成，外觀設定模仿 vscode 預設主題，一律使用 nerd font (MesloLGS NF) 字體。
 
-- 終端機
-  1. 全部使用 oh-my-zsh + powerlevel10k，使用最少樣式，使用官方推薦的 MesloLGS NF 字體
-  2. wezterm: [binwenwu/wezterm-config](https://github.com/binwenwu/wezterm-config/)
-  3. warp: [warpdotdev/themes](https://github.com/warpdotdev/themes)
-  4. alacritty: 只有基礎設定
+> 主分支使用 zinit，omz 分支使用 oh-my-zsh 管理套件
 
-- 文字編輯 - 外觀遵循 vscode 預設風格
-  1. helix: onedarker theme + ruff lsp
-  2. neovim: 使用 Lazyvim 設定檔，關閉所有 lsp，鍵盤映射 ctrl+d 成黑洞刪除
+## Feature
 
-- 工具
-  1. gallery-dl: 精心設計的 config.json，只需修改路徑即可使用
-  2. yt-dlp: 最高畫質和音質的設定
+- 📂 集中管理：不再需要將安裝腳本和 dotfiles 分開管理，一次完成安裝和設定
+- ⚡ 快速啟動：使用 zinit 和 zsh-defer 實現懶加載
+- 🎨 已配置完成的 Powerlevel10k 主題
+- 🔍 多個預先配置的插件
+  - fast-syntax-highlighting 語法上色
+  - zsh-autosuggestions 指令歷史建議
+  - zsh-completions 指令補全
+  - colored-man-pages 上色的 man pages
+  - extract 自動解壓縮
+  - z 快速導航
+- 🌏 LANG、LC_ALL 和 Git 都已經設定好繁體中文
+- 🍺 GPG、homebrew 和 Git 等套件的常見問題都已經解決
+- ⚙️ 完善設定的 gitconfig，大量借鑒 [mathiasbynens](https://github.com/mathiasbynens/dotfiles)
+- 🖥️ 終端機
+  - 使用現代終端機，分割視窗不再需要 tmux 並且設定好外觀主題和鍵盤映射
+  - wezterm: [binwenwu/wezterm-config](https://github.com/binwenwu/wezterm-config/)
+  - warp: [warpdotdev/themes](https://github.com/warpdotdev/themes)
+- ✏️ 文字編輯
+  - neovim: 使用 Lazyvim 設定檔，關閉所有 lsp，鍵盤映射 Ctrl+d 為黑洞刪除
+  - helix: onedarker 主題，並且整合 ruff lsp
+- 🔧 工具
+  - gallery-dl: 精心設計的 config.json，只需修改路徑即可使用
+  - yt-dlp: 設定檔為最高畫質和音質，開箱即用
 
 ## 哪裡不一樣？
 
 和 holman 的相比：
 
-1. 我使用 oh-my-zsh，所有能用 oh-my-zsh 取代的功能都用他取代，$ZSH 關鍵字被改為 $ZDOTFILES 避免衝突
-2. 改成先安裝才 symlink，因為安裝 oh-my-zsh 時會覆蓋 `.zshrc`
+1. 使用套件管理系統，不再需要自己維護功能
+2. 清理老舊腳本並且新增現代腳本
+3. 集中管理 symlink 和 installer 更直觀易於維護
+4. $ZSH 關鍵字被改為 $ZDOTFILES 避免衝突
 
-和 DanielThomas 的相比：
-
-1. 沒有任何作業系統區分，簡化設定
-2. 執行檔和設定檔不區分為兩個 repo（但是要用 git submodule）
-3. 一樣有 defaults，安裝時 defaults 資料夾的內容會優先執行，用於解決有些程式會覆蓋設定檔的問題
-
-> [!WARNING]  
-> gitconfig 設定編碼為 utf-8，如果有衝突記得修改。
-
-## 資料夾架構
-
-holman 把每個類別都設計成一個 topic，例如我想新增 java 設定只需要增加 java 資料夾，內容符合下面的規範，這邊我把 topic 和整個架構一起說明：
-
-- **bin/**: 所有在 bin 資料夾的指令都會被載入並隨處可用
-- **bin/dot**: 會安裝 Homebrew (如果還沒安裝)、更新 brew 和 brew 套件、根據 macos 資料夾的設定刷新系統
-- **topic/\*.zsh**: 所有 `.zsh` 都會被 `zsh/zshrc.symlink` 載入到環境，`path.zsh` 則是保留字會提前載入
-- **topic/completion.zsh**: `completion.zsh` 最後載入，用來設定自動補全
-- **topic/install.sh**: 所有 `install.sh` 都會在 `script/install` 被執行
-- **topic/\*.symlink**: 所有 `*.symlink` 結尾的檔案都會被 symlinked 到 `$HOME` 完成設定檔的集中管理，注意開頭不用加上點，並且結尾 `.symlink` 會自動移除
-- **defaults/**: 也是一個 topic，但是在所有 topic 前優先執行
-
-repo 的必要資料夾是 bin/git/functions/script/zsh，其餘都是個人偏好，需要提醒的是因為 .config 裡面可能會有隱私設定，所以 .gitignore 設定 `config.symlink` 一律略過除非手動新增。
+曾經為了效能嘗試不使用管理器手動安裝插件，發現手動沒優化的情況下反而更慢，所以現在應該是最好的選擇了。
 
 ## 安裝
 
 ```sh
 git clone --depth=1 --recursive --shallow-submodules https://github.com/ZhenShuo2021/dotfiles-macos.git ~/.dotfiles
 cd ~/.dotfiles
-find . -type f -name "*.sh" -exec sudo chmod +x {} \; 
-script/bootstrap
+find . -type f -name "*.sh" -exec chmod +x {} \; 
+./bootstrap
 ```
 
-你應該首先修改 `zsh/zshrc.symlink` 以調整路徑和個人偏好設定。成功安裝後系統會增加 `dot` 指令可以更新所有
+## 快捷鍵列表
 
-## 程式說明
+優化直覺性，盡量同步成系統內建用法。
 
-第一次看 shell 發現他的上下文比一般語言難追多了，所以在這裡額外解釋方便像我這樣的小白理解。
+<details>
 
-1. 入口 scripts/bootstrap
-2. 如果是 MacOS 會執行 bin/dot 進行安裝
-   1. bin/dot 會進行各項安裝和更新，使用 bootstrap 安裝完成後也可以直接使用 `dot` 執行
-   2. bin/dot 會回頭呼叫 script/install
-   3. script/install 會進行 brew bundle 安裝所有套件，並且找到所有 install.sh 執行
-3. 接著回到 bootstrap 繼續執行 setup_gitconfig/link_files
+<summary>終端機</summary>
 
-到此為止完成整個 shell 腳本。每次開啟終端機時所有的 `.zsh` 檔案都會在 `.zshrc` 中被載入，`system.zsh` 又會載入 `functions` `bin`。
+- **WezTerm**:
 
-所有 submodule 都在 custom 分支進行修改。
+- `⌘`: SUPER
+- `⌘`+`^`: SUPER_REV
+- `⌥`: ALT
 
-## 奈米提醒
+```lua
+if platform.is_mac then
+   mod.SUPER = 'SUPER'
+   mod.SUPER_REV = 'SUPER|CTRL'
+elseif platform.is_win or platform.is_linux then
+   mod.SUPER = 'ALT' -- to not conflict with Windows key shortcuts
+   mod.SUPER_REV = 'ALT|CTRL'
+end
+```
 
-- 此腳本在設定 `p10k configure` 時最後一個問題會問要不要加入 `.zshrc`，選擇否也可以成功載入，因為已經在 `defaults/oh-my-zsh.zsh` 載入。
-- wezterm 主題預設的圖片沒有刪掉只是放到子資料夾，移出來就可以有隨機背景圖片。
+- 視窗
+  - 垂直分割: `SUPER`+`d`
+  - 水平分割: `SUPER`+`D`
+  - 切換: `SUPER_REV` + `方向鍵`
+- 向上捲動: `CTRL`+`f`
+- 向下捲動: `CTRL`+`d`
+- 原作者的圖片沒有刪除只是放到子資料夾，移出來就可以有隨機背景圖片。
 
-## 縮寫列表
+---
 
-### Neovim
+- **Warp**: 同 WezTerm
+
+</details>
+
+<details>
+
+<summary>Neovim</summary>
 
 這其實是一個速查表，我基本上沒改什麼東西大部分都是預設
 
@@ -140,7 +151,13 @@ script/bootstrap
   </tr>
 </table>
 
-### Git
+</details>
+
+<details>
+
+<summary>Git</summary>
+
+大量參考 [mathiasbynens](https://github.com/mathiasbynens/dotfiles)，可使用 `git aliases` 查看 git 系統內的 alias，除了 git 自身的別名系統在全域系統也有設定別名。
 
 <table>
   <tr>
@@ -174,6 +191,41 @@ script/bootstrap
     <td>複製分支名稱</td>
   </tr>
   <tr>
+    <td>gcp</td>
+    <td>git cherry-pick</td>
+    <td>複製提交</td>
+  </tr>
+  <tr>
+    <td>grb</td>
+    <td>git rebase</td>
+    <td>變基</td>
+  </tr>
+  <tr>
+    <td>grba</td>
+    <td>git rebase --abort</td>
+    <td>中止變基</td>
+  </tr>
+  <tr>
+    <td>grbc</td>
+    <td>git rebase --continue</td>
+    <td>繼續變基</td>
+  </tr>
+  <tr>
+    <td>grbi</td>
+    <td>git rebase --interactive</td>
+    <td>互動式變基</td>
+  </tr>
+  <tr>
+    <td>grbo</td>
+    <td>git rebase --onto</td>
+    <td>指定基底變基</td>
+  </tr>
+  <tr>
+    <td>grbs</td>
+    <td>git rebase --skip</td>
+    <td>跳過當前提交</td>
+  </tr>
+  <tr>
     <td>gb</td>
     <td>git branch</td>
     <td>顯示分支</td>
@@ -199,13 +251,18 @@ script/bootstrap
     <td>顯示提交圖</td>
   </tr>
   <tr>
+    <td>gloga</td>
+    <td>git log --graph ...</td>
+    <td>顯示提交樹</td>
+  </tr>
+  <tr>
     <td>gp</td>
-    <td>git push origin HEAD</td>
+    <td>git push</td>
     <td>推送分支</td>
   </tr>
   <tr>
     <td>gp!</td>
-    <td>git push origin HEAD --force-with-lease</td>
+    <td>git push --force-with-lease --force-if-includes</td>
     <td>強制推送</td>
   </tr>
   <tr>
@@ -215,7 +272,11 @@ script/bootstrap
   </tr>
 </table>
 
-### 系統
+</details>
+
+<details>
+
+<summary>系統</summary>
 
 <table>
   <tr>
@@ -234,34 +295,24 @@ script/bootstrap
     <td>新增 Hugo 內容文章</td>
   </tr>
   <tr>
-    <td>ls</td>
-    <td>ls -F</td>
-    <td>列出檔案</td>
-  </tr>
-  <tr>
     <td>l</td>
-    <td>ls -lAh</td>
-    <td>詳細檢視檔案</td>
+    <td>ls -lAGh</td>
+    <td>詳細列出檔案</td>
   </tr>
   <tr>
     <td>ll</td>
-    <td>ls -l</td>
-    <td>列出詳細資訊</td>
+    <td>ls -FG</td>
+    <td>普通列出檔案</td>
   </tr>
   <tr>
-    <td>la</td>
-    <td>ls -A</td>
-    <td>顯示隱藏檔</td>
+    <td>lll</td>
+    <td>ls -lA</td>
+    <td>機器可讀列出</td>
   </tr>
   <tr>
     <td>reload!</td>
     <td>. ~/.zshrc</td>
     <td>重新載入 Zsh</td>
-  </tr>
-  <tr>
-    <td>cls</td>
-    <td>clear</td>
-    <td>清理終端</td>
   </tr>
   <tr>
     <td><code>..</code> <code>cd..</code></td>
@@ -284,24 +335,44 @@ script/bootstrap
     <td>複製公鑰</td>
   </tr>
   <tr>
-    <td>d</td>
-    <td>docker $*</td>
-    <td>執行 Docker</td>
-  </tr>
-  <tr>
-    <td>d-c</td>
-    <td>docker-compose $*</td>
-    <td>執行 Docker Compose</td>
+    <td>docker-compose</td>
+    <td>例如 dco=docker-compose</td>
+    <td><a href="https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/docker-compose" target="_blank">使用插件</a></td>
   </tr>
 </table>
 
-### 函式
+</details>
 
-太多了自己看（其實是跨檔案懶得慢慢貼給 GPT 生成），在 `bin` 還有 `functions` 都有很多 holman 設定的函式，例如 extract 根本神器，自動分辨副檔名解壓縮。
+## 資料夾架構說明
 
-## Brewfile
+發現繁雜的設定只是徒增困擾，於是簡化資料夾設定：
 
-簡單介紹都裝了哪些東西，只講大件的，基本上全部都是開源工具
+- **bin/**: 所有在 bin 資料夾的指令都會被載入並隨處可用
+- **fpath/**: 此資料夾會加入 fpath，這個路徑多用於指令補齊
+- **installer/**: 只有 macos 才會執行 installer 資料夾的所有 `*.sh` 檔案
+- **symlink/**: 這裡的所有檔案都會被 symlinked 到 `$HOME` 以便集中管理設定檔
+- **zsh/\*.zsh**: 所有 `.zsh` 都會被 `.zshrc` 載入到環境中
+
+因為 `.config` 裡面可能會有隱私設定，所以 .gitignore 設定略過所有內容 `.config` 除非手動新增。
+
+## 程式說明
+
+第一次看 shell 發現他的上下文比一般語言難追多了，所以在這裡額外解釋方便像我這樣的小白理解。
+
+1. 入口 ./bootstrap
+2. 如果是 MacOS 會執行 bin/dot 進行安裝
+   1. bin/dot 會進行各項安裝和更新（註：使用 bootstrap 安裝完成後也可以直接使用 `dot` 執行，用於定期更新系統套件）
+   2. bin/dot 回頭呼叫 ./install
+   3. ./install 會進行 brew bundle 安裝所有套件，並且執行所有 installer 資料夾中的 .sh 檔
+3. 最後回到 bootstrap 繼續執行 `setup_gitconfig` 和 `link_files`
+
+每次開啟終端機時 `.zshrc` 會載入 zsh 資料夾裡面的所有 `.zsh` 檔以及 `functions` `bin`。
+
+所有 submodule 都在 custom 分支進行修改。
+
+## Brewfile 套件說明
+
+簡單介紹都裝了哪些東西，只講大件的，基本上都是開源工具
 
 ### 開發者
 
@@ -332,6 +403,12 @@ script/bootstrap
 8. raycast
 9. stats
 
+# Todo
+
+- [ ] [只需輸入一次密碼](https://github.com/alrra/dotfiles/blob/main/src/os/utils.sh)
+- [ ] [免 Git 安裝](https://github.com/alrra/dotfiles?tab=readme-ov-file#setup)
+- [ ] [支援 Ubuntu](https://github.com/alrra/dotfiles)
+
 # Acknowledgments
 
-This software is forked from Holman (MIT License, https://github.com/holman) and includes code from Oh My Zsh (MIT License, © 2009-2017 Robby Russell and contributors) and Warp themes (Apache License 2.0, https://github.com/warpdotdev/themes).
+This software is built upon resources from Holman's dotfiles (MIT License, https://github.com/holman), LazyVim starter template (Apache-2.0 License, https://github.com/LazyVim/starter), KevinSilvester's wezterm-config (MIT License, https://github.com/KevinSilvester/wezterm-config), and Warp themes (Apache License 2.0, https://github.com/warpdotdev/themes).
