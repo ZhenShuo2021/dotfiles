@@ -81,10 +81,7 @@ zsh-defer source $ZDOTFILES/src/zsh/system.zsh
 # 載入 zsh 主題，應該在最後載入並且不使用延遲載入
 
 # p10k
-# p10k configure 倒數第三個問題詢問是否啟用 instant prompt，選擇否
-# p10k configure 最後一個問題詢問是否修改 .zshrc，選擇否
 source $PLUGIN_DIR/powerlevel10k/powerlevel10k.zsh-theme
-[[ ! -f $ZDOTFILES/src/zsh/.p10k.zsh ]] || source $ZDOTFILES/src/zsh/.p10k.zsh
 
 # pure
 # fpath+=($PLUGIN_DIR/pure)

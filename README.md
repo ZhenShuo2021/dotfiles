@@ -1,25 +1,30 @@
 # Dotfiles
 
-不用手動安裝程式的 dotfile 才是好 dotfile。
+修改自 [holman/dotfiles](https://github.com/holman/dotfiles) 並且參考多個熱門的 dotfiles 設定，此份 dotfiles 開箱即用能自動安裝套件和 symlink 設定檔，只需要在安裝過程中輸入密碼不需要手動安裝每個套件。插件經過研究篩選只挑選真正有幫助的插件，並且大量使用 zsh-defer 加速載入速度。相比其餘 dotfiles 除了選擇更好、仍持續更新的插件以外，並且正確設定自動補全，很多人的自動補全都沒有正確啟用。
 
-修改自 [holman/dotfiles](https://github.com/holman/dotfiles) 並且參考熱門的 dotfiles 設定，可自動化安裝套件和 symlink 檔案，你只需要在安裝過程中輸入密碼，不需要一一手動安裝每個套件，是開箱即用的狀態。設定基於簡單原則完成，外觀設定模仿 vscode 預設主題，一律使用 nerd font (MesloLGS NF) 字體。
+三個分支 zinit/omz/manual 分別是使用插件管理器以及手動安裝的版本，經過 zsh-defer 優化後三者速度測試結果[^1]雖然沒有差太多，但是實際使用時 zinit 的反應速度最快，套件管理也比其餘兩者更方便。
 
-> 主分支使用 zinit，omz 分支使用 oh-my-zsh 管理套件
+[^1]: 使用 `hyperfine --runs 100 --warmup 3 'zsh -i -c exit 0'` 還有 [zsh-bench](https://github.com/romkatv/zsh-bench/) 進行 profile。
 
 ## Feature
 
-- 📂 集中管理：不再需要將安裝腳本和 dotfiles 分開管理，一次完成安裝和設定
-- ⚡ 快速啟動：使用 zinit 和 zsh-defer 實現懶加載
+設定基於簡單原則完成，外觀設定模仿 vscode 預設主題，一律使用 nerd font (MesloLGS NF) 字體。
+
+- 📂 集中管理：不需要把安裝腳本和設定檔分開管理，一次完成安裝和設定
+- 🛠️ 易於調整：.zshrc 乾淨簡潔，讓你不會每次修改頭都很痛
+- ⚡ 快速啟動：大量使用 zsh-defer 實現懶加載
+- 🔄 輕鬆更新：執行 `update-dotfiles` 就可輕鬆更新所有插件
 - 🎨 已配置完成的 Powerlevel10k 主題
-- 🔍 多個預先配置的插件
-  - fast-syntax-highlighting 語法上色
+- 📦 多個預先配置的插件
+  - zsh-syntax-highlighting 語法上色
   - zsh-autosuggestions 指令歷史建議
   - zsh-completions 指令補全
   - colored-man-pages 上色的 man pages
   - extract 自動解壓縮
-  - z 快速導航
+  - z 快速切換目錄
 - 🌏 LANG、LC_ALL 和 Git 都已經設定好繁體中文
 - 🍺 GPG、homebrew 和 Git 等套件的常見問題都已經解決
+- 🎯 正確的設定指令補全
 - ⚙️ 完善設定的 gitconfig，大量借鑒 [mathiasbynens](https://github.com/mathiasbynens/dotfiles)
 - 🖥️ 終端機
   - 使用現代終端機，分割視窗不再需要 tmux 並且設定好外觀主題和鍵盤映射
@@ -36,12 +41,12 @@
 
 和 holman 的相比：
 
-1. 使用套件管理系統，不再需要自己維護功能
-2. 清理老舊腳本並且新增現代腳本
-3. 集中管理 symlink 和 installer 更直觀易於維護
-4. $ZSH 關鍵字被改為 $ZDOTFILES 避免衝突
-
-曾經為了效能嘗試不使用管理器手動安裝插件，發現手動沒優化的情況下反而更慢，所以現在應該是最好的選擇了。
+1. 使用插件管理工具
+2. 清理老舊腳本，以現代、現成的工具完成同樣功能
+3. 修改資料夾架構，集中管理 symlink 和安裝腳本，更直觀易於維護
+4. 簡化系統路徑設定，原版 FPATH 會有很多路徑
+5. 優化安裝腳本，簡單易懂而且功能更強
+6. `dotfile-update` 指令除了能更新 brew 還能更新 ZSH 插件
 
 ## 安裝
 
@@ -49,7 +54,7 @@
 git clone --depth=1 --recursive --shallow-submodules https://github.com/ZhenShuo2021/dotfiles-macos.git ~/.dotfiles
 cd ~/.dotfiles
 find . -type f -name "*.sh" -exec chmod +x {} \; 
-./bootstrap
+src/bootstrap.sh
 ```
 
 ## 快捷鍵列表
@@ -60,7 +65,8 @@ find . -type f -name "*.sh" -exec chmod +x {} \;
 
 <summary>終端機</summary>
 
-- **WezTerm**:
+**Warp**: 同 WezTerm  
+**WezTerm**:  
 
 - `⌘`: SUPER
 - `⌘`+`^`: SUPER_REV
@@ -82,11 +88,7 @@ end
   - 切換: `SUPER_REV` + `方向鍵`
 - 向上捲動: `CTRL`+`f`
 - 向下捲動: `CTRL`+`d`
-- 原作者的圖片沒有刪除只是放到子資料夾，移出來就可以有隨機背景圖片。
-
----
-
-- **Warp**: 同 WezTerm
+- 原本的背景圖片放在 backdrops/archive 裡面，移出來就可以有隨機背景圖片。
 
 </details>
 
@@ -94,7 +96,7 @@ end
 
 <summary>Neovim</summary>
 
-這其實是一個速查表，我基本上沒改什麼東西大部分都是預設
+這其實是一個速查表，大部分都是預設值。
 
 <table>
   <tr>
@@ -124,6 +126,14 @@ end
   <tr>
     <td><code>g-d</code></td>
     <td>跳到變數定義位置</td>
+  </tr>
+  <tr>
+    <td><code>Ctrl-f</code></td>
+    <td>往下捲動10行</td>
+  </tr>
+  <tr>
+    <td><code>Ctrl-b</code></td>
+    <td>往上捲動10行</td>
   </tr>
   <tr>
     <td><code>Ctrl-o</code></td>
@@ -157,7 +167,11 @@ end
 
 <summary>Git</summary>
 
-大量參考 [mathiasbynens](https://github.com/mathiasbynens/dotfiles)，可使用 `git aliases` 查看 git 系統內的 alias，除了 git 自身的別名系統在全域系統也有設定別名。
+大量參考 [mathiasbynens](https://github.com/mathiasbynens/dotfiles)，可使用 `git aliases` 查看 git 系統內的 alias，別名來源有三個：
+
+1. [oh-my-zsh](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git)
+2. src/bin/ 裡面的會被綁定到 .gitconfig 裡面作為 alias 使用
+3. src/zsh/alias.zsh 是最高層級，會覆蓋所有 alias
 
 <table>
   <tr>
@@ -343,32 +357,17 @@ end
 
 </details>
 
-## 資料夾架構說明
+## 架構說明
 
-發現繁雜的設定只是徒增困擾，於是簡化資料夾設定：
+大幅簡化簡化架構，src 只有以下幾個資料夾：
 
 - **bin/**: 所有在 bin 資料夾的指令都會被載入並隨處可用
-- **fpath/**: 此資料夾會加入 fpath，這個路徑多用於指令補齊
-- **installer/**: 只有 macos 才會執行 installer 資料夾的所有 `*.sh` 檔案
-- **symlink/**: 這裡的所有檔案都會被 symlinked 到 `$HOME` 以便集中管理設定檔
-- **zsh/\*.zsh**: 所有 `.zsh` 都會被 `.zshrc` 載入到環境中
+- **fpath/**: 此資料夾會加入 FPATH，這個路徑多用於指令補全
+- **installer/\*.sh**: main 作為入口在 bootstrap 時被呼叫，執行所有 `*.sh` 檔
+- **symlink/**: 這裡的所有檔案都會被 symlinked 到 `$HOME` 以集中管理設定檔
+- **zsh/\*.zsh**: zsh 資料夾中的所有 `*.zsh` 檔都會被載入到 `.zshrc` 的文件，`load_all.zsh` 是主入口
 
-因為 `.config` 裡面可能會有隱私設定，所以 .gitignore 設定略過所有內容 `.config` 除非手動新增。
-
-## 程式說明
-
-第一次看 shell 發現他的上下文比一般語言難追多了，所以在這裡額外解釋方便像我這樣的小白理解。
-
-1. 入口 ./bootstrap
-2. 如果是 MacOS 會執行 bin/dot 進行安裝
-   1. bin/dot 會進行各項安裝和更新（註：使用 bootstrap 安裝完成後也可以直接使用 `dot` 執行，用於定期更新系統套件）
-   2. bin/dot 回頭呼叫 ./install
-   3. ./install 會進行 brew bundle 安裝所有套件，並且執行所有 installer 資料夾中的 .sh 檔
-3. 最後回到 bootstrap 繼續執行 `setup_gitconfig` 和 `link_files`
-
-每次開啟終端機時 `.zshrc` 會載入 zsh 資料夾裡面的所有 `.zsh` 檔以及 `functions` `bin`。
-
-所有 submodule 都在 custom 分支進行修改。
+所有 submodule 都在 custom 分支進行修改。每個分支的插件路徑略有不同，尊重插件管理器避免自創路徑。
 
 ## Brewfile 套件說明
 
@@ -387,14 +386,15 @@ end
 1. exiftool: 相片元資料編輯器
 2. imagemagick: 相片編輯工具
 3. gallery-dl/yt-dlp/motrix: 圖片/影片/萬用下載工具
-4. yazi: 檔案檢視器
-5. hiddenbar: 狀態欄隱藏工具
-6. ffmpeg: 影片轉檔
+4. bat: 更好用的 cat
+5. yazi: 檔案檢視器
+6. hiddenbar: 狀態欄隱藏工具
+7. ffmpeg: 影片轉檔
 
 ### 其他工具
 
 1. Localsend: 跨裝置類 airdrop
-2. upscayl: AI 超解析度工具
+2. upscayl: AI 圖片超解析度工具
 3. Spotify
 4. chrome
 5. joplin
@@ -405,7 +405,7 @@ end
 
 # Todo
 
-- [ ] [只需輸入一次密碼](https://github.com/alrra/dotfiles/blob/main/src/os/utils.sh)
+- [x] [不需重複輸入密碼](https://github.com/alrra/dotfiles/blob/main/src/os/utils.sh)
 - [ ] [免 Git 安裝](https://github.com/alrra/dotfiles?tab=readme-ov-file#setup)
 - [ ] [支援 Ubuntu](https://github.com/alrra/dotfiles)
 

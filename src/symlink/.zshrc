@@ -1,3 +1,7 @@
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # Basic Settings
 # ============================================================================
 # 提前載入變數讓後續腳本都能使用
@@ -38,3 +42,4 @@ export HOMEBREW_NO_ENV_HINTS=1   # 關閉提醒
 # 載入這份 dotfiles 的設定如 theme, completion, system...
 
 source $ZDOTFILES/src/zsh/load_all.zsh
+[[ ! -f ~/.dotfiles/src/zsh/.p10k.zsh ]] || source ~/.dotfiles/src/zsh/.p10k.zsh
