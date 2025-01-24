@@ -163,29 +163,7 @@ ask_for_sudo() {
   done &> /dev/null &
 }
 
-ask_install_homebrew() {
-  user "Do you wish to install Homebrew? (y/n) "
-  read -r answer
-
-  case "$answer" in
-    [Yy]) 
-      source $SRC_ROOT/installer/utils/brew_helper.sh
-      user "Please enter your password for brew installations: "
-      export INSTALL_HOMEBREW=0
-      export TEMP_ASKPASS_SCRIPT=$(create_askpass_script)
-      ;;
-    [Nn]) 
-      export INSTALL_HOMEBREW=1
-      ;;
-    *) 
-      user "Invalid input. Please enter 'y' or 'n'."
-      ask_install_homebrew
-      ;;
-  esac
-}
-
 ask_for_sudo
-ask_install_homebrew
 setup_gitconfig
 link_files
 

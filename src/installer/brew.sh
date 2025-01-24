@@ -1,32 +1,114 @@
+
 #!/bin/sh
 #
 # Homebrew 安裝腳本
-#
 
-source "$(dirname "$0")/utils/brew_helper.sh"
 
-brew_bundle() {
-  if [[ -f "$TEMP_ASKPASS_SCRIPT" ]]; then
-    password=$(bash "$TEMP_ASKPASS_SCRIPT")
-  else
-    echo "Please enter your password for brew installations: "
-    TEMP_ASKPASS_SCRIPT=$(create_askpass_script)
-    password=$(bash "$TEMP_ASKPASS_SCRIPT")
-  fi
+CURRENT_DIR="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P)"
+TEMP_ASKPASS_SCRIPT=""
+export INSTALL_HOMEBREW=1
+
+ask_install_homebrew() {
+  read -r -p "Install Homebrew? (y/n) " answer
+
+  case "$answer" in
+    [Yy]) 
+      export INSTALL_HOMEBREW=0
+      ;;
+    [Nn]) 
+      export INSTALL_HOMEBREW=1
+      ;;
+    *) 
+      echo "Invalid input. Please enter 'y' or 'n'."
+      ask_install_homebrew
+      ;;
+  esac
+}
+
+create_askpass_script() {
+    local temp_askpass
+    local password
+    read -s password
+    
+    temp_askpass=$(mktemp)
+    printf '#!/bin/bash\n' > "$temp_askpass"
+    printf "echo '%s'\n" "$password" >> "$temp_askpass"
+    chmod +x "$temp_askpass"
+    
+    printf '%s\n' "$temp_askpass"
+}
+
+cleanup_askpass() {
   rm "$TEMP_ASKPASS_SCRIPT"
   unset TEMP_ASKPASS_SCRIPT
+}
+
+default_brew_prefix() {
+  local cpu_arch=$(uname -m)
+  if [[ "Darwin" == "$(uname)" ]]; then
+    case $cpu_arch in
+      x86_64)
+        echo "/usr/local"
+      ;;
+      arm64)
+        echo "/opt/homebrew"
+      ;;
+      *)
+        >&2 echo "Cannot determine brew prefix, unknown architecture $cpu_arch"
+      ;;
+    esac
+  else
+    echo "$HOME/.linuxbrew"
+  fi
+}
+
+should_install_brew() {
+  # Exit if installed
+  if type brew &>/dev/null; then
+    brew_path=$(brew --prefix)
+    echo "Homebrew is already installed at $brew_path/bin/brew. Skipping installation"
+    echo "$brew_path/bin" > /tmp/brew_path.txt
+    return 1
+  fi
+
+  # Exit if installed but path is missed
+  if [[ -f $(default_brew_prefix)/bin/brew ]]; then
+    echo "Skip homebrew installation: Homebrew is installed in $(default_brew_prefix)/bin/brew but not found in path, please add \`eval \"\$($(default_brew_prefix)/bin/brew shellenv)\"\` in .zprofile"
+    return 1
+  fi
+
+  # Exit if INSTALL_HOMEBREW equals to 0
+  ask_install_homebrew
+  if [ "$INSTALL_HOMEBREW" -eq 0 ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+brew_bundle() {
+  if [[ ! -f "$TEMP_ASKPASS_SCRIPT" ]]; then
+    echo "Please enter your password for brew installations: "
+    TEMP_ASKPASS_SCRIPT=$(create_askpass_script)
+  fi
+  chmod +x "$TEMP_ASKPASS_SCRIPT"
+  SUDO_ASKPASS="$TEMP_ASKPASS_SCRIPT" brew bundle --file=$CURRENT_DIR/Brewfile
+  trap cleanup_askpass EXIT INT TERM
 }
 
 install_homebrew() {
   # early return
   if ! should_install_brew; then exit 0; fi
+  echo "Please enter your password for brew installations: "
+  TEMP_ASKPASS_SCRIPT=$(create_askpass_script)
   
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" > /dev/tty 2>&1
-  brew_path=$(brew_prefix --prefix)
+  brew_path=$(default_brew_prefix --prefix)
 
   "$brew_path/bin/brew" --version &> /dev/null
   if [ $? -ne 0 ]; then
-    echo "Homebrew installation failed."
+    echo "Error on Homebrew installation: binary file not found in $brew_path/bin/brew"
+    cleanup_askpass
     exit 1
   fi
 

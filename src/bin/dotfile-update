@@ -1,9 +1,9 @@
 #!/bin/sh
 #
-# dot
+# dotfile-update
 #
 # 安裝並且更新套件
-# `dot` handles installation, updates, things like that. Run it periodically
+# `dotfile-update` handles installation, updates, things like that. Run it periodically
 # to make sure you're on the latest and greatest.
 
 set -e
@@ -13,9 +13,9 @@ parentDirectory="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P)"
 dotfilesDirectory="$(cd "$( dirname "$parentDirectory" )" && pwd -P)"
 
 displayUsageAndExit() {
-	echo "dot -- dotfiles management"
+	echo "dotfile-update -- dotfiles management"
 	echo ""
-	echo "Usage: dot [options]"
+	echo "Usage: dotfile-update [options]"
 	echo ""
 	echo "Options:"
 	echo "  -e, --edit    Open dotfiles directory for editing"
@@ -41,6 +41,8 @@ while test $# -gt 0; do
 done
 
 # Update zsh plugins
+source $HOME/.dotfiles/src/zsh/constant.zsh
+
 if [ -z "$PLUGIN_DIR" ] || [ ! -d "$PLUGIN_DIR" ]; then
   echo "Error: PLUGIN_DIR is not set or does not exist."
   exit_code=1
@@ -48,8 +50,8 @@ fi
 
 for plugin in "$PLUGIN_DIR"/*; do
   if [ -d "$plugin/.git" ]; then
-    echo "Pulling latest changes for plugin: $plugin"
-    cd "$plugin" && git pull
+    echo "Updating plugin $(basename $plugin)"
+    cd "$plugin" && command git pull -q
   fi
 done
 

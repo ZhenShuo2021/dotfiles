@@ -1,9 +1,15 @@
+# Basic Settings
+# ============================================================================
+# 提前載入變數讓後續腳本都能使用
+
 export ZDOTFILES=$HOME/.dotfiles   # shortcut to this dotfiles
-if [[ -a ~/.localrc ]]; then source ~/.localrc; fi   # localrc 用以載入敏感設定
+source $ZDOTFILES/src/zsh/constant.zsh
+source $PLUGIN_DIR/zsh-defer/zsh-defer.plugin.zsh   # 提前載入 zsh-defer 讓整個腳本都能使用
+
 
 # User Preferences
 # ============================================================================
-# 這裡可以隨意更改
+# 這裡個區域可以隨意更改
 
 # 設定中文
 export LANG=zh_TW.UTF-8
@@ -20,41 +26,15 @@ SAVEHIST=10000
 
 # 其餘靜態設定
 export GPG_TTY=$(tty)   # 自動刷新 GPG 終端檢測
-export PATH="/Users/leo/.local/bin:$PATH"   # 加入路徑
-export ZSHZ_DATA="$HOME/.cache/.z"   # 修改 zsh-z .z 位置
-export LESSHISTFILE="$HOME/.cache/.lesshst"   # 修改 .lesshst 位置
+export PATH="$HOME/.local/bin:$PATH"   # 加入路徑
+export ZSHZ_DATA="$XDG_CACHE_HOME/.z"   # 修改 zsh-z .z 位置
+export LESSHISTFILE="$XDG_CACHE_HOME/.lesshst"   # 修改 .lesshst 位置
 export HOMEBREW_NO_AUTO_UPDATE=1   # 關閉 homebrew 自動更新
 export HOMEBREW_NO_ENV_HINTS=1   # 關閉提醒
-
-
-# Load plugins
-# ============================================================================
-# 不使用插件管理器載入外部插件，插件應該都以 *.plugin.zsh 結尾
-
-PLUGIN_DIR="$HOME/.local/share/zsh/plugins"
-OMZ_DIR="$PLUGIN_DIR/ohmyzsh"
-source $PLUGIN_DIR/zsh-defer/zsh-defer.plugin.zsh
-
-zsh-defer source $OMZ_DIR/lib/key-bindings.zsh
-zsh-defer source $OMZ_DIR/plugin/docker.zsh
-zsh-defer source $OMZ_DIR/plugin/git.zsh
-zsh-defer source $PLUGIN_DIR/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
-zsh-defer source $PLUGIN_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
-zsh-defer source $PLUGIN_DIR/zsh-z/zsh-z.plugin.zsh
 
 
 # Load dotfiles
 # ============================================================================
 # 載入這份 dotfiles 的設定如 theme, completion, system...
 
-export PATH="$ZDOTFILES/src/bin:$PATH"
-export EDITOR='code'
-zsh-defer source $ZDOTFILES/src/zsh/_load_zsh.zsh
-
-
-# Load zsh theme
-# ============================================================================
-# 載入 zsh 主題，應該在最後並且不使用延遲載入
-
-source $PLUGIN_DIR/powerlevel10k/powerlevel10k.zsh-theme
-[[ ! -f $ZDOTFILES/src/zsh/.p10k.zsh ]] || source $ZDOTFILES/src/zsh/.p10k.zsh
+source $ZDOTFILES/src/zsh/load_all.zsh

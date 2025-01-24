@@ -10,12 +10,19 @@ install_plugins() {
     echo "Start installing plugins"
     echo "Plugin directory: $PLUGIN_DIR"
 
+    # Themes
     install_plugin "https://github.com/romkatv/powerlevel10k"
-    install_plugin "https://github.com/ohmyzsh/ohmyzsh.git"
+    install_plugin "https://github.com/sindresorhus/pure"
+
+    # Plugins
     install_plugin "https://github.com/zsh-users/zsh-autosuggestions"
+    install_plugin "https://github.com/zsh-users/zsh-completions"
     install_plugin "https://github.com/zsh-users/zsh-syntax-highlighting"
+    install_plugin "https://github.com/zsh-users/zsh-history-substring-search"
     install_plugin "https://github.com/agkozak/zsh-z.git"
+    install_plugin "https://github.com/ohmyzsh/ohmyzsh.git"
     install_plugin "https://github.com/romkatv/zsh-defer.git"
+    install_plugin "https://github.com/lukechilds/zsh-better-npm-completion"
 }
 
 install_plugin() {
