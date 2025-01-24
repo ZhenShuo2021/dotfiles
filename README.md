@@ -1,6 +1,6 @@
 # Dotfiles
 
-修改自 [holman/dotfiles](https://github.com/holman/dotfiles) 並且參考多個熱門的 dotfiles 設定，此份 dotfiles 開箱即用能自動安裝套件和 symlink 設定檔，只需要在安裝過程中輸入密碼不需要手動安裝每個套件。插件經過研究篩選只挑選真正有幫助的插件，並且大量使用 zsh-defer 加速載入速度。相比其餘 dotfiles 除了選擇更好、仍持續更新的插件以外，並且正確設定自動補全，很多人的自動補全都沒有正確啟用。
+此份修改自 [holman/dotfiles](https://github.com/holman/dotfiles) 並且參考多個熱門的 dotfiles 設定，能自動安裝套件和 symlink 設定檔，只需在安裝過程中輸入密碼不需要手動安裝每個套件。插件經過篩選並且大量使用 zsh-defer 加速載入速度，相比其餘 dotfiles 除了選擇更好、仍持續更新的插件以外，也正確設定自動補全，很多人的自動補全都沒有正確啟用。
 
 三個分支 zinit/omz/manual 分別是使用插件管理器以及手動安裝的版本，經過 zsh-defer 優化後三者速度測試結果[^1]雖然沒有差太多，但是實際使用時 zinit 的反應速度最快，套件管理也比其餘兩者更方便。
 
