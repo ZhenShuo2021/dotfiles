@@ -2,6 +2,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+
 # Basic Settings
 # ============================================================================
 # 提前載入變數讓後續腳本都能使用
@@ -30,6 +31,7 @@ SAVEHIST=10000
 
 # 其餘靜態設定
 export GPG_TTY=$(tty)   # 自動刷新 GPG 終端檢測
+export LESS=FR   # git pager模式退出後清除文字
 export PATH="$HOME/.local/bin:$PATH"   # 加入路徑
 export ZSHZ_DATA="$XDG_CACHE_HOME/.z"   # 修改 zsh-z .z 位置
 export LESSHISTFILE="$XDG_CACHE_HOME/.lesshst"   # 修改 .lesshst 位置

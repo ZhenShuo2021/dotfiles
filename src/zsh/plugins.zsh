@@ -7,9 +7,11 @@
 #   load_plugin zsh-z             # load zsh-z with delay=0s
 #   load_plugin zsh-z 0.5         # load zsh-z with delay=0.5s
 #   load_plugin zsh-z 0 false     # load zsh-z without delay
+#   load_plugin zsh-z         # load zsh-z without delay
+#   load_plugin zsh-z 0 1         # load zsh-z without delay
 
 load_omz_lib() {
-  local plugin_name=$1
+  local lib_name=$1
   local delay=${2:-0}
   local use_defer=${3:-true}
 
@@ -18,9 +20,9 @@ load_omz_lib() {
   fi
 
   if [[ $use_defer == true ]]; then
-    zsh-defer -t $delay source "$OMZ_DIR/lib/$lib_name/$lib_name.zsh"
+    zsh-defer -t $delay source "$OMZ_DIR/lib/$lib_name.zsh"
   else
-    source "$OMZ_DIR/lib/$lib_name/$lib_name.zsh"
+    source "$OMZ_DIR/lib/$lib_name.zsh"
   fi
 }
 
