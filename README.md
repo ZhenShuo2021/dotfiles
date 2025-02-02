@@ -1,10 +1,20 @@
 # Dotfiles
 
-修改自 [holman/dotfiles](https://github.com/holman/dotfiles) 並且參考多個熱門的 dotfiles 設定，此份 dotfiles 開箱即用能自動安裝套件和 symlink 設定檔，只需要在安裝過程中輸入密碼不需要手動安裝每個套件。插件經過研究篩選只挑選真正有幫助的插件，並且大量使用 zsh-defer 加速載入速度。相比其餘 dotfiles 除了選擇更好、仍持續更新的插件以外，並且正確設定自動補全，很多人的自動補全都沒有正確啟用。
+現代、快速、方便、功能齊全的 ZSH dotfiles。
 
-三個分支 zinit/omz/manual 分別是使用插件管理器以及手動安裝的版本，經過 zsh-defer 優化後三者速度測試結果[^1]雖然沒有差太多，但是實際使用時 zinit 的反應速度最快，套件管理也比其餘兩者更方便。
+參考多份的 dotfiles 完成，截取各個優點並且大量使用 [zsh-defer](https://github.com/romkatv/zsh-defer) 優化載入速度，還能自動安裝套件和 symlink 設定檔，只需在安裝過程中輸入密碼即可完成。對比其他 dotfiles 除了選擇更好、仍持續更新的插件之外，也正確設定自動補全，很多人的自動補全都沒有正確啟用。
 
-[^1]: 使用 `hyperfine --runs 100 --warmup 3 'zsh -i -c exit 0'` 還有 [zsh-bench](https://github.com/romkatv/zsh-bench/) 進行 profile。
+## 速度
+
+快不是講講也不是亂測，對比其他文章只簡單使用 `time` 測試，這裡使用全面且嚴謹的 [zsh-bench](https://github.com/romkatv/zsh-bench/) 測試，同時也提供直觀易懂的 hyperfine 進行測試。測試執行於 M1 MacBook Pro，zsh-bench 使用預設值，hyperfine 使用 `hyperfine --runs 100 --warmup 3 'zsh -i -c exit 0'` 測試。
+
+可以看到載入速度大幅領先 Oh-My-ZSH，在某些項目更可以和不使用套件管理器的速度持平甚至超越，而且注意兩個對手都公平的使用 zsh-defer 加速。
+
+<p align="center">
+  <img src=".github/benchmark.svg" width="95%" height="95%" alt="benchmark">
+</p>
+
+附帶一提，ZINIT 除了比 Oh-My-ZSH 更快管理插件也更方便，不需要自己 clone 插件，也不需要一個額外文件負責設定插件管理器本身。
 
 ## Feature
 
@@ -12,8 +22,9 @@
 
 - 📂 集中管理：不需要把安裝腳本和設定檔分開管理，一次完成安裝和設定
 - 🛠️ 易於調整：.zshrc 乾淨簡潔，讓你不會每次修改頭都很痛
-- ⚡ 快速啟動：大量使用 zsh-defer 實現懶加載
-- 🔄 輕鬆更新：執行 `update-dotfiles` 就可輕鬆更新所有插件
+- 🚀 快速啟動：大量使用 zsh-defer 實現懶加載
+- 📚 完整註解：保證你看得懂 zshrc 在寫什麼以及為何這樣寫
+- 🔄 輕鬆更新：執行 `update-dotfiles` 就可輕鬆更新所有插件和系統套件
 - 🎨 已配置完成的 Powerlevel10k 主題
 - 📦 多個預先配置的插件
   - zsh-syntax-highlighting 語法上色
@@ -22,11 +33,11 @@
   - colored-man-pages 上色的 man pages
   - extract 自動解壓縮
   - z 快速切換目錄
-- 🌏 LANG、LC_ALL 和 Git 都已經設定好繁體中文
-- 🍺 GPG、homebrew 和 Git 等套件的常見問題都已經解決
+- 🌐 LANG、LC_ALL 和 Git 都已經設定好繁體中文
+- ✅ GPG、homebrew 和 Git 等套件的常見問題都已經解決
 - 🎯 正確的設定指令補全
 - ⚙️ 完善設定的 gitconfig，大量借鑒 [mathiasbynens](https://github.com/mathiasbynens/dotfiles)
-- 🖥️ 終端機
+- 🖥️ 現代化終端機
   - 使用現代終端機，分割視窗不再需要 tmux 並且設定好外觀主題和鍵盤映射
   - wezterm: [binwenwu/wezterm-config](https://github.com/binwenwu/wezterm-config/)
   - warp: [warpdotdev/themes](https://github.com/warpdotdev/themes)
@@ -39,14 +50,13 @@
 
 ## 哪裡不一樣？
 
-和 holman 的相比：
+本份 dotfiles 由 [holman](https://github.com/holman/dotfiles) 的修改而來，和原版相比：
 
 1. 使用插件管理工具
 2. 清理老舊腳本，以現代、現成的工具完成同樣功能
 3. 修改資料夾架構，集中管理 symlink 和安裝腳本，更直觀易於維護
 4. 簡化系統路徑設定，原版 FPATH 會有很多路徑
 5. 優化安裝腳本，簡單易懂而且功能更強
-6. `dotfile-update` 指令除了能更新 brew 還能更新 ZSH 插件
 
 ## 安裝
 
