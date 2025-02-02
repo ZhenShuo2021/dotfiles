@@ -2,23 +2,25 @@
 
 現代、快速、方便、功能齊全的 ZSH dotfiles。
 
-參考多份的 dotfiles 完成，截取各個優點並且大量使用 [zsh-defer](https://github.com/romkatv/zsh-defer) 優化載入速度，還能自動安裝套件和 symlink 設定檔，只需在安裝過程中輸入密碼即可完成。對比其他 dotfiles 除了選擇更好、仍持續更新的插件之外，也正確設定自動補全，很多人的自動補全都沒有正確啟用。
+此 ZSH dotfiles 參考多個熱門的 dotfiles 優點進行優化，並且大量使用 [zsh-defer](https://github.com/romkatv/zsh-defer) 加快載入速度，同時支援自動安裝套件和 symlink 設定檔，只需在安裝過程中輸入一次密碼即可完成所有安裝和設定，無需任何手動安裝。
+
+對比其他 dotfiles 除了選擇功能更好、更新更活躍的插件之外，也正確設定自動補全，很多人的自動補全都沒有正確啟用。
 
 ## 速度
 
-快不是講講也不是亂測，對比其他文章只簡單使用 `time` 測試，這裡使用全面且嚴謹的 [zsh-bench](https://github.com/romkatv/zsh-bench/) 測試，同時也提供直觀易懂的 hyperfine 進行測試。測試執行於 M1 MacBook Pro，zsh-bench 使用預設值，hyperfine 使用 `hyperfine --runs 100 --warmup 3 'zsh -i -c exit 0'` 測試。
+載入速度快不是隨口說說也不是隨便測試，這裡採用全面且嚴謹的 [zsh-bench](https://github.com/romkatv/zsh-bench/) 作為測試基準，同時也提供直觀易懂的 hyperfine 進行測試。測試執行於 M1 MacBook Pro，zsh-bench 使用預設值，hyperfine 使用 `hyperfine --runs 100 --warmup 3 'zsh -i -c exit 0'` 測試。
 
-可以看到載入速度大幅領先 Oh-My-ZSH，在某些項目更可以和不使用套件管理器的速度持平甚至超越，而且注意兩個對手都公平的使用 zsh-defer 加速。
+可以看到載入速度大幅領先 Oh-My-ZSH，某些項目更可以持平不使用套件管理器的速度甚至超越，請注意兩個對手都公平的使用 zsh-defer 加速，所以已經非常接近使用插件的速度上限了。
 
 <p align="center">
   <img src=".github/benchmark.jpg" width="95%" height="95%" alt="benchmark">
 </p>
 
-附帶一提，ZINIT 除了比 Oh-My-ZSH 更快管理插件也更方便，不需要自己 clone 插件，也不需要一個額外文件負責設定插件管理器本身。
+附帶一提，ZINIT 除了比 Oh-My-ZSH 更快管理插件也更方便，不需要自己 clone 插件，也不需要一個額外文件負責設定插件管理器本身，所以這份 dotfiles 除了速度也更易於管理插件。
 
 ## Feature
 
-設定基於簡單原則完成，外觀設定模仿 vscode 預設主題，一律使用 nerd font (MesloLGS NF) 字體。
+所有程式的設定都基於簡單原則完成，外觀設定模仿 vscode 預設主題，一律使用 nerd font (MesloLGS NF) 字體。
 
 - 📂 集中管理：不需要把安裝腳本和設定檔分開管理，一次完成安裝和設定
 - 🛠️ 易於調整：.zshrc 乾淨簡潔，讓你不會每次修改頭都很痛
@@ -361,13 +363,13 @@ end
 
 大幅簡化簡化架構，src 只有以下幾個資料夾：
 
-- **bin/**: 所有在 bin 資料夾的指令都會被載入並隨處可用
-- **fpath/**: 此資料夾會加入 FPATH，這個路徑多用於指令補全
+- **bin/**: 此資料夾會加入 PATH，裡面所有指令都會被 `.zshrc` 載入並隨處可用
+- **fpath/**: 此資料夾會加入 FPATH，這個路徑多用於指令補全以及自定義的 shell 函式
 - **installer/\*.sh**: main 作為入口在 bootstrap 時被呼叫，執行所有 `*.sh` 檔
 - **symlink/**: 這裡的所有檔案都會被 symlinked 到 `$HOME` 以集中管理設定檔
 - **zsh/\*.zsh**: zsh 資料夾中的所有 `*.zsh` 檔都會被載入到 `.zshrc` 的文件，`load_all.zsh` 是主入口
 
-所有 submodule 都在 custom 分支進行修改。每個分支的插件路徑略有不同，尊重插件管理器避免自創路徑。
+所有 submodule 都在 custom 分支進行修改。
 
 ## Brewfile 套件說明
 
