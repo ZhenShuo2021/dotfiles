@@ -47,7 +47,7 @@ for i in range(3):
 axs[0].tick_params(labelsize=FONT_SIZE_TICK)
 axs[0].set_xticks(x_h)
 axs[0].set_xticklabels([m[0] for m in metrics_hyper], ha='center', fontsize=FONT_SIZE_LABEL)
-axs[0].set_title('Shell Initialization Performance', fontsize=FONT_SIZE_TITLE)
+axs[0].set_title('Hyperfine Performance Test', fontsize=FONT_SIZE_TITLE)
 axs[0].set_ylabel('Time (ms)', fontsize=FONT_SIZE_LABEL)
 axs[0].grid(True, linestyle='--', alpha=0.3, axis='y')
 axs[0].legend(prop={'size': FONT_SIZE_LEGEND})
