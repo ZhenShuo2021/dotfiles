@@ -23,6 +23,7 @@ setopt NO_BG_NICE # don't nice background tasks
 setopt AUTO_LIST
 setopt AUTO_MENU
 setopt MENU_COMPLETE
+setopt NO_BEEP   # 修正 Tab 補全需要按兩次 (unsetopt BEEP?)
 unsetopt CORRECT   # 關閉 zsh 自動修正，不準又很煩
 
 # bindkey '^[^[[D' backward-word
