@@ -45,4 +45,4 @@ source $ZDOTFILES/src/zsh/plugins.zsh
 # zsh-defer -t 0.5 source $ZDOTFILES/src/zsh/alias.zsh   # 更晚載入避免被插件的延遲載入覆蓋
 zsh-defer source $ZDOTFILES/src/zsh/alias.zsh
 zsh-defer source $ZDOTFILES/src/zsh/completion.zsh
-zsh-defer source $ZDOTFILES/src/zsh/system.zsh
+source $ZDOTFILES/src/zsh/system.zsh

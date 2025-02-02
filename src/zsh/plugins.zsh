@@ -7,20 +7,19 @@ zinit ice depth=1; zinit light romkatv/powerlevel10k
 # Load plugins
 # ============================================================================
 
-zinit snippet OMZL::git.zsh
-zinit snippet OMZL::history.zsh
+zsh-defer zinit snippet OMZL::git.zsh
+zsh-defer zinit snippet OMZL::history.zsh
 
-zinit snippet OMZP::docker
-zinit snippet OMZP::docker-compose
-zinit snippet OMZP::extract
-zinit snippet OMZP::git
+zsh-defer zinit snippet OMZP::docker
+zsh-defer zinit snippet OMZP::docker-compose
+zsh-defer zinit snippet OMZP::extract
+zsh-defer zinit snippet OMZP::git
 
-zinit light zsh-users/zsh-autosuggestions; bindkey ',' autosuggest-accept
-zinit light zsh-users/zsh-completions
-zinit light zsh-users/zsh-syntax-highlighting
-zinit light agkozak/zsh-z
+zsh-defer zinit light zsh-users/zsh-autosuggestions; bindkey ',' autosuggest-accept
+zsh-defer zinit light zsh-users/zsh-completions
+zsh-defer zinit light zsh-users/zsh-syntax-highlighting
+zsh-defer zinit light agkozak/zsh-z
 
-# Furthermore, instant prompt is indeed faster than zsh-defer
 # https://github.com/zimfw/zimfw/issues/372
 # zinit wait lucid for \
 #   OMZL::git.zsh \
@@ -50,17 +49,17 @@ export LESS_TERMCAP_us=$'\e[1;4;31m'
 
 # Conflict: use either `zsh-history-substring-search` or `key-bindings`. Also, I don't like substring search
 
-zinit snippet OMZL::key-bindings.zsh
-# zinit snippet OMZL::key-bindings.zsh
-# zinit light zsh-users/zsh-history-substring-search
+zsh-defer zinit snippet OMZL::key-bindings.zsh
+# zsh-defer zinit snippet OMZL::key-bindings.zsh
+# zsh-defer zinit light zsh-users/zsh-history-substring-search
 # bindkey '^[[A' history-substring-search-up
 # bindkey '^[[B' history-substring-search-down
 
 
 # optional plugins
-# zinit light lukechilds/zsh-better-npm-completion
+# zsh-defer zinit light lukechilds/zsh-better-npm-completion
 
 
 # deprecated plugins
-# zinit snippet OMZL::completion   # brew fpath and zsh-completions are better
+# zsh-defer zinit snippet OMZL::completion   # brew fpath and zsh-completions are better
 
