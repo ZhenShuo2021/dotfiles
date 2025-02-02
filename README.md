@@ -11,7 +11,7 @@
 可以看到載入速度大幅領先 Oh-My-ZSH，在某些項目更可以和不使用套件管理器的速度持平甚至超越，而且注意兩個對手都公平的使用 zsh-defer 加速。
 
 <p align="center">
-  <img src=".github/benchmark.svg" width="95%" height="95%" alt="benchmark">
+  <img src=".github/benchmark.jpg" width="95%" height="95%" alt="benchmark">
 </p>
 
 附帶一提，ZINIT 除了比 Oh-My-ZSH 更快管理插件也更方便，不需要自己 clone 插件，也不需要一個額外文件負責設定插件管理器本身。
@@ -47,16 +47,6 @@
 - 🔧 工具
   - gallery-dl: 精心設計的 config.json，只需修改路徑即可使用
   - yt-dlp: 設定檔為最高畫質和音質，開箱即用
-
-## 哪裡不一樣？
-
-本份 dotfiles 由 [holman](https://github.com/holman/dotfiles) 的修改而來，和原版相比：
-
-1. 使用插件管理工具
-2. 清理老舊腳本，以現代、現成的工具完成同樣功能
-3. 修改資料夾架構，集中管理 symlink 和安裝腳本，更直觀易於維護
-4. 簡化系統路徑設定，原版 FPATH 會有很多路徑
-5. 優化安裝腳本，簡單易懂而且功能更強
 
 ## 安裝
 

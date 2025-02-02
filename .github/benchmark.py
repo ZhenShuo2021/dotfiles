@@ -88,5 +88,5 @@ axs[2].legend(prop={'size': FONT_SIZE_LEGEND})
 
 # fig.suptitle('ZSH Configuration Frameworks Performance Test', fontsize=16, y=0.98)
 plt.tight_layout(rect=[0, 0, 1, 0.95])
-plt.savefig('.github/benchmark.svg', bbox_inches='tight')
+plt.savefig('.github/benchmark.jpg', dpi=160, bbox_inches='tight')
 plt.close()
