@@ -1,3 +1,5 @@
+# 記得放在 plugin 後載入避免被覆蓋
+
 ### User Preference
 alias vv=nvim
 alias lg=lazygit

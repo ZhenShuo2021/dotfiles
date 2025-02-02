@@ -1,12 +1,10 @@
 # Load plugins
 # ============================================================================
+
 # Theme
 zinit ice depth=1; zinit light romkatv/powerlevel10k
 
-
-# Load plugins
-# ============================================================================
-
+# Plugins
 zsh-defer zinit snippet OMZL::git.zsh
 zsh-defer zinit snippet OMZL::history.zsh
 
@@ -47,7 +45,8 @@ export LESS_TERMCAP_ue=$'\e[0m'
 export LESS_TERMCAP_us=$'\e[1;4;31m'
 
 
-# Conflict: use either `zsh-history-substring-search` or `key-bindings`. Also, I don't like substring search
+# Conflict: use either `zsh-history-substring-search` or `key-bindings`
+# Also, I don't like substring search
 
 zsh-defer zinit snippet OMZL::key-bindings.zsh
 # zsh-defer zinit snippet OMZL::key-bindings.zsh
