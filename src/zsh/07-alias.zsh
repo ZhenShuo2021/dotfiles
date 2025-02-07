@@ -22,7 +22,8 @@ alias l="ls -lAGh"
 alias ll="ls -FG"
 alias lll="ls -lA"
 alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pasteboard.'"
-alias test_gpg='echo test | gpg --clear-sign'
+alias gpg_test='echo test | gpg --clear-sign'
+alias gpg_reload='gpgconf --kill gpg-agent'
 
 ### Git
 alias g=git

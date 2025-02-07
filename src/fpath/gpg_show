@@ -1,0 +1,5 @@
+if [[ "$1" == "-s" || "$1" == "--secret" ]]; then
+    gpg --list-secret-keys --keyid-format SHORT
+else
+    gpg --list-keys --keyid-format SHORT
+fi
