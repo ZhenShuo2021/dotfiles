@@ -3,7 +3,6 @@
 ### User Preference
 alias vv=nvim
 alias lg=lazygit
-alias hnc='hugo new content'
 alias act-mac='act -P macos-latest=-self-hosted --container-architecture linux/amd64'
 
 ### System

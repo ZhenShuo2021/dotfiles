@@ -1,0 +1,20 @@
+#compdef hnc
+
+# new: filter with regex
+_hnc() {
+  local -a dirs
+  local ignore_pattern='archives|about|tags|categories'
+  dirs=(${(f)"$(find ./content -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | grep -v -E $ignore_pattern)"})
+  _describe 'directories' dirs -S '/'
+}
+
+_hnc
+
+
+# old: filter names
+
+# #compdef hnc
+# local content_dir="${PWD}/content"
+# local -a ignored_patterns
+# ignored_patterns=("about" "archives" "tags" "categories")
+# _files -W "$content_dir" -/ -F ignored_patterns
