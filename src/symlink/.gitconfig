@@ -108,3 +108,5 @@
 	logoutputencoding = utf-8
 [pull]
 	rebase = true
+[rebase]
+	autoStash = true
