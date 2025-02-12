@@ -6,7 +6,10 @@ alias lg=lazygit
 alias act-mac='act -P macos-latest=-self-hosted --container-architecture linux/amd64'
 
 ### System
+alias ee="exit 0"
 alias reload!=". ~/.zshrc"
+alias switch_en="export LC_ALL='en_US.UTF-8'; export LANG='en_US.UTF-8'"
+alias switch_tw="export LC_ALL='zh_TW.UTF-8'; export LANG='zh_TW.UTF-8'"
 
 alias "cls"="clear"
 alias ".."="cd .."
@@ -27,8 +30,14 @@ alias gpg_reload='gpgconf --kill gpg-agent'
 ### Git
 alias g=git
 alias gc='git commit'
-alias 'gc!'='git commit --amend --no-verify'
-alias 'gcn!'='git commit --amend --no-verify --no-edit'
+alias 'gcn'='git commit --no-verify'
+alias 'gcn!'='git commit --no-verify --amend'
+alias 'gcnn!'='git commit --no-verify --amend --no-edit'
+alias 'gtll'='gtll(){ git tag --sort=-v:refname -n10 --format="[%(refname:short)] %(contents:lines=10)%0a" --list "${1}*" }; noglob gtll'
+
+alias 'gtlll'='gtlll(){ git tag --sort=-v:refname -n999 --format="[%(objectname:short) %(refname:short)] %(contents:lines=999)%0a" --list "${1}*" }; noglob gtlll'
+# alias 'gtll'='gtll(){ git tag --sort=-v:refname -n10 --format="[%(refname:short)] %(subject)" --list "${1}*" }; noglob gtll'
+# alias 'gtlll'='gtlll(){ git tag --sort=-v:refname -n10 --format="[%(objectname:short) %(refname:short)] %(subject)" --list "${1}*" }; noglob gtlll'
 alias gca='git commit -a'
 alias gco='git checkout'
 alias gcb='git copy-branch-name'
@@ -48,4 +57,4 @@ alias glog="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgre
 alias gloga="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' --all"
 alias gp='git push'
 alias 'gp!'='git push --force-with-lease --force-if-includes'
-alias gd='git diff --color | sed "s/^\([^-+ ]*\)[-+ ]/\\1/" | less -r'
+# alias gd='git diff --color | sed "s/^\([^-+ ]*\)[-+ ]/\\1/" | less -r'
