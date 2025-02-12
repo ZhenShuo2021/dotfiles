@@ -6,9 +6,17 @@
 
 對比其他 dotfiles 除了選擇功能更好、更新更活躍的插件之外，也正確設定自動補全，很多人的自動補全都沒有正確啟用。
 
+## 兼容性
+
+測試過以下系統能正常運作，就連權限幾乎被全部鎖定而且完全不能用 dpkg 的 TrueNAS 都能成功啟用
+
+- [x] macOS Sonoma
+- [x] Ubuntu 22.04.5 LTS
+- [x] TrueNas ElectricEel-24.10.0 (6.6.44-production+truenas)
+
 ## 速度
 
-載入速度快不是隨口說說也不是隨便測試，這裡採用全面且嚴謹的 [zsh-bench](https://github.com/romkatv/zsh-bench/) 作為測試基準，同時也提供直觀易懂的 hyperfine 進行測試。測試執行於 M1 MacBook Pro，zsh-bench 使用預設值，hyperfine 使用 `hyperfine --runs 100 --warmup 3 'zsh -i -c exit 0'` 測試。
+載入速度採用全面且嚴謹的 [zsh-bench](https://github.com/romkatv/zsh-bench/) 作為測試基準，同時也提供直觀易懂的 hyperfine 進行測試。測試執行於 M1 MacBook Pro 8G RAM，zsh-bench 使用預設值，hyperfine 使用 `hyperfine --runs 100 --warmup 3 'zsh -i -c exit 0'` 測試。
 
 可以看到載入速度大幅領先 Oh-My-ZSH，某些項目更可以持平不使用套件管理器的速度甚至超越，請注意兩個對手都公平的使用 zsh-defer 加速，所以已經非常接近使用插件的速度上限了。
 
@@ -17,6 +25,8 @@
 </p>
 
 附帶一提，ZINIT 除了比 Oh-My-ZSH 更快管理插件也更方便，不需要自己 clone 插件，也不需要一個額外文件負責設定插件管理器本身，所以這份 dotfiles 除了速度也更易於管理插件。
+
+> 繪製自己的測試結果：將數據更新在 .github/benchmark.py 後使用 `uv run .github/benchmark.py` 直接執行，不需建立虛擬環境。
 
 ## Feature
 
@@ -44,7 +54,7 @@
   - wezterm: [binwenwu/wezterm-config](https://github.com/binwenwu/wezterm-config/)
   - warp: [warpdotdev/themes](https://github.com/warpdotdev/themes)
 - ✏️ 文字編輯
-  - neovim: 使用 Lazyvim 設定檔，關閉所有 lsp，鍵盤映射 Ctrl+d 為黑洞刪除
+  - neovim: 使用 Lazyvim 設定檔，鍵盤映射 Ctrl+d 為黑洞刪除
   - helix: onedarker 主題，並且整合 ruff lsp
 - 🔧 工具
   - gallery-dl: 精心設計的 config.json，只需修改路徑即可使用
@@ -58,6 +68,22 @@ cd ~/.dotfiles
 find . -type f -name "*.sh" -exec chmod +x {} \; 
 src/bootstrap.sh
 ```
+
+## 修改
+
+zshrc 會載入這些文件：
+
+1. 00-constant.zsh: 設定常數，獨立設定讓客製化腳本可以存取
+2. 01-basic.zsh: 需要最早載入的設定放在這裡，例如 powerlevel10k 和 ZINIT
+3. 02-system.zsh: 設定 shell 選項如 `setopt` 和 `bindkey`
+4. 03-preference.zsh: 設定全局環境變數，可以任意修改，快捷變數為 `ZDOTFILES_PREFERENCE`
+5. 04-fpath.zsh: FPATH 相關設定
+6. 05-completion.zsh: 設定自動補全，如 `zstyle`
+7. 06-plugins.zsh: 載入插件
+8. 07-alias.zsh: 設定別名，可以任意修改，快捷變數為 `ZDOTFILES_ALIAS`
+9. 08-p10k.zsh: powerlevel10k 設定檔
+
+想編輯 zshrc 時建議直接修改這些文件，輸入 `vim $ZD [tab]` 可以自動補全不用記這麼長的名字。
 
 ## 快捷鍵列表
 
@@ -88,8 +114,6 @@ end
   - 垂直分割: `SUPER`+`d`
   - 水平分割: `SUPER`+`D`
   - 切換: `SUPER_REV` + `方向鍵`
-- 向上捲動: `CTRL`+`f`
-- 向下捲動: `CTRL`+`d`
 - 原本的背景圖片放在 backdrops/archive 裡面，移出來就可以有隨機背景圖片。
 
 </details>
@@ -212,6 +236,11 @@ end
     <td>複製提交</td>
   </tr>
   <tr>
+    <td>gtlll</td>
+    <td>gtlll(){ git tag --sort=-v:refname -n999 --format="[%(objectname:short) %(refname:short)] %(contents:lines=999)%0a" --list "${1}*" }; noglob gtlll</td>
+    <td>尋找指定標籤，無輸入就列出所有，類似指令有 gtll/gtl</td>
+  </tr>
+  <tr>
     <td>grb</td>
     <td>git rebase</td>
     <td>變基</td>
@@ -304,6 +333,26 @@ end
     <td>vv</td>
     <td>nvim</td>
     <td>啟動 Neovim Editor</td>
+  </tr>
+  <tr>
+    <td>ee</td>
+    <td>exit 0</td>
+    <td>退出終端</td>
+  </tr>
+  <tr>
+    <td>switch_en</td>
+    <td>export LC_ALL='en_US.UTF-8'; export LANG='en_US.UTF-8'</td>
+    <td>暫時切換到英語系統，也有 tw 版本</td>
+  </tr>
+  <tr>
+    <td>gpg_test</td>
+    <td>echo test | gpg --clear-sign</td>
+    <td>測試 GPG 是否能正確簽署</td>
+  </tr>
+  <tr>
+    <td>gpg_reload</td>
+    <td>gpgconf --kill gpg-agent</td>
+    <td>重新載入 GPG</td>
   </tr>
   <tr>
     <td>hnc</td>
