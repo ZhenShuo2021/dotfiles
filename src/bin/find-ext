@@ -1,0 +1,17 @@
+#!/bin/sh
+# 
+# 找出指定副檔名的檔案
+# example: find-ext "*.zsh" "*.sh" 找出所有 zsh 和 sh 檔
+
+find_pattern=""
+for pattern in "$@"; do
+    pattern="\"$pattern\""
+    if [ -z "$find_pattern" ]; then
+        find_pattern="-name $pattern"
+    else
+        find_pattern="$find_pattern -o -name $pattern"
+    fi
+done
+
+eval "find . -type f \( $find_pattern \)"
+
