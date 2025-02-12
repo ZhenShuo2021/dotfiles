@@ -58,7 +58,25 @@ default_brew_prefix() {
       ;;
     esac
   else
-    echo "$HOME/.linuxbrew"
+    echo "$HOME/linuxbrew/.linuxbrew"
+  fi
+}
+
+setup_shell_env() {
+  local brew_path=$(default_brew_prefix)
+  local shell_config
+  local brew_command="$brew_path/bin/brew"
+  local shell_env_command="eval \"\$(${brew_command} shellenv)\""
+  
+  if [ "$(uname)" = "Darwin" ]; then
+    shell_config="$HOME/.zprofile"
+  else
+    shell_config="$HOME/.zshrc"
+  fi
+
+  if ! grep -q "$shell_env_command" "$shell_config" 2>/dev/null; then
+    echo "$shell_env_command" >> "$shell_config"
+    echo "Added Homebrew shell environment to $shell_config"
   fi
 }
 
@@ -115,7 +133,7 @@ install_homebrew() {
   printf "\033[00;32mHomebrew successfully installed at $brew_path\033[0m\n"
   eval "$($brew_path/bin/brew shellenv)"
 
-  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+  setup_shell_env
   echo "$brew_path/bin" > /tmp/brew_path.txt
 
   echo 'Start installing packages in Brewfile'
