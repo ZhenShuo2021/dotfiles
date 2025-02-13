@@ -1,32 +1,38 @@
-# Dotfiles
+# Dotfile Built for Speed and Simplicity
 
-現代、快速、方便、功能齊全的 ZSH dotfiles。
+現代、快速、方便、功能齊全的 ZSH dotfile。
 
-此 ZSH dotfiles 參考多個熱門的 dotfiles 優點進行優化，並且大量使用 [zsh-defer](https://github.com/romkatv/zsh-defer) 加快載入速度，同時支援自動安裝套件和 symlink 設定檔，只需在安裝過程中輸入一次密碼即可完成所有安裝和設定，無需任何手動安裝。
+此 ZSH dotfile 參考多個熱門的 dotfile 優點進行優化，並且大量使用 [zsh-defer](https://github.com/romkatv/zsh-defer) 加快載入速度，同時支援自動安裝套件和 symlink 設定檔，只需在安裝過程中輸入一次密碼即可完成所有安裝和設定，無需任何手動安裝。
 
-對比其他 dotfiles 除了選擇功能更好、更新更活躍的插件之外，也正確設定自動補全，很多人的自動補全都沒有正確啟用。
-
-## 兼容性
-
-測試過以下系統能正常運作，就連權限幾乎被全部鎖定而且完全不能用 dpkg 的 TrueNAS 都能成功啟用
-
-- [x] macOS Sonoma
-- [x] Ubuntu 22.04.5 LTS
-- [x] TrueNas ElectricEel-24.10.0 (6.6.44-production+truenas)
+對比其他 dotfile 除了選擇功能更好、更新更活躍的插件之外，也正確設定自動補全，很多人的自動補全都沒有正確啟用。
 
 ## 速度
 
-載入速度採用全面且嚴謹的 [zsh-bench](https://github.com/romkatv/zsh-bench/) 作為測試基準，同時也提供直觀易懂的 hyperfine 進行測試。測試執行於 M1 MacBook Pro 8G RAM，zsh-bench 使用預設值，hyperfine 使用 `hyperfine --runs 100 --warmup 3 'zsh -i -c exit 0'` 測試。
+Faster 不只是口號。
 
-可以看到載入速度大幅領先 Oh-My-ZSH，某些項目更可以持平不使用套件管理器的速度甚至超越，請注意兩個對手都公平的使用 zsh-defer 加速，所以已經非常接近使用插件的速度上限了。
+載入速度採用全面且嚴謹的 [zsh-bench](https://github.com/romkatv/zsh-bench/) 作為測試指標，同時也提供直觀易懂的 hyperfine 測試結果[^test-method]，不只是表面數據好看，而是使用反應現實狀態的指標得到真實可感知的效能提升。
+
+[^test-method]: 測試執行於 M1 MacBook Pro 8G RAM，zsh-bench 使用預設值，hyperfine 使用 `hyperfine --runs 100 --warmup 3 'zsh -i -c exit 0'` 測試。由於不使用 zsh-defer 優化的 `Manual Install` 實在太慢，所以他沒有載入最耗時的幾個插件：oh-my-zsh 本身（借用他的插件庫，`Manual Install Optimized` 也有載入 oh-my-zsh 以達成公平的測試環境），以及需要載入 oh-my-zsh 的 docker/git 插件。總而言之所有框架的插件都相同只有 `Manual Install` 沒載入 oh-my-zsh 和 git/docker 插件。
+
+測試項目涵蓋五個框架：
+
+- Oh-My-ZSH: 使用 Oh-My-ZSH 加上 zsh-defer 優化
+- Manual Install: 手動安裝無優化
+- Manual Install Optimized: 手動安裝加上 zsh-defer 優化
+- Zinit: 本份 dotfile
+- Baseline: 基準線，移除 .zshrc，本機能達到的最快速度
+
+從最廣泛使用的框架到完全空白的設定檔，分別測試了最多人用的框架、純手動安裝、手動安裝極限優化、本份 dotfile 以及作為基準線的空白 zshrc。
 
 <p align="center">
-  <img src=".github/benchmark.jpg" width="95%" height="95%" alt="benchmark">
+  <img src=".github/benchmark.webp" width="95%" height="95%" alt="benchmark">
 </p>
 
-附帶一提，ZINIT 除了比 Oh-My-ZSH 更快管理插件也更方便，不需要自己 clone 插件，也不需要一個額外文件負責設定插件管理器本身，所以這份 dotfiles 除了速度也更易於管理插件。
+載入速度大幅領先 Oh-My-ZSH，並且大多數測試項目都能持平 `Manual Install Optimized` 甚至超越，請注意對手都公平的使用 zsh-defer 加速，表示已經非常接近速度上限了。比照基準線看似差距很多，但是根據 zsh-bench 作者的[人類感知閾值測試](https://github.com/romkatv/zsh-bench/?tab=readme-ov-file#how-fast-is-fast)，本份 dotfile 全部測試項目的耗時都能達到距離體感無延遲 10ms 之內的成績。
 
-> 繪製自己的測試結果：將數據更新在 .github/benchmark.py 後使用 `uv run .github/benchmark.py` 直接執行，不需建立虛擬環境。
+除了效能也更方便管理。由於採用 Zinit，不需要額外的設定文件來設定插件管理器，也不必像 Manual Install 那樣手動 clone 插件。
+
+> 繪製自己的測試結果：將數據更新在 .github/benchmark.py 後使用 `uv run .github/benchmark.py` 可以直接執行不需建立虛擬環境。
 
 ## Feature
 
@@ -60,14 +66,24 @@
   - gallery-dl: 精心設計的 config.json，只需修改路徑即可使用
   - yt-dlp: 設定檔為最高畫質和音質，開箱即用
 
+## 相容性
+
+以下系統經過測試能正常運作，即使在權限被鎖定甚至連 dpkg 都不能用的 TrueNAS 都能成功啟用
+
+- [x] macOS Sonoma
+- [x] Ubuntu 22.04.5 LTS
+- [x] TrueNas ElectricEel-24.10.0 (6.6.44-production+truenas)
+
 ## 安裝
 
 ```sh
-git clone --depth=1 --recursive --shallow-submodules https://github.com/ZhenShuo2021/dotfiles-macos.git ~/.dotfiles
+git clone --recursive --shallow-submodules https://github.com/ZhenShuo2021/dotfiles ~/.dotfiles
 cd ~/.dotfiles
 find . -type f -name "*.sh" -exec chmod +x {} \; 
 src/bootstrap.sh
 ```
+
+submodule 有 neovim、wezterm 以及 warp 三個設定檔。
 
 ## 修改
 
