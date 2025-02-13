@@ -11,7 +11,7 @@ export PATH="$ZDOTFILES/src/bin:$PATH"
 export EDITOR='code'
 
 FPATH="$ZDOTFILES/src/fpath:$FPATH"
-zsh-defer autoload -U $ZDOTFILES/src/fpath/*(:t)
+autoload -U $ZDOTFILES/src/fpath/*(:t)
 
 
 # Setup completions
@@ -20,17 +20,16 @@ zsh-defer autoload -U $ZDOTFILES/src/fpath/*(:t)
 # compdef/compinit、修改 FPATH 等等依賴，就需要手動調整順序
 
 autoload -U compinit
-zsh-defer compinit -d "$ZSH_COMPDUMP"   # ZSH_COMPDUMP is configured in .zshenv
+compinit -d "$ZSH_COMPDUMP"   # ZSH_COMPDUMP is configured in .zshenv
 
 
 # Load plugins
 # ============================================================================
-# 插件應該都以 *.plugin.zsh 結尾。載入函式預設啟用 zsh-defer，在載入後面加上 false 可以關閉該功能
-# 由於 zsh-defer 遮蔽錯誤訊息，所以新增插件請先關閉延遲載入功能測試是否需要額外依賴
+# 插件應該都以 *.plugin.zsh 結尾。
 
 OMZ_DIR="$PLUGIN_DIR/ohmyzsh"
 source $ZDOTFILES/src/zsh/plugins.zsh
-zsh-defer source "$OMZ_DIR/oh-my-zsh.sh"   # OMZ cache and completions. Required by docker/git
+source "$OMZ_DIR/oh-my-zsh.sh"   # OMZ cache and completions. Required by docker/git
 
 load_omz_lib "git"
 load_omz_lib "history"
@@ -87,7 +86,6 @@ source $PLUGIN_DIR/powerlevel10k/powerlevel10k.zsh-theme
 # Load dotfiles
 # ============================================================================
 
-# zsh-defer -t 0.5 source $ZDOTFILES/src/zsh/alias.zsh   # 更晚載入避免被插件的延遲載入覆蓋
-zsh-defer source $ZDOTFILES/src/zsh/alias.zsh
-zsh-defer source $ZDOTFILES/src/zsh/completion.zsh
-zsh-defer source $ZDOTFILES/src/zsh/system.zsh
+source $ZDOTFILES/src/zsh/alias.zsh
+source $ZDOTFILES/src/zsh/completion.zsh
+source $ZDOTFILES/src/zsh/system.zsh
