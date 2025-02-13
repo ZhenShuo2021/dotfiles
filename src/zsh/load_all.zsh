@@ -29,14 +29,14 @@ compinit -d "$ZSH_COMPDUMP"   # ZSH_COMPDUMP is configured in .zshenv
 
 OMZ_DIR="$PLUGIN_DIR/ohmyzsh"
 source $ZDOTFILES/src/zsh/plugins.zsh
-source "$OMZ_DIR/oh-my-zsh.sh"   # OMZ cache and completions. Required by docker/git
+# source "$OMZ_DIR/oh-my-zsh.sh"   # OMZ cache and completions. Required by docker/git
 
-load_omz_lib "git"
+# load_omz_lib "git"
 load_omz_lib "history"
 
 autoload -Uz is-at-least   #  for docker plugin
-load_omz_plugin "docker"
-load_omz_plugin "docker-compose"
+# load_omz_plugin "docker"
+# load_omz_plugin "docker-compose"
 load_omz_plugin "extract"
 load_omz_plugin "git"
 
