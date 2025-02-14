@@ -1,20 +1,13 @@
 #compdef hnc
+# 
+# auto completion of `hugo new content` with ignore pattern
+# see fpath/hnc for more information
+# https://unix.stackexchange.com/questions/14434/path-files-and-compadd-ignore-files-parameter
 
-# new: filter with regex
 _hnc() {
-  local -a dirs
-  local ignore_pattern='archives|about|tags|categories'
-  dirs=(${(f)"$(find ./content -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | grep -v -E $ignore_pattern)"})
-  _describe 'directories' dirs -S '/'
+  local -a ignored
+  ignored=('about' 'archives' 'tags' 'categories' '2024*' '**/2024*')
+  _path_files -/ -W "$PWD/content" -F ignored
 }
 
 _hnc
-
-
-# old: filter names
-
-# #compdef hnc
-# local content_dir="${PWD}/content"
-# local -a ignored_patterns
-# ignored_patterns=("about" "archives" "tags" "categories")
-# _files -W "$content_dir" -/ -F ignored_patterns
