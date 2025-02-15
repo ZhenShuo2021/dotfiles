@@ -2,19 +2,15 @@
 
 現代、快速、方便、功能齊全的 ZSH dotfile。
 
-此 ZSH dotfile 參考多個熱門的 dotfile 優點進行優化，並且大量使用 [zsh-defer](https://github.com/romkatv/zsh-defer) 加快載入速度，同時支援自動安裝套件和 symlink 設定檔，只需在安裝過程中輸入一次密碼即可完成所有安裝和設定，無需任何手動安裝。
-
-對比其他 dotfile 除了選擇功能更好、更新更活躍的插件之外，也正確設定自動補全，很多人的自動補全都沒有正確啟用。
+![demo](.github/dotfiles-demo.webp "demo")
 
 ## 速度
 
-Faster 不只是口號。
+速度不只是口號也不只是表面數據。
 
-載入速度採用全面且嚴謹的 [zsh-bench](https://github.com/romkatv/zsh-bench/) 作為測試指標，同時也提供直觀易懂的 hyperfine 測試結果[^test-method]，不只是表面數據好看，而是使用反應現實狀態的指標得到真實可感知的效能提升。
+採用全面且嚴謹的 [zsh-bench](https://github.com/romkatv/zsh-bench/) 作為測試指標以反應真實可感知的效能，避免只有數據好看的問題，並同時提供 hyperfine 測試結果作為直觀易懂的數據結果[^test-method]。測試項目涵蓋五個常見框架：
 
 [^test-method]: 測試執行於 M1 MacBook Pro 8G RAM，zsh-bench 使用預設值，hyperfine 使用 `hyperfine --runs 100 --warmup 3 'zsh -i -c exit 0'` 測試。由於不使用 zsh-defer 優化的 `Manual Install` 實在太慢，所以他沒有載入最耗時的幾個插件：oh-my-zsh 本身（借用他的插件庫，`Manual Install Optimized` 也有載入 oh-my-zsh 以達成公平的測試環境），以及需要載入 oh-my-zsh 的 docker/git 插件。總而言之所有框架的插件都相同只有 `Manual Install` 沒載入 oh-my-zsh 和 git/docker 插件。
-
-測試項目涵蓋五個框架：
 
 - Oh-My-ZSH: 使用 Oh-My-ZSH 加上 zsh-defer 優化
 - Manual Install: 手動安裝無優化
@@ -22,27 +18,31 @@ Faster 不只是口號。
 - Zinit: 本份 dotfile
 - Baseline: 基準線，移除 .zshrc，本機能達到的最快速度
 
-從最廣泛使用的框架到完全空白的設定檔，分別測試了最多人用的框架、純手動安裝、手動安裝極限優化、本份 dotfile 以及作為基準線的空白 zshrc。
+從最廣泛使用的框架到完全空白的設定檔，分別代表最多人用的框架、純手動安裝、手動安裝極限優化、本份 dotfile 以及作為基準線的空白 zshrc，這樣選擇的原因是為了能和絕大多數人的設定比較，並且藉由沒有框架只有插件本身的 overhead，還有 shell 本身的速度上限進行比對，藉此準確的定位效能。
 
 <p align="center">
   <img src=".github/benchmark.webp" width="95%" height="95%" alt="benchmark">
 </p>
 
-載入速度大幅領先 Oh-My-ZSH，並且大多數測試項目都能持平 `Manual Install Optimized` 甚至超越，請注意對手都公平的使用 zsh-defer 加速，表示已經非常接近速度上限了。比照基準線看似差距很多，但是根據 zsh-bench 作者的[人類感知閾值測試](https://github.com/romkatv/zsh-bench/?tab=readme-ov-file#how-fast-is-fast)，本份 dotfile 全部測試項目的耗時都能達到距離體感無延遲 10ms 之內的成績。
+請注意對手都公平的使用 zsh-defer 加速，我們可以看到載入速度大幅領先 Oh-My-ZSH，並且大多數測試項目都能持平 `Manual Install Optimized` 甚至超越，表示已經非常接近速度上限了，除非改用 fish shell，否則在 zsh 下這基本上就是速度最快的設定檔。比照基準線看似差距不少，不過根據 zsh-bench 作者的[感知閾值測試](https://github.com/romkatv/zsh-bench/?tab=readme-ov-file#how-fast-is-fast)，本份 dotfile 的所有測試項目距離體感無延遲區別都不超過 10ms。
 
 除了效能也更方便管理。由於採用 Zinit，不需要額外的設定文件來設定插件管理器，也不必像 Manual Install 那樣手動 clone 插件。
 
 > 繪製自己的測試結果：將數據更新在 .github/benchmark.py 後使用 `uv run .github/benchmark.py` 可以直接執行不需建立虛擬環境。
 
-## Feature
+> 優化自己的 shell 載入速度：使用我的[腳本](https://gist.github.com/ZhenShuo2021/be33f28acc0e818ecc532a432af08ee5)來可視化效能瓶頸。
+
+## 特色
 
 所有程式的設定都基於簡單原則完成，外觀設定模仿 vscode 預設主題，一律使用 nerd font (MesloLGS NF) 字體。
 
-- 📂 集中管理：不需要把安裝腳本和設定檔分開管理，一次完成安裝和設定
-- 🛠️ 易於調整：.zshrc 乾淨簡潔，讓你不會每次修改頭都很痛
+- 🌿 輕鬆方便：使用 Zinit，你的 shell 不會要你買帽T，不會一天到晚要求更新
+- 🔲 極簡風格：不搞花花綠綠的分散注意力
 - 🚀 快速啟動：大量使用 zsh-defer 實現懶加載
+- 📂 集中管理：不需要把安裝腳本和設定檔分開管理，一次完成安裝和設定
 - 📚 完整註解：保證你看得懂 zshrc 在寫什麼以及為何這樣寫
-- 🔄 輕鬆更新：執行 `update-dotfiles` 就可輕鬆更新所有插件和系統套件
+- 🛠️ 易於調整：.zshrc 乾淨簡潔，讓你不會每次修改頭都很痛
+- 🔄 簡單更新：執行 `dotfile-update` 就可輕鬆更新所有插件和系統套件
 - 🎨 已配置完成的 Powerlevel10k 主題
 - 📦 多個預先配置的插件
   - zsh-syntax-highlighting 語法上色
