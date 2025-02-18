@@ -1,0 +1,15 @@
+#!/bin/sh
+echo "Running ubuntu-install-packages.sh"
+
+{{- if .flags.is_codespace }}
+  echo "Using codespace, skip running apt commands"
+{{- else if and (eq .chezmoi.os "linux") (eq .chezmoi.osRelease.id "ubuntu") }}
+
+sudo apt update
+sudo apt install -y unzip zsh
+
+# Dependencies for asdf
+sudo apt install -y curl git
+{{- else }}
+  exit 0
+{{ end -}}

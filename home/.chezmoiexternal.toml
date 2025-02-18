@@ -1,0 +1,15 @@
+[".config/nvim"]
+    type = "git-repo"
+    url = "https://github.com/ZhenShuo2021/starter.git"
+    clone.args = ["--depth", "1"]
+    refreshPeriod = "168h"
+[".config/wezterm"]
+    type = "git-repo"
+    url = "https://github.com/ZhenShuo2021/wezterm-config.git"
+    clone.args = ["--depth", "1"]
+    refreshPeriod = "168h"
+[".warp/themes"]
+    type = "git-repo"
+    url = "https://github.com/ZhenShuo2021/warp-themes.git"
+    clone.args = ["--depth", "1"]
+    refreshPeriod = "168h"

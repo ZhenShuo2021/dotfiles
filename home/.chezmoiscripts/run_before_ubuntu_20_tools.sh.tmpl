@@ -1,0 +1,26 @@
+#!/bin/bash
+echo "Running before-ubuntu-tools.sh"
+{{- if and (eq .chezmoi.os "linux") (eq .chezmoi.osRelease.id "ubuntu") -}}
+
+# Git delta
+curl -sS https://webi.sh/delta | sh
+
+# # Load asdf
+# source $HOME/.asdf/asdf.sh
+
+# # ghq
+# asdf plugin add ghq
+# asdf install ghq latest
+# asdf global ghq latest
+
+# # direnv
+# asdf plugin add direnv
+# asdf install direnv latest
+# asdf global direnv latest
+# asdf direnv setup --version latest # Setup script
+
+# # neovim
+# asdf plugin add neovim
+# asdf install neovim latest
+# asdf global neovim latest
+{{ end -}}
