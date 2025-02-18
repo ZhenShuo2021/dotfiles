@@ -1,0 +1,9 @@
+{{- if .flags.is_codespace -}}
+#!/bin/bash
+
+echo "Running tasks in background for codespaces"
+
+zsh -ic "echo zsh plugins initialized" &
+disown
+
+{{ end -}}

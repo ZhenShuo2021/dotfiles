@@ -1,0 +1,54 @@
+#!/bin/sh
+#
+# dotfile-update
+#
+# 更新套件
+# `dotfile-update` handles installation, updates, things like that. Run it periodically
+# to make sure you're on the latest and greatest.
+
+set -e
+
+parentDirectory="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P)"
+dotfilesDirectory="$(cd "$( dirname "$parentDirectory" )" && pwd -P)"
+
+displayUsageAndExit() {
+	echo "dotfile-update -- dotfiles management"
+	echo ""
+	echo "Usage: dotfile-update [options]"
+	echo ""
+	echo "Options:"
+	echo "  -e, --edit    Open dotfiles directory for editing"
+	echo "  -h, --help    Show this help message and exit"
+	exit
+}
+
+while test $# -gt 0; do
+	case "$1" in
+		"-h"|"--help")
+			displayUsageAndExit
+			;;
+		"-e"|"--edit")
+			exec "$EDITOR" "$dotfilesDirectory"
+			exit
+			;;
+		*)
+			echo "Invalid option: $1"
+			displayUsageAndExit
+			;;
+	esac
+	shift
+done
+
+# Update zsh plugins
+if type zinit &>/dev/null; then
+echo "Update zsh plugins"
+command zinit update --all
+fi
+
+# Upgrade brew packages
+if command -v brew &> /dev/null; then
+  echo "Updating Homebrew packages"
+  brew update
+fi
+
+exit ${exit_code:-0}

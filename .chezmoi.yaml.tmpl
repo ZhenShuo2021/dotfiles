@@ -1,0 +1,64 @@
+# Default values
+{{- $name := "ZhenShuo Leo" -}}
+{{- $email := "98386542+ZhenShuo2021@users.noreply.github.com" -}}
+{{- $github_user := "ZhenShuo2021" -}}
+{{- $computer_name := default "MBP.leo" (env "CM_computer_name") -}}
+{{- $hostname := default "leo" (env "CM_hostname") -}}
+{{- $is_codespace := false }}
+{{- $nas_mount_path := default "~/mnt/leonas" (env "NAS_PATH") -}}
+{{- $passphrase := default "change me with 'SETPASS=1 chezmoi init'" (index . "passphrase") -}}
+{{- $devcontainer := or (env "REMOTE_CONTAINERS") (env "CODESPACES") (env "VSCODE_REMOTE_CONTAINERS_SESSION") (env "GITPOD_HOST") | not | not | not -}}
+
+# Check if we are in codespace
+{{- $is_codespace:= env "CODESPACES" | not | not -}}
+{{- $minimum := $devcontainer -}}
+
+# Command line prompt
+{{- if (env "ASK") }}
+{{- $question := "Minimum install (only install zsh plugins, T/F)" -}}
+{{- $minimum := promptBool $question false -}}
+
+{{- if $minimum -}}
+{{-   writeToStdout "✅ Minimum mode enabled\n" -}}
+
+{{- else -}}
+{{-   writeToStdout "✅ Minimum mode disabled\n" -}}
+{{-   $computer_name := promptString "Computer Name" "" -}}
+{{-   $hostname := promptString "Hostname" "" -}}
+{{-   $name := promptString "Full Name" "" -}}
+{{-   $email := promptString "Email" "" -}}
+{{-   $github_user := promptString "GitHub Username" "" -}}
+{{- end -}}
+
+{{- end }}
+
+# Set passphrase if SETPASS env is given
+{{- if (env "SETPASS") }}
+{{    $passphrase = promptString "Encryption Passphrase" $passphrase -}}
+{{- end }}
+
+# Check delta installed
+{{- $delta_is_not_installed := true }}
+{{- if (contains "delta" (output "bash" "-c" "command -v delta || true")) }}
+{{-   $delta_is_not_installed = false }}
+{{- end }}
+
+# chezmoi data
+data:
+  name: {{ $name | quote }}
+  email: {{ $email | quote }}
+  github_user: {{ $github_user | quote }}
+  computer_name: {{ $computer_name | quote }}
+  hostname: {{ $hostname | quote }}
+  nas_mount_path: {{ $nas_mount_path | quote }}
+  passphrase: {{ $passphrase | quote }}
+
+  flags:
+    delta_is_not_installed: {{ $delta_is_not_installed }}
+    is_codespace: {{ $is_codespace }}
+    minimum: {{ $minimum | quote }}
+
+encryption: gpg
+gpg:
+  symmetric: true
+  args: ["--batch", "--passphrase", {{ $passphrase | quote }}, "--no-symkey-cache", "--quiet"]

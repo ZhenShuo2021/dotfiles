@@ -1,0 +1,7 @@
+#!/bin/sh
+echo "Running codespace-change-shell.sh"
+{{- if .flags.is_codespace -}}
+
+sudo chsh -s $(which zsh) $(whoami)
+
+{{- end -}}

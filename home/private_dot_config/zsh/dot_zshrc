@@ -1,0 +1,17 @@
+# This file is copied to ~/.config/zsh/.zshrc by chezmoi and symlinked by
+# symlink_dot_zshrc.tmpl If you want to change the location, you need to
+# change both of them
+
+# These settings should take effect immediately
+source $HOME/.config/zsh/01-preference.zsh
+source $ZZ/02-cm-config.zsh
+source $ZZ/03-plugin.zsh   # source $ZZ/04-p10k.zsh in plugin.zsh
+
+# I want to manage which plugin to be defer after loading the preferences
+source $ZZ/05-system.zsh
+
+# compinit and eval is slow, defer it to speedup
+zsh-defer source $ZZ/06-completion.zsh
+
+# alias must be loaded after plugins with defer to overwrite settings
+zsh-defer source $ZZ/99-alias.zsh

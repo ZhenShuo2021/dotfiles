@@ -1,0 +1,2 @@
+# Deprecated, run `asdf direnv setup --version latest` to setup
+# source "$(asdf direnv hook asdf)"

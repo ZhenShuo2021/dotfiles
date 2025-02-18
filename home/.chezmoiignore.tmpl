@@ -1,0 +1,35 @@
+
+{{ if .flags.minimum }}
+**/.chezmoiscripts/*
+**/.local
+**/.warp
+{{ end }}
+
+*/README.md
+
+{{ if ne .chezmoi.os "darwin" }}
+.config/sketchybar
+.local/macos
+{{ end }}
+
+{{ if ne .chezmoi.os "linux" }}
+.local/linux
+.hushlogin
+.local/share/fonts
+{{ end }}
+
+{{ if ne .chezmoi.os "windows" }}
+Documents
+{{ else }}
+.bash_aliases
+.inputrc
+.oh-my-zsh
+.p10k.zsh
+.ssh/authorized_keys
+.ssh/id_rsa
+.ssh/id_rsa.pub
+.tmux.conf
+.vim
+.vimrc
+.zshrc
+{{ end }}

@@ -1,0 +1,151 @@
+[user]
+  name = {{ .name }}
+  email = {{ .email }}
+  signingkey = D4556A1FB8A62CE310881E849BD938FE686F7AEB
+[core]
+  excludesfile = ~/.gitignore_global
+  {{ if .flags.delta_is_not_installed -}} # [git-delta not installed] # {{ end -}}
+  pager = delta
+  editor = nvim
+  quotepath = false
+[include]
+  path = ~/.gitconfig.local
+[alias]
+  nuke = !$CM_ZSH_DIR/bin/git-nuke-branch
+  track = !$CM_ZSH_DIR/bin/git-track
+  count = !git shortlog -sn
+
+  # Credit: https://github.com/mathiasbynens/dotfiles/blob/main/.gitconfig
+  # List aliases.
+  aliases = config --get-regexp alias
+
+  # `git d` 和上一次的提交比較差異
+  d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
+
+  # `git di <number>` 和前 <number> 次的提交比較差異
+  di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+
+  # `git ca` 預存除了子模組的所有修改並且提交
+  ca = !git add ':(exclude,attr:builtin_objectmode=160000)' && git commit -av
+
+  # Show verbose output about tags, branches or remotes
+  tags = tag -l
+  branches = branch --all
+  remotes = remote --verbose
+
+  # Amend the currently staged files to the latest commit.
+  amend = commit --amend --reuse-message=HEAD
+
+  # `git credit <name> [<email>]` 修改前一個提交的作者
+  credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
+
+  # `git reb <number>` 對前 <number> 次提交進行互動式變基
+  rbi = "!r() { git rebase -i HEAD~$1; }; r"
+
+  # `git ft <commit-ish>` 找到該提交的下一個標籤，並且顯示距離
+  ft = "!f() { git describe --always --contains $1; }; f"
+
+  # `git fc <any>` 從原始碼找到標籤
+  fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
+
+  # `git fm <msg>` 從提交訊息找到標籤
+  fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
+
+  # `git dm` 移除所有已經被合併到 main 的分支
+  # a.k.a. ‘delete merged’
+  dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+
+  # List contributors with number of commits.
+  contributors = shortlog --summary --numbered
+
+
+[init]
+  defaultBranch = main
+[commit]
+  gpgsign = true
+[delta]
+  navigate = true  # use n and N to move between diff sections
+  line-numbers = true
+[merge]
+  conflictstyle = diff3
+[diff]
+  colorMoved = default
+[gui]
+  encoding = utf-8
+[i18n "commit"]
+  encoding = utf-8
+[i18n]
+  logoutputencoding = utf-8
+[rebase]
+  autoStash = true
+[rerere]
+  enabled = 1
+[pull]
+  rebase = true
+
+
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  ui = auto
+[color "branch"]
+  current = green reverse
+  remote = red reverse
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold # line info
+  old = red # deletions
+  new = green # additions
+[color "status"]
+  added = green
+  changed = blue
+
+
+[apply]
+  whitespace = nowarn
+[mergetool]
+  keepBackup = false
+[help]
+  autocorrect = 1
+[push]
+  # See `git help config` (search for push.default)
+  # for more information on different options of the below setting.
+  #
+  # Setting to git 2.0 default to suppress warning message
+  default = simple
+  followTags = true
+[ghq]
+  root = ~/Code
+[interactive]
+  {{ if .flags.delta_is_not_installed -}} # [git-delta not installed] # {{ end -}}
+  diffFilter = delta --color-only
+[filter "lfs"]
+  required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+
+
+{{ if .flags.is_codespace -}} # [Disable since it's codespace] # {{ end -}}
+[url "ssh://git@github.com/{{ .github_user }}"]
+{{ if .flags.is_codespace -}} # [Disable since it's codespace] #   {{ end -}}
+  insteadOf = https://github.com/{{ .github_user }}
+
+
+{{/* Added from gh auth setup-git */}}
+{{- if (env "CODER") }}
+[credential "https://github.com"]
+  helper =
+  helper = !gh auth git-credential
+[credential "https://gist.github.com"]
+  helper =
+  helper = !gh auth git-credential
+{{ end -}}
+
+{{ if eq .chezmoi.os "darwin" }}
+[credential]
+  helper = osxkeychain
+[diff "spaceman-diff"]
+  command = /opt/homebrew/bin/spaceman-diff
+{{ end -}}

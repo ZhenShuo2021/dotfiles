@@ -1,9 +1,0 @@
-[submodule "src/symlink/.config/nvim"]
-	path = src/symlink/.config/nvim
-	url = https://github.com/ZhenShuo2021/starter
-[submodule "src/symlink/.config/wezterm"]
-	path = src/symlink/.config/wezterm
-	url = https://github.com/ZhenShuo2021/wezterm-config
-[submodule "src/symlink/.warp/themes"]
-	path = src/symlink/.warp/themes
-	url = https://github.com/ZhenShuo2021/warp-themes

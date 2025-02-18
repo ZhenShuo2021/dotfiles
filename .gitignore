@@ -1,33 +1,13 @@
-.gitconfig.local
-Brewfile.lock.json
+*.retry
+secrets.yml
+.DS_Store
 
-# 基本設定
-*.env*
-*.key*
-*.pem*
-*cookies*
+# Zsh
+/zsh/config/local.zsh
 
-# symlink
-symlink/.config/*
-!symlink/.config/update-modules.sh
-!symlink/.config/alacritty
-!symlink/.config/gallery-dl
-!symlink/.config/helix
-!symlink/.config/nvim
-symlink/.config/gallery-dl/*.txt
-!symlink/.config/pip
-!symlink/.config/wezterm
-!symlink/symlink/.config/yazi
-!symlink/.config/yt-dlp
-
-src/symlink/.config/*
-!src/symlink/.config/update-modules.sh
-!src/symlink/.config/alacritty
-!src/symlink/.config/gallery-dl
-!src/symlink/.config/helix
-!src/symlink/.config/nvim
-src/symlink/.config/gallery-dl/*.txt
-!src/symlink/.config/pip
-!src/symlink/.config/wezterm
-!src/symlink/.config/yazi
-!src/symlink/.config/yt-dlp
+# Fish
+fishd.*
+fish/config.fish.backup
+.config/fish/fish_history
+fish/fish_history
+fish/fish_variables
