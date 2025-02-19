@@ -1,22 +1,20 @@
 # An EXTREME FAST Zsh Dotfile
 
-Featured by speed, no compromises.
+Featured by speed, no compromise.
 
 ![demo](.github/dotfiles-demo.webp "demo")
 
 ## 速度
 
-使用 shell 的專門測試腳本 [zsh-bench](https://github.com/romkatv/zsh-bench/) 和直觀易懂的 hyperfine 進行測試[^test-method]，測試項目涵蓋五個常見框架：
+使用專門測試 shell 的 [zsh-bench](https://github.com/romkatv/zsh-bench/) 和直觀易懂的 hyperfine 進行測試[^test-method]，測試項目涵蓋五種框架：
 
-[^test-method]: 測試執行於 M1 MacBook Pro 8G RAM，zsh-bench 使用預設值，hyperfine 使用 `hyperfine --runs 100 --warmup 3 'zsh -i -c exit 0'` 測試。所有框架的插件都相同只有 `Manual Install` 沒載入 git/docker 插件，因為加上後就會慢到受不了（因為這兩個插件需要是基於 oh-my-zsh，想要使用就需要額外初始化 oh-my-zsh 會嚴重影響速度）。
-
-- Oh-My-ZSH: 使用 Oh-My-ZSH 加上 zsh-defer 優化
-- Manual Install: 手動安裝無優化
-- Manual Install Optimized: 手動安裝加上 zsh-defer 優化
-- Zinit: 本份 dotfile
+- Oh-My-ZSH: 最多人使用的框架並且加上 zsh-defer 優化
+- Zinit: 講求效能的插件管理器
+- No Plugin Manager: 不使用插件管理器以減少延遲，並且使用 zsh-defer 優化
+- Zim: 此份 dotfile
 - Baseline: 基準線，移除 .zshrc，本機能達到的最快速度
 
-從最廣泛使用的框架到手動優化以及作為基準線的空白 zshrc，測試項目這樣選擇的原因是為了能和絕大多數人的設定比較，並且藉由不同優化程度的設定檔藉此準確的定位效能。
+測試項目的選擇從最廣泛使用的框架到手動優化，以便準確定位效能，可以看到基本上追平甚至超越不使用插件管理器的速度。
 
 <p align="center">
   <img src=".github/benchmark.webp" width="95%" height="95%" alt="benchmark">
@@ -27,9 +25,11 @@ Featured by speed, no compromises.
 > - 為何不用 antidote?  
 > 有太多 anti* 的插件管理器了，而且他正好在換代中
 > - 為何不用 zsh4humans?  
-z4h [如圖所示](https://github.com/zimfw/zimfw/wiki/Speed) 是最快的插件管理器，但是我不需要一個強迫我用 p10k、設定混亂而且會覆蓋我 zshrc 的插件管理器，如果沒有這些問題他會是完美的
+> z4h [是最快的插件管理器](https://github.com/zimfw/zimfw/wiki/Speed)，但是我不想要一個強迫使用 p10k、設定混亂、會覆蓋我 zshrc 的插件管理器，如果沒有這些問題他會是完美的
 > - 繪製自己的測試結果：將數據更新在 .github/benchmark.py 後使用 `uv run .github/benchmark.py` 可以直接執行不需建立虛擬環境。
 > - 找出效能瓶頸：使用我的[腳本](https://gist.github.com/ZhenShuo2021/be33f28acc0e818ecc532a432af08ee5)來可視化效能瓶頸。
+
+[^test-method]: 測試執行於 M1 MacBook Pro 8G RAM，zsh-bench 使用預設值，hyperfine 使用 `hyperfine --runs 100 --warmup 3 'zsh -i -c exit 0'` 測試，測試總共載入的插件有 zsh-defer, zsh-syntax-highlighting, zsh-autosuggestions, zsh-completions, zsh-z, docker, docker-compose, extract, git。
 
 ## 特色
 
@@ -68,7 +68,7 @@ z4h [如圖所示](https://github.com/zimfw/zimfw/wiki/Speed) 是最快的插件
 ## 安裝
 
 ```shell
-ASK=1 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ZhenShuo2021/dotfiles/chezmoi/remote_install.sh) -k -v"
+ASK=1 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ZhenShuo2021/dotfiles/main/remote_install.sh) -k -v"
 ```
 
 首次執行不會完整安裝，因為 GPG 等需要進一步設定，移除 `ASK=1` 會使用預設名稱作為電腦和用戶名，再次執行 `chezmoi -k apply` 可以進行後續部分的安裝。
@@ -82,11 +82,13 @@ chezmoi cd
 - 應用設定檔，環境變數可選  
 ASK=1 SETPASS=1 chezmoi init --apply
 
-## 最簡模式
+## 最簡安裝
 
-最簡模式只會複製 .zshrc/.zshenv 不會修改其餘任何設定，第一個問題輸入 T/F 選擇是否啟用。
+最簡安裝只會修改 shell 設定不會進行任何額外安裝，在第一個問題輸入 T/F 選擇是否啟用。
 
 ## 修改
+
+zshrc 相關設定在 `~/.local/share/chezmoi/home/private_dot_config/zsh` 中，由以下組成
 
 1. 01-preference.zsh: 各種路徑和常數設定
 2. 02-cm-config.zsh: 由 chezmoi 載入的設定
@@ -423,5 +425,6 @@ end
 
 # Acknowledgments
 
-- Code is based on [narze's dotfiles (MIT License)](https://github.com/narze/dotfiles)
-- Snippets from [Holman's dotfiles (MIT License)](https://github.com/holman/dotfiles), [mathiasbynens (MIT License)](https://github.com/mathiasbynens/dotfiles)
+- Code is based on [narze's dotfile (MIT License)](https://github.com/narze/dotfiles)
+- Snippets from [Holman's dotfile (MIT License)](https://github.com/holman/dotfiles), [mathiasbynens (MIT License)](https://github.com/mathiasbynens/dotfiles)
+- The idea of modularization comes from [xero's dotfile](https://github.com/xero/dotfiles/tree/main/zsh/.config/zsh)
