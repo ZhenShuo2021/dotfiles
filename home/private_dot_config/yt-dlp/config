@@ -1,0 +1,39 @@
+# Enable SQLite database for archive
+--download-archive /Volumes/photo/stash-photo/downloaded_videos.txt
+
+# Directory to save the downloaded videos
+-o "/Volumes/photo/stash-photo/%(uploader)s/livestream/%(upload_date)s - %(title)s.%(ext)s"
+
+# Set the video format to download
+-f bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]
+
+# Enable resuming of partially downloaded files
+-c
+
+# Number of retries in case of download errors
+-R 3
+
+# Number of fragments of a dash/hlsnative video that should be downloaded concurrently
+--concurrent-fragments 3
+
+# Avoid getting banned
+--sleep-requests 2
+--sleep-interval 15
+
+# Do not overwrite files
+--no-overwrites
+
+# Continue downloading if errors are encountered
+-i
+
+# Use the Last-modified header to set the file modification time
+--mtime
+
+# Force filenames to be Windows-compatible
+--windows-filenames
+
+# Video codec preference 
+-S vcodec:av01/vcodec:vp9.2/vcodec:h265/vcodec:h264
+
+# Chinese Subtitle
+--sub-lang zh-TW --write-sub
