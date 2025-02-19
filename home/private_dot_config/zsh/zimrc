@@ -1,0 +1,8 @@
+zmodule romkatv/zsh-defer
+zmodule git
+zmodule agkozak/zsh-z
+zmodule ohmyzsh/ohmyzsh --root plugins/extract
+zmodule ohmyzsh/ohmyzsh --root lib/key-bindings.zsh
+zmodule zsh-users/zsh-completions
+zmodule zsh-users/zsh-syntax-highlighting
+zmodule zsh-users/zsh-autosuggestions
