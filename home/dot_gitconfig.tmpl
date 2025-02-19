@@ -11,8 +11,8 @@
 [include]
   path = ~/.gitconfig.local
 [alias]
-  nuke = !$CM_ZSH_DIR/bin/git-nuke-branch
-  track = !$CM_ZSH_DIR/bin/git-track
+  nuke = !{{ .chezmoi.destDir -}}/.config/zsh/bin/git-nuke-branch
+  track = !{{ .chezmoi.destDir -}}/.config/zsh/bin/git-track
   count = !git shortlog -sn
 
   # Credit: https://github.com/mathiasbynens/dotfiles/blob/main/.gitconfig
