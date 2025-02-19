@@ -21,6 +21,11 @@ if [[ ! -d ${ZIM_HOME}/modules/powerlevel10k ]]; then
   git clone --depth=10 https://github.com/romkatv/powerlevel10k ${ZIM_HOME}/modules/powerlevel10k
 fi
 
+# Install zsh-defer if not installed
+if [[ ! -d ${ZIM_HOME}/modules/zsh-defer ]]; then
+  git clone --depth=10 https://github.com/romkatv/zsh-defer.git ${ZIM_HOME}/modules/zsh-defer
+fi
+
 # Install docker completion
 docker_completion="$HOME/.config/zsh/zim/modules/_docker"
 if [ ! -f "$docker_completion" ]; then
@@ -39,6 +44,7 @@ source ${ZIM_HOME}/modules/powerlevel10k/powerlevel10k.zsh-theme
 if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZIM_CONFIG_FILE:-${ZDOTDIR:-${HOME}}/.zimrc} ]]; then
   zsh-defer source ${ZIM_HOME}/zimfw.zsh init -q
 fi
+
 zsh-defer source ${ZIM_HOME}/init.zsh
 zsh-defer source $docker_completion
 

@@ -23,4 +23,4 @@ else
 fi
 
 # exec: replace current process with chezmoi init
-exec "$chezmoi" init https://github.com/ZhenShuo2021/dotfiles.git --branch chezmoi --apply --keep-going
+exec "$chezmoi" init https://github.com/ZhenShuo2021/dotfiles.git --branch main --apply --keep-going
