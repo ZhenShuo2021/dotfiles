@@ -11,7 +11,8 @@ compinit -d "$ZSH_COMPDUMP"   # ZSH_COMPDUMP is configured in .zshenv
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*' insert-tab pending
-zstyle ':completion:*' menu select
+zstyle ':completion:*' menu select   # better zsh-z completion
+zstyle ':completion::complete:*' cache-path "$XDG_CACHE_HOME/zsh/zcompcache"
 
 # Uncomment if $BREW_PATH/share/zsh/site-functions missing in FPATH
 # if type brew &>/dev/null

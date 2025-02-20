@@ -43,10 +43,19 @@ export PATH="/run/current-system/sw/bin:$PATH"
 export NIX_PATH="nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs"
 
 # Change zsh-z .z location
-export ZSHZ_DATA="$XDG_CACHE_HOME/.z"
+export ZSHZ_DATA="$XDG_CACHE_HOME/zsh/.z"
 
 # Change .lesshst location
-export LESSHISTFILE="$XDG_CACHE_HOME/.lesshst"
+export LESSHISTFILE="$XDG_CACHE_HOME/zsh/.lesshst"
+
+# Change .vimrc location
+export VIMINIT="$XDG_CONFIG_HOME/vim/.vimrc"
+
+# Change .gitconfig location
+export GIT_CONFIG_GLOBAL="$XDG_CONFIG_HOME/git/.gitconfig"
+
+# Change .matplotlib location
+export MPLCONFIGDIR="$XDG_CONFIG_HOME/.matplotlib"
 
 # Disable homebrew auto-update
 export HOMEBREW_NO_AUTO_UPDATE=1
