@@ -1,8 +1,10 @@
 zmodule romkatv/zsh-defer
-zmodule git
 zmodule ohmyzsh/ohmyzsh --root plugins/extract
 zmodule ohmyzsh/ohmyzsh --root lib/key-bindings.zsh
+zmodule ohmyzsh/ohmyzsh --root lib/git.zsh
 zmodule zsh-users/zsh-completions
+zmodule completion
+zmodule ohmyzsh/ohmyzsh --root plugins/git   # Requires compdef, must be loaded after completion.  
 zmodule zsh-users/zsh-syntax-highlighting
 zmodule zsh-users/zsh-autosuggestions
 zmodule agkozak/zsh-z

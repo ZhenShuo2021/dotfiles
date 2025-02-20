@@ -6,6 +6,12 @@
 # This MUST run before compinit
 eval $(/opt/homebrew/bin/brew shellenv)
 
+# According to the zimfw documentation, we shouldn't run `compinit` again if `zmodule completion`  
+# is used. However, removing these two lines would require placing `eval $(/opt/homebrew/bin/brew shellenv)`  
+# before sourcing `zmodule completion`. Additionally, `zmodule` enforces execution in non-blocking mode,  
+# significantly slowing down shell startup.  
+# The current solution leverages `zsh-defer` to suppress all messages, eliminating any warnings.  
+
 autoload -Uz compinit
 compinit -d "$ZSH_COMPDUMP"   # ZSH_COMPDUMP is configured in .zshenv
 

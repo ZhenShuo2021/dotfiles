@@ -1,16 +1,6 @@
-# 設定常數在後續腳本使用
-# =============================================================================
-
-# Path which point to this dotfile, also used in fpath/bin/git alias
-CM_ZSH_DIR=$HOME/.local/share/chezmoi/home/private_dot_config/zsh
-CM_ZSH_PREFERENCE=$CM_ZSH_DIR/00-preference.zsh
-CM_ZSH_ALIAS=$CM_ZSH_DIR/99-alias.zsh
-
-# Path which point to dest files. you can edit and use `chezmoi add`
-# to update the original git repo (a.k.a CM_ZSH_DIR)
-ZZ=$HOME/.config/zsh
-ZZ_PREFERENCE=$ZZ/00-preference.zsh
-ZZ_ALIAS=$ZZ/99-alias.zsh
+# Chezmoi cached variables
+export CM_computer_name={{ .computer_name }}
+export CM_hostname={{ .hostname }}
 
 if [[ -a $HOME/.localrc ]]; then source $HOME/.localrc; fi   # for sensitive information
 
@@ -49,7 +39,7 @@ export ZSHZ_DATA="$XDG_CACHE_HOME/zsh/.z"
 export LESSHISTFILE="$XDG_CACHE_HOME/zsh/.lesshst"
 
 # Change .vimrc location
-export VIMINIT="$XDG_CONFIG_HOME/vim/.vimrc"
+# export VIMINIT="$XDG_CONFIG_HOME/vim/.vimrc"
 
 # Change .gitconfig location
 export GIT_CONFIG_GLOBAL="$XDG_CONFIG_HOME/git/.gitconfig"

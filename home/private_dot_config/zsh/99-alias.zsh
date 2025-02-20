@@ -1,12 +1,13 @@
-# 記得放在 plugin 後載入避免被覆蓋
+# Make sure to load this after plugins to prevent it from being overwritten
 
 ### User Preference
-alias vv=nvim
+alias v=nvim
 alias lg=lazygit
+alias d=docker
 alias dc=docker-compose
 alias act-mac='act -P macos-latest=-self-hosted --container-architecture linux/amd64'
 
-### System
+### System Tools
 alias ee="exit 0"
 alias reload!=". ~/.zshrc"
 alias switch_en="export LC_ALL='en_US.UTF-8'; export LANG='en_US.UTF-8'"
@@ -30,6 +31,7 @@ alias gpg_reload='gpgconf --kill gpg-agent; gpgconf --reload gpg-agent'
 alias gpg_list_keys='gpg --list-keys'
 alias gpg_list_config='gpgconf --list-options gpg-agent'
 alias gpg_delete_key='gpg --delete-secret-and-public-keys'
+alias gpg_pubkey="gpg --armor --export | pbcopy | echo '=> Public key copied to pasteboard.'"
 
 ### Git
 alias g=git
@@ -61,5 +63,4 @@ alias glog="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgre
 alias gloga="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' --all"
 alias gp='git push'
 alias 'gp!'='git push --force-with-lease --force-if-includes'
-abbr gdabc="git diff --name-only --diff-filter=U"
 # alias gd='git diff --color | sed "s/^\([^-+ ]*\)[-+ ]/\\1/" | less -r'

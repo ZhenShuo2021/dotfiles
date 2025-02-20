@@ -38,7 +38,13 @@ fi
 # load zsh-defer and p10k
 source ${ZIM_HOME}/modules/zsh-defer/zsh-defer.plugin.zsh
 source ${ZIM_HOME}/modules/powerlevel10k/powerlevel10k.zsh-theme
-[[ ! -f ~/.config/zsh/04-p10k.zsh ]] || source ~/.config/zsh/04-p10k.zsh
+[[ ! -f ~/.config/zsh/03-p10k.zsh ]] || source ~/.config/zsh/03-p10k.zsh
+
+# change zcompdump destination
+# https://github.com/zimfw/zimfw/issues/343#issuecomment-584351654
+zsh-defer zstyle -s ':zim:completion' dumpfile 'zdumpfile' || zdumpfile=$XDG_CACHE_HOME/zsh/zcompcache/.zcompdump
+zsh-defer autoload -Uz zrecompile && zsh-defer zrecompile -p -q ${zdumpfile}
+zsh-defer unset zdumpfile
 
 # load other plugins
 if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZIM_CONFIG_FILE:-${ZDOTDIR:-${HOME}}/.zimrc} ]]; then
