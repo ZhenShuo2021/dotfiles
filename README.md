@@ -1,4 +1,4 @@
-# An EXTREME FAST Zsh Dotfile
+# Blazing Fast Zsh Dotfile
 
 Featured by speed, no compromise.
 
@@ -11,7 +11,8 @@ Featured by speed, no compromise.
 - Oh-My-ZSH: 最多人使用的框架並且加上 zsh-defer 優化
 - Zinit: 講求效能的插件管理器
 - No Plugin Manager: 不使用插件管理器以減少延遲，並且使用 zsh-defer 優化
-- Zim: 此份 dotfile
+- Zim: 標榜 [blazing speed](https://github.com/zimfw/zimfw/wiki/Speed) 的插件管理器
+- zcomet: 此份 dotfile
 - Baseline: 基準線，移除 .zshrc，本機能達到的最快速度
 
 測試項目的選擇從最廣泛使用的框架到手動優化，以便準確定位效能，可以看到基本上追平甚至超越不使用插件管理器的速度。
@@ -20,28 +21,18 @@ Featured by speed, no compromise.
   <img src=".github/benchmark.webp" width="95%" height="95%" alt="benchmark">
 </p>
 
-> - 為何不用 Zinit?  
-> Zinit 內建延遲加載整合，但是插件管理器本體太慢，請見 [zsh-plugin-manager-benchmark](https://github.com/rossmacarthur/zsh-plugin-manager-benchmark)
-> - 為何不用 antidote?  
-> 有太多 anti* 的插件管理器了，而且他正好在換代中
-> - 為何不用 zsh4humans?  
-> z4h [是最快的插件管理器](https://github.com/zimfw/zimfw/wiki/Speed)，但是我不想要一個強迫使用 p10k、設定混亂、會覆蓋我 zshrc 的插件管理器，如果沒有這些問題他會是完美的
-> - 繪製自己的測試結果：將數據更新在 .github/benchmark.py 後使用 `uv run .github/benchmark.py` 可以直接執行不需建立虛擬環境。
-> - 找出效能瓶頸：使用我的[腳本](https://gist.github.com/ZhenShuo2021/be33f28acc0e818ecc532a432af08ee5)來可視化效能瓶頸。
-
-[^test-method]: 測試執行於 M1 MacBook Pro 8G RAM，zsh-bench 使用預設值，hyperfine 使用 `hyperfine --runs 100 --warmup 3 'zsh -i -c exit 0'` 測試，測試總共載入的插件有 zsh-defer, zsh-syntax-highlighting, zsh-autosuggestions, zsh-completions, zsh-z, docker, docker-compose, extract, git。
+[^test-method]: 測試執行於 M1 MacBook Pro 8G RAM，zsh-bench 使用預設值，測試總共載入的插件有 powerlevel10k, zsh-defer, zsh-syntax-highlighting, zsh-autosuggestions, zsh-completions, zsh-z, zsh-history-substring-search, extract, git，每個測試都確保 brew/docker/docker-compose/yarn/npm 的指令補全必須正常運作。hyperfine 使用 `hyperfine --runs 100 --warmup 3 'zsh -i -c exit 0'` 測試，請注意 hyperfine 測試是超級簡化的測試[沒有特別意義](https://github.com/romkatv/zsh-bench?tab=readme-ov-file#how-not-to-benchmark)，他只告訴你執行這行指令的平均時間，不真正代表你的體感時間。
 
 ## 特色
 
 所有程式的設定都基於簡單原則完成，外觀設定模仿 vscode 預設主題，一律使用 nerd font (MesloLGS NF) 字體。
 
-- 🌿 輕鬆方便：你的 shell 不會要你買帽T，不會一天到晚要求更新
-- 🔲 極簡風格：沒有花花綠綠的分散注意力
-- 🚀 快速啟動：使用 zsh-defer 實現懶加載，不用學複雜的語法
+- 🚀 快速啟動：使用 zsh-defer 延遲加載實現 0.04s 的 prompt 載入延遲， 0.1s 的首次指令延遲
 - 📂 集中管理：不需要把安裝腳本和設定檔分開管理，一次完成安裝和設定
 - 📚 完整註解：保證你看得懂 zshrc 在寫什麼以及為何這樣寫
 - 🛠️ 易於調整：.zshrc 乾淨簡潔，讓你不會每次修改頭都很痛
 - 🔄 簡單更新：執行 `dotfile-update` 就可輕鬆更新所有插件和系統套件
+- 🔲 極簡風格：沒有花花綠綠的分散注意力
 - 🎨 已配置完成的 Powerlevel10k 主題
 - 📦 多個預先配置的插件
   - zsh-syntax-highlighting 語法上色
@@ -91,15 +82,15 @@ ASK=1 SETPASS=1 chezmoi init --apply
 
 zshrc 相關設定在 `~/.local/share/chezmoi/home/private_dot_config/zsh` 中，由以下組成
 
-1. 01-preference.zsh: 各種路徑和常數設定
-2. 02-cm-config.zsh: 由 chezmoi 載入的設定
-3. 03-plugins.zsh: 載入插件
-4. 04-p10k.zsh: 載入 p10k 設定檔
-5. 05-system.zsh: 設定 `setopt` 和 `bindkey`
-6. 06-completion.zsh: 設定自動補全
+1. 00-basic.zsh: 基礎路徑設定，指向 Zsh 設定檔和 chezmoi 裡面的設定檔
+2. 01-plugins.zsh: 載入插件
+3. 02-p10k.zsh: p10k 設定檔，由 plugins 載入
+4. 03-preference.zsh: 各種路徑和常數設定
+5. 04-system.zsh: 設定 `setopt` 和 `bindkey`
+6. 05-completion.zsh: 設定自動補全
 7. 99-alias.zsh: 設定別名，可以任意修改
 
-想編輯 zshrc 時建議直接修改這些文件，輸入 `vim $ZZ [tab]` 可以自動補全不用記路徑，通常只會改 01 和 99，變更 p10k 外觀時記得修改 zshrc 選擇否，對應設定已經在 03 裡面完成了。
+編輯 zshrc 看你的習慣是直接編輯 chezmoi 文件還是原始文件，如果使用 chezmoi，可以輸入 `chezmoi cd` 後使用 `v $CM_[tab]` 編輯，最後使用 `make apply` 應用到主目錄；輸入 `v $ZZ[tab]` 則是直接編輯主目錄的點文件，最後再使用 `chezmoi add <file>` 加回儲存庫。通常只會改的 preference 和 alias 有快捷變數，變更 p10k 外觀時最後一個問題詢問修改 zshrc 請選擇否。
 
 ## 快捷鍵列表
 
@@ -346,19 +337,24 @@ end
     <th>用途簡介</th>
   </tr>
   <tr>
-    <td>vv</td>
+    <td>v</td>
     <td>nvim</td>
     <td>啟動 Neovim Editor</td>
   </tr>
   <tr>
-    <td>ee</td>
+    <td>e</td>
     <td>exit 0</td>
     <td>退出終端</td>
   </tr>
   <tr>
     <td>switch_en</td>
     <td>export LC_ALL='en_US.UTF-8'; export LANG='en_US.UTF-8'</td>
-    <td>暫時切換到英語系統，也有 tw 版本</td>
+    <td>暫時切換到英語系統</td>
+  </tr>
+  <tr>
+    <td>switch_twn</td>
+    <td>export LC_ALL='zh_TW.UTF-8'; export LANG='zh_TW.UTF-8'</td>
+    <td>暫時切換到中文系統</td>
   </tr>
   <tr>
     <td>gpg_test</td>
@@ -367,8 +363,13 @@ end
   </tr>
   <tr>
     <td>gpg_reload</td>
-    <td>gpgconf --kill gpg-agent</td>
+    <td>gpgconf --kill gpg-agent; gpgconf --reload gpg-agent</td>
     <td>重新載入 GPG</td>
+  </tr>
+  <tr>
+    <td>gpg_[tab]</td>
+    <td>顯示所有 gpg alias</td>
+    <td>更多常用的 alias 都已經內建不浪費篇幅</td>
   </tr>
   <tr>
     <td>hnc</td>
@@ -376,19 +377,30 @@ end
     <td>新增 Hugo 內容文章</td>
   </tr>
   <tr>
+    <td>ls</td>
+    <td>ls --color=auto --group-directories-first</td>
+    <td>列出檔案</td>
+  </tr>
+  <tr>
     <td>l</td>
-    <td>ls -lAGh</td>
-    <td>詳細列出檔案</td>
+    <td>ls</td>
+    <td>ls 的縮寫</td>
   </tr>
   <tr>
     <td>ll</td>
-    <td>ls -FG</td>
-    <td>普通列出檔案</td>
+    <td>ls --color=auto -A --group-directories-first</td>
+    <td>列出隱藏檔案</td>
   </tr>
   <tr>
-    <td>lll</td>
-    <td>ls -lA</td>
-    <td>機器可讀列出</td>
+    <td>l3</td>
+    <td>ls --color=auto -lAh --time-style=+'' --group-directories-first</td>
+    <td>列出檔案屬性但是不顯示時間和隱藏檔案</td>
+  </tr>
+  </tr>
+  <tr>
+    <td>l4</td>
+    <td>ls --color=auto -lahF --time-style='+[%Y-%m-%d %H:%M:%S]' --group-directories-first</td>
+    <td>列出檔案所有檔案屬性</td>
   </tr>
   <tr>
     <td>reload!</td>
@@ -423,6 +435,41 @@ end
 </table>
 
 </details>
+
+# FAQ
+
+- 有幾種 completion?  
+  - 輸入指令時灰色的字是 zsh-autosuggestion，使用 `<Ctrl>-f` 選擇，設定 `bindkey '<key>' autosuggest-accept` 修改  
+  - 輸入指令時上下按鍵搜尋過往前綴指令是 zsh-history-substring-search，可以在 plugins.zsh 關閉只匹配前綴  
+  - 為了效能捨棄了自動補全的方便性，不是所有補全都可以完美適應，如果沒有正常啟用可以在 preference.zsh 修改，例如 `autoload -Uz /path/to/_zcomet` 加上此補全檔案  
+
+- 遇到奇怪的問題  
+例如 vscode 無法使用 GPG 等奇怪的問題，原因是延遲載入 brew，如果不想處理這種問題請把 completion.zsh 中的 `eval $(/opt/homebrew/bin/brew shellenv)` 移動到 .zshenv 中，刪除 compinit 那兩行，移除 preference.zsh 的 brew PATH，最後在 plugin.zsh 加上 `zcomet compinit`。
+
+- 為何使用 zcomet?  
+語法簡單而且支援直接載入 url，比起 Zinit 更輕量快速，就算遇到問題直接切換到 Zinit 也非常容易
+
+- 為何不用 Zim?  
+語法麻煩而且不支援直接載入 url，最重要的是難以獨立設定哪些插件需要使用 zsh-defer，而沒有使用延遲加載所有插件管理器都會從比較誰更快變成比較誰更慢
+
+- 為何不用 Zinit?  
+Zinit 內建延遲加載整合，但是插件管理器本體太慢，請見 [zsh-plugin-manager-benchmark](https://github.com/rossmacarthur/zsh-plugin-manager-benchmark)
+
+- 為何不用 zsh4humans?  
+z4h [是最快的插件管理器](https://github.com/zimfw/zimfw/wiki/Speed)，但是我不想要一個強迫使用 p10k、設定混亂、會覆蓋我 zshrc 的插件管理器，如果沒有這些問題他會是完美的
+
+- 為何不用 antidote?  
+有太多 anti* 的插件管理器了，我不知道他會不會又停止開發，而且正好在換代到 V2
+
+- 怎麼做才能更快?  
+現在的效能瓶頸在主題，但是 p10k 已經是顯示 git status 裡面最快而且最好看的主題了。為一能更快的是在 `p10k configure` 的 `Prompt Style` 中，四個選項 Lean/Classic/Rainbow/Pure 裡面選擇 Pure 還可以更快，但是我不喜歡這個樣式。
+
+- 我想從根本加速  
+現在就幾乎是最快的設定，不可能更快了，直接改用 fish shell 才能從根本解決問題
+
+- 繪製自己的測試結果：將數據更新在 .github/benchmark.py 後使用 `uv run .github/benchmark.py` 可以直接執行不需建立虛擬環境。
+
+- 找出效能瓶頸：使用我的[腳本](https://gist.github.com/ZhenShuo2021/be33f28acc0e818ecc532a432af08ee5)來可視化效能瓶頸。
 
 # Acknowledgments
 

@@ -40,9 +40,10 @@ while test $# -gt 0; do
 done
 
 # Update zsh plugins
-if type zinit &>/dev/null; then
+if type zcomet &>/dev/null; then
 echo "Update zsh plugins"
-command zinit update --all
+command zcomet self-update
+command zcomet update
 fi
 
 # Upgrade brew packages
