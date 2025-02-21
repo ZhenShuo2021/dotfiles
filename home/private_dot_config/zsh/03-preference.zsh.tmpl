@@ -29,6 +29,13 @@ export PATH="$ZZ/bin:$PATH"
 # Add paths
 export PATH="/run/current-system/sw/bin:$PATH"
 
+# fix gpg not found issue in vscode caused by zsh-defer brew shellenv
+{{- if (eq .chezmoi.os "darwin") }}
+export PATH="/opt/homebrew/bin:$PATH" 
+{{ else }}
+export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH" 
+{{- end }}
+
 # Set Nix path
 export NIX_PATH="nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs"
 
