@@ -2,11 +2,11 @@
 # symlink_dot_zshrc.tmpl. To change the location, modify both files.
 
 # Immediate loading
-source $HOME/.local/share/chezmoi/home/private_dot_config/zsh/00-basic.zsh
+source $HOME/.config/zsh/00-basic.zsh
 source $ZZ/01-plugin.zsh
 
 # Deferred loading for performance optimization
-source $ZZ/02-preference.zsh
+source $ZZ/03-preference.zsh
 
 # Note: 03-p10k.zsh is sourced within plugin.zsh. Do NOT defer loading p10k
 # source $ZZ/03-p10k.zsh

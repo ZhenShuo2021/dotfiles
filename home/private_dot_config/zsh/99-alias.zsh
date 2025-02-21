@@ -8,7 +8,7 @@ alias dc=docker-compose
 alias act-mac='act -P macos-latest=-self-hosted --container-architecture linux/amd64'
 
 ### System Tools
-alias ee="exit 0"
+alias e="exit 0"
 alias reload!=". ~/.zshrc"
 alias switch_en="export LC_ALL='en_US.UTF-8'; export LANG='en_US.UTF-8'"
 alias switch_tw="export LC_ALL='zh_TW.UTF-8'; export LANG='zh_TW.UTF-8'"

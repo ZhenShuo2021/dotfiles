@@ -16,7 +16,7 @@ source ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh
 # load p10k
 zcomet load romkatv/zsh-defer
 zcomet load romkatv/powerlevel10k
-source $ZZ/03-p10k.zsh
+source $ZZ/02-p10k.zsh
 
 
 # load plugins
