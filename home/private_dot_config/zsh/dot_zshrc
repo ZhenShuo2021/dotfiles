@@ -7,13 +7,13 @@ source $HOME/.local/share/chezmoi/home/private_dot_config/zsh/00-basic.zsh
 source $ZZ/01-plugin.zsh
 
 # Deferred loading for performance optimization
-zsh-defer source $ZZ/02-preference.zsh
+source $ZZ/02-preference.zsh
 
 # Note: 03-p10k.zsh is sourced within plugin.zsh. Do NOT defer loading p10k
 # source $ZZ/03-p10k.zsh
 
 # Load opt and bindkey
-zsh-defer source $ZZ/04-system.zsh
+source $ZZ/04-system.zsh
 
 # Defer slow operations (compinit and eval) to improve startup time
 zsh-defer source $ZZ/05-completion.zsh
