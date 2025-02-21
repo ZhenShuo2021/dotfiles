@@ -1,4 +1,4 @@
-# An EXTREME FAST Zsh Dotfile
+# Blazing FAST Zsh Dotfile
 
 Featured by speed, no compromise.
 
@@ -11,7 +11,8 @@ Featured by speed, no compromise.
 - Oh-My-ZSH: 最多人使用的框架並且加上 zsh-defer 優化
 - Zinit: 講求效能的插件管理器
 - No Plugin Manager: 不使用插件管理器以減少延遲，並且使用 zsh-defer 優化
-- Zim: 此份 dotfile
+- Zim: 標榜 [blazing speed](https://github.com/zimfw/zimfw/wiki/Speed) 的插件管理器
+- zcomet: 此份 dotfile
 - Baseline: 基準線，移除 .zshrc，本機能達到的最快速度
 
 測試項目的選擇從最廣泛使用的框架到手動優化，以便準確定位效能，可以看到基本上追平甚至超越不使用插件管理器的速度。
@@ -23,9 +24,13 @@ Featured by speed, no compromise.
 > - 為何不用 Zinit?  
 > Zinit 內建延遲加載整合，但是插件管理器本體太慢，請見 [zsh-plugin-manager-benchmark](https://github.com/rossmacarthur/zsh-plugin-manager-benchmark)
 > - 為何不用 antidote?  
-> 有太多 anti* 的插件管理器了，而且他正好在換代中
+> 有太多 anti* 的插件管理器了，我不知道他會不會又消失，而且他正好在換代中
+> - 為何不用 Zim?  
+> 語法麻煩而且不支援直接載入 url，最重要的是難以獨立設定哪些插件需要使用 zsh-defer
 > - 為何不用 zsh4humans?  
 > z4h [是最快的插件管理器](https://github.com/zimfw/zimfw/wiki/Speed)，但是我不想要一個強迫使用 p10k、設定混亂、會覆蓋我 zshrc 的插件管理器，如果沒有這些問題他會是完美的
+> - 為何使用 zcomet?  
+> 語法簡單支援直接載入 url，比起 Zinit 更輕量快速，就算遇到問題直接切換到 Zinit 也不會浪費你太多時間轉換
 > - 繪製自己的測試結果：將數據更新在 .github/benchmark.py 後使用 `uv run .github/benchmark.py` 可以直接執行不需建立虛擬環境。
 > - 找出效能瓶頸：使用我的[腳本](https://gist.github.com/ZhenShuo2021/be33f28acc0e818ecc532a432af08ee5)來可視化效能瓶頸。
 
