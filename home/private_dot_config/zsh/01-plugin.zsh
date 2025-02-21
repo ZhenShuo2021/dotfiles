@@ -1,45 +1,61 @@
-# Install plugin manager and source it
-### Added by Zinit's installer
+# Preload anything we need for the rest of the rc scripts
+# =============================================================================
 
+ZSH_CUSTOM=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
+PLUGIN_DIR="${ZSH_CUSTOM}/plugins"
+mkdir -p "$PLUGIN_DIR"
+
+# Install and compile plugins, comment these lines while testing
+# https://github.com/romkatv/zsh-bench/blob/master/configs/diy%2B%2B/skel/.zshrc
+
+git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh ~/.oh-my-zsh
+function zcompile-many() {
+  local f
+  for f; do 
+    zcompile -R -- "$f".zwc "$f"
+  done
+}
+
+declare -A plugins=(
+  [zsh-autosuggestions]="https://github.com/zsh-users/zsh-autosuggestions"
+  [zsh-completions]="https://github.com/zsh-users/zsh-completions"
+  [zsh-syntax-highlighting]="https://github.com/zsh-users/zsh-syntax-highlighting"
+  [zsh-history-substring-search]="https://github.com/zsh-users/zsh-history-substring-search"
+  [zsh-z]="https://github.com/agkozak/zsh-z"
+  [zsh-defer]="https://github.com/romkatv/zsh-defer"
+)
+
+for plugin repo in "${(@kv)plugins}"; do
+  target_dir="${PLUGIN_DIR}/${plugin}"
+  if [[ ! -e "$target_dir" ]]; then
+    git clone --depth=1 "$repo" "$target_dir"
+  fi
+  if [[ -d "$target_dir" ]]; then
+    zcompile-many "$target_dir"/*.zsh
+    if [[ "$plugin" = "zsh-syntax-highlighting" && -d "$target_dir/highlighters" ]]; then
+      zcompile-many "$target_dir/highlighters"/*/*.zsh
+    fi
+  fi
+done
+
+# End of Install and compile plugins
+
+
+# Enable the function of p10k instant prompt
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
-    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
-    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
-        print -P "%F{33} %F{34}Installation successful.%f%b" || \
-        print -P "%F{160} The clone has failed.%f%b"
-fi
-
-source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
-# zinit light-mode for \
-#     zdharma-continuum/zinit-annex-readurl \
-#     zdharma-continuum/zinit-annex-bin-gem-node \
-#     zdharma-continuum/zinit-annex-patch-dl \
-#     zdharma-continuum/zinit-annex-rust
-
-### End of Zinit's installer chunk
-
-# load p10k
-zinit load romkatv/zsh-defer
-zinit load romkatv/powerlevel10k
+source $PLUGIN_DIR/../themes/powerlevel10k/powerlevel10k.zsh-theme
 source $ZZ/03-p10k.zsh
+source $PLUGIN_DIR/zsh-defer/zsh-defer.plugin.zsh
 
-
-# load plugins
-zsh-defer zinit load ohmyzsh plugins/extract
-zsh-defer zinit load ohmyzsh plugins/git
+zsh-defer source $PLUGIN_DIR/../../plugins/extract/extract.plugin.zsh
+zsh-defer source $PLUGIN_DIR/../../plugins/git/git.plugin.zsh
 
 
 # configure zsh-history-substring-search
-zsh-defer zinit load zsh-users/zsh-history-substring-search
+zsh-defer source $PLUGIN_DIR/zsh-history-substring-search/zsh-history-substring-search.zsh
 
 # Only search full prefix match
 HISTORY_SUBSTRING_SEARCH_PREFIXED=1
@@ -54,8 +70,7 @@ bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 
 
-# plugins that must be loaded last
-zsh-defer zinit load agkozak/zsh-z
-zsh-defer zinit load zsh-users/zsh-completions
-zsh-defer zinit load zsh-users/zsh-syntax-highlighting
-zsh-defer zinit load zsh-users/zsh-autosuggestions
+zsh-defer source $PLUGIN_DIR/zsh-z/zsh-z.plugin.zsh
+zsh-defer source $PLUGIN_DIR/zsh-completions/zsh-completions.plugin.zsh
+zsh-defer source $PLUGIN_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
+zsh-defer source $PLUGIN_DIR/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
