@@ -18,9 +18,22 @@ eval $(/opt/homebrew/bin/brew shellenv)
 autoload -Uz compinit
 compinit -d "$ZSH_COMPDUMP"   # ZSH_COMPDUMP is configured in .zshenv
 
+# Case-insensitive tab completion
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-zstyle ':completion:*' insert-tab pending
-zstyle ':completion:*' menu select   # better zsh-z completion
+
+# Allow tab insertion when completion is pending
+# zstyle ':completion:*' insert-tab pending
+
+# Set format for completion descriptions
+zstyle ':completion:*:descriptions' format '%F{green}-- %d --%f'
+
+# Set format for completion warnings
+zstyle ':completion:*:warnings' format '%F{red}-- No matches found --%f'
+
+# Enable menu selection for completion
+zstyle ':completion:*' menu select
+
+# Set cache path for completion
 zstyle ':completion::complete:*' cache-path "$XDG_CACHE_HOME/zsh/zcompcache"
 
 # Uncomment if $BREW_PATH/share/zsh/site-functions missing in FPATH
