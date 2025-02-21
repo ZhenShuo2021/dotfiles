@@ -22,9 +22,31 @@ alias "cd.."="cd .."
 alias "cd..."="cd ../.."
 alias "cd...."="cd ../../.."
 
-alias l="ls -lAGh"
-alias ll="ls -FG"
-alias lll="ls -lA"
+export LS_COLORS='di=0;34:ex=0;31:'
+
+{{ if (eq .chezmoi.os "darwin") -}}
+if type gls &>/dev/null
+then
+  alias  l="gls --color=auto --group-directories-first"
+  alias ls='gls --color=auto --group-directories-first'
+  alias ll="gls --color=auto -A --group-directories-first"
+  alias l3="gls --color=auto -lAh --time-style=+'' --group-directories-first"
+  alias l4="gls --color=auto -lahF --time-style='+[%Y-%m-%d %H:%M:%S]' --group-directories-first"
+else
+  alias  l="ls -G"
+  alias ls='ls -G'
+  alias ll="ls -AG"
+  alias l3="ls -lAGh"
+  alias l4="ls -laGhF"
+fi
+{{ else }}
+alias  l="ls --color=auto --group-directories-first"
+alias ls='ls --color=auto --group-directories-first'
+alias ll="ls --color=auto -A --group-directories-first"
+alias l3="ls --color=auto -lAh --time-style=+'' --group-directories-first"
+alias l4="ls --color=auto -lahF --time-style='+[%Y-%m-%d %H:%M:%S]' --group-directories-first"
+{{ end -}}
+
 alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pasteboard.'"
 alias gpg_test='echo test | gpg --clear-sign'
 alias gpg_reload='gpgconf --kill gpg-agent; gpgconf --reload gpg-agent'

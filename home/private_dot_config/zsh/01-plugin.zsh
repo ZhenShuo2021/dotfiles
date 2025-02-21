@@ -44,7 +44,7 @@ bindkey '^[[B' history-substring-search-down
 zsh-defer zcomet load agkozak/zsh-z
 zsh-defer zcomet load zsh-users/zsh-completions
 zsh-defer zcomet load zsh-users/zsh-syntax-highlighting
-zsh-defer zcomet load zsh-users/zsh-autosuggestions
+zsh-defer zcomet load zsh-users/zsh-autosuggestions; bindkey '^f' autosuggest-accept
 
 
 # zcomet compinit doesn't help in my zshrc, see completion.zsh
@@ -57,3 +57,13 @@ zsh-defer zcomet load zsh-users/zsh-autosuggestions
 
 # deprecated plugins
 # zcomet load ohmyzsh lib completion.zsh   # brew fpath and zsh-completions are better
+
+
+# colored manpage
+export LESS_TERMCAP_mb=$'\e[1;32m'
+export LESS_TERMCAP_md=$'\e[1;32m'
+export LESS_TERMCAP_me=$'\e[0m'
+export LESS_TERMCAP_se=$'\e[0m'
+export LESS_TERMCAP_so=$'\e[01;33m'
+export LESS_TERMCAP_ue=$'\e[0m'
+export LESS_TERMCAP_us=$'\e[1;4;31m'
