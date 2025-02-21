@@ -46,8 +46,6 @@ setopt inc_append_history     # Write to the history file immediately, not when 
 # bindkey '^[[5C' end-of-line
 # bindkey '^[[3~' delete-char
 # bindkey '^?' backward-delete-char
-bindkey '^[[H' beginning-of-line
-bindkey '^[[F' end-of-line
 
 
 # from ohmyzsh
@@ -57,17 +55,8 @@ bindkey '^[[F' end-of-line
 bindkey -e
 
 # [PageUp] - Up a line of history
-if [[ -n "${terminfo[kpp]}" ]]; then
-  bindkey -M emacs "${terminfo[kpp]}" up-line-or-history
-  bindkey -M viins "${terminfo[kpp]}" up-line-or-history
-  bindkey -M vicmd "${terminfo[kpp]}" up-line-or-history
-fi
-# [PageDown] - Down a line of history
-if [[ -n "${terminfo[knp]}" ]]; then
-  bindkey -M emacs "${terminfo[knp]}" down-line-or-history
-  bindkey -M viins "${terminfo[knp]}" down-line-or-history
-  bindkey -M vicmd "${terminfo[knp]}" down-line-or-history
-fi
+bindkey '^[[H' beginning-of-line
+bindkey '^[[F' end-of-line
 
 # Start typing + [Up-Arrow] - fuzzy find history forward
 autoload -U up-line-or-beginning-search
