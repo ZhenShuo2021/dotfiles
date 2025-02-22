@@ -84,13 +84,13 @@ zshrc 相關設定在 `~/.local/share/chezmoi/home/private_dot_config/zsh` 中�
 
 1. 00-basic.zsh: 基礎路徑設定，指向 Zsh 設定檔和 chezmoi 裡面的設定檔
 2. 01-plugins.zsh: 載入插件
-3. 02-p10k.zsh: p10k 設定檔，由 plugins 載入
-4. 03-preference.zsh: 各種路徑和常數設定
-5. 04-system.zsh: 設定 `setopt` 和 `bindkey`
-6. 05-completion.zsh: 設定自動補全
-7. 99-alias.zsh: 設定別名，可以任意修改
+3. 02-preference.zsh: 各種路徑和常數設定
+4. 03-system.zsh: 設定 `setopt` 和 `bindkey`
+5. 04-completion.zsh: 設定自動補全
+6. 99-alias.zsh: 設定別名，可以任意修改
+7. 100-p10k.zsh: p10k 設定檔
 
-編輯 zshrc 看你的習慣是直接編輯 chezmoi 文件還是原始文件，如果使用 chezmoi，可以輸入 `chezmoi cd` 後使用 `v $CM_[tab]` 編輯，最後使用 `make apply` 應用到主目錄；輸入 `v $ZZ[tab]` 則是直接編輯主目錄的點文件，最後再使用 `chezmoi add <file>` 加回儲存庫。通常只會改的 preference 和 alias 有快捷變數，變更 p10k 外觀時最後一個問題詢問修改 zshrc 請選擇否。
+編輯方式依照你的習慣是直接編輯 chezmoi 文件還是原始文件，前者可以輸入 `chezmoi cd` 後使用 `v $CM_[tab]` 編輯，最後使用 `make apply` 應用到主目錄；輸入 `v $ZZ[tab]` 則是直接編輯主目錄的點文件，最後再使用 `chezmoi add <file>` 加回儲存庫，常修改的 preference 和 alias 有快捷變數。
 
 ## 快捷鍵列表
 

@@ -1,11 +1,6 @@
 # Preload anything we need for the rest of the rc scripts
 # =============================================================================
 
-# Enable the function of p10k instant prompt
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 # Install plugin manager and source it
 if [[ ! -f ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh ]]; then
   git clone https://github.com/agkozak/zcomet.git ${ZDOTDIR:-${HOME}}/.zcomet/bin
@@ -16,7 +11,6 @@ source ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh
 # load p10k
 zcomet load romkatv/zsh-defer
 zcomet load romkatv/powerlevel10k
-source $ZZ/02-p10k.zsh
 
 
 # load plugins
@@ -30,10 +24,12 @@ zsh-defer zcomet load zsh-users/zsh-history-substring-search
 # Only search full prefix match
 HISTORY_SUBSTRING_SEARCH_PREFIXED=1
 
-# disable 
+# custom substring highlight color
 # HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='fg=white,bold,bg=cyan'
 # HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='fg=white,bold,bg=red'
 # HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_TIMEOUT=2
+
+# disable substring match highlighting
 zsh-defer unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND
 zsh-defer unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND
 bindkey '^[[A' history-substring-search-up

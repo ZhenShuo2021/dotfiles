@@ -1,21 +1,26 @@
-# This file would be copied to ~/.config/zsh/.zshrc by chezmoi and symlinked by
-# symlink_dot_zshrc.tmpl. To change the location, modify both files.
+# dot_zshrc would be copied to ~/.config/zsh/.zshrc by chezmoi and symlinked by
+# symlink_dot_zshrc.tmpl. To change it's location, modify both dot_zshrc and .tmpl file
+
+# Enable the function of p10k instant prompt
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
 # Immediate loading
 source $HOME/.config/zsh/00-basic.zsh
 source $ZZ/01-plugin.zsh
 
 # Deferred loading for performance optimization
-source $ZZ/03-preference.zsh
-
-# Note: 03-p10k.zsh is sourced within plugin.zsh. Do NOT defer loading p10k
-# source $ZZ/03-p10k.zsh
+source $ZZ/02-preference.zsh
 
 # Load opt and bindkey
-source $ZZ/04-system.zsh
+source $ZZ/03-system.zsh
 
 # Defer slow operations (compinit and eval) to improve startup time
-zsh-defer source $ZZ/05-completion.zsh
+zsh-defer source $ZZ/04-completion.zsh
 
 # Load aliases last to ensure they override any plugin settings
 zsh-defer source $ZZ/99-alias.zsh
+
+# To customize prompt, run `p10k configure` or edit ~/.config/zsh/100-p10k.zsh.
+[[ ! -f ~/.config/zsh/100-p10k.zsh ]] || source ~/.config/zsh/100-p10k.zsh
