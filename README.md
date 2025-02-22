@@ -1,10 +1,12 @@
-# Blazing Fast Zsh Dotfile
+<h1 align="center">My Zsh Dotfile Built for Speed!</h1>
 
-Featured by speed, no compromise.
+</br>
 
-![demo](.github/dotfiles-demo.webp "demo")
+<p align="center">
+  <img src=".github/dotfiles-demo.webp" width="90%" height="90%" alt="demo">
+</p>
 
-## 速度
+## How Fast Is It
 
 使用專門測試 shell 的 [zsh-bench](https://github.com/romkatv/zsh-bench/) 和直觀易懂的 hyperfine 進行測試[^test-method]，測試項目涵蓋五種框架：
 
@@ -15,17 +17,17 @@ Featured by speed, no compromise.
 - zcomet: 此份 dotfile
 - Baseline: 基準線，移除 .zshrc，本機能達到的最快速度
 
-測試項目的選擇從最廣泛使用的框架到手動優化，以便準確定位效能，可以看到基本上追平甚至超越不使用插件管理器的速度。
+測試項目的選擇從最廣泛使用的框架到手動優化，以便準確定位效能，可以看到比 Zinit 更快，基本上追平甚至超越不使用插件管理器的速度，同時又比 Zim 易於設定。
 
 <p align="center">
   <img src=".github/benchmark.webp" width="95%" height="95%" alt="benchmark">
 </p>
 
-[^test-method]: 測試執行於 M1 MacBook Pro 8G RAM，zsh-bench 使用預設值，測試總共載入的插件有 powerlevel10k, zsh-defer, zsh-syntax-highlighting, zsh-autosuggestions, zsh-completions, zsh-z, zsh-history-substring-search, extract, git，每個測試都確保 brew/docker/docker-compose/yarn/npm 的指令補全必須正常運作。hyperfine 使用 `hyperfine --runs 100 --warmup 3 'zsh -i -c exit 0'` 測試，請注意 hyperfine 測試是超級簡化的測試[沒有特別意義](https://github.com/romkatv/zsh-bench?tab=readme-ov-file#how-not-to-benchmark)，他只告訴你執行這行指令的平均時間，不真正代表你的體感時間。
+[^test-method]: 測試執行於 M1 MacBook Pro 8G RAM，zsh-bench 使用預設值，測試總共載入的插件有 powerlevel10k, zsh-defer, zsh-syntax-highlighting, zsh-autosuggestions, zsh-completions, zsh-z, zsh-history-substring-search, extract, git，每個測試都確保 brew/docker/docker-compose/yarn/npm 的指令補全必須正常運作。hyperfine 使用 `hyperfine --runs 100 --warmup 3 'zsh -i -c exit 0'` 測試，請注意 hyperfine 測試是超級簡化的測試[沒有特別意義](https://github.com/romkatv/zsh-bench?tab=readme-ov-file#how-not-to-benchmark)，他只告訴你執行這行指令的平均時間，不代表真正的體感時間。
 
 ## 特色
 
-所有程式的設定都基於簡單原則完成，外觀設定模仿 vscode 預設主題，一律使用 nerd font (MesloLGS NF) 字體。
+不只是快而且功能齊全，所有設定都基於簡單原則完成，外觀設定模仿 vscode 預設主題，一律使用 nerd font (MesloLGS NF) 字體。
 
 - 🚀 快速啟動：使用 zsh-defer 延遲加載實現 0.04s 的 prompt 載入延遲， 0.1s 的首次指令延遲
 - 📂 集中管理：不需要把安裝腳本和設定檔分開管理，一次完成安裝和設定
@@ -438,22 +440,29 @@ end
 
 # FAQ
 
-- 有幾種 completion?  
+- 有幾種指令建議?  
   - 輸入指令時灰色的字是 zsh-autosuggestion，使用 `<Ctrl>-f` 選擇，設定 `bindkey '<key>' autosuggest-accept` 修改  
   - 輸入指令時上下按鍵搜尋過往前綴指令是 zsh-history-substring-search，可以在 plugins.zsh 關閉只匹配前綴  
-  - 為了效能捨棄了自動補全的方便性，不是所有補全都可以完美適應，如果沒有正常啟用可以在 preference.zsh 修改，例如 `autoload -Uz /path/to/_zcomet` 加上此補全檔案  
+
+- 自動補全系統  
+Zsh 本身的補全系統很麻煩，大量使用 zsh-defer 又讓偵錯更麻煩，偵錯時建議暫時移除所有 zsh-defer 才會顯示錯誤訊息。使用 `echo _comps[your_function]` 檢查是否印出函式才表示正確啟用，如果問題簡單的話加上 `autoload -Uz /path/to/_zcomet` 設定補全檔案就可解決，麻煩的就要檢查他到底需要哪些指令並且修改載入位置，Zsh 補全系統的載入順序為
+  1. 設定 fpath
+  2. 執行 compinit
+  3. 執行 functions requires compdef
+  4. 執行 zsh-syntax-highlighting > zsh-autosuggestions  
+這幾項設定加上 `eval $(/opt/homebrew/bin/brew shellenv)` 是影響補全是否成功啟用的關鍵節點，試著把補全設定放在這些指令前後進行測試。  
 
 - 遇到奇怪的問題  
-例如 vscode 無法使用 GPG 等奇怪的問題，原因是延遲載入 brew，如果不想處理這種問題請把 completion.zsh 中的 `eval $(/opt/homebrew/bin/brew shellenv)` 移動到 .zshenv 中，刪除 compinit 那兩行，移除 preference.zsh 的 brew PATH，最後在 plugin.zsh 加上 `zcomet compinit`。
+例如 vscode 無法使用 GPG 等奇怪的問題，原因是延遲載入 brew，如果不想處理這種問題請把 completion.zsh 中的 `eval $(/opt/homebrew/bin/brew shellenv)` 移動到 .zprofile 中，刪除 compinit 那兩行，移除 preference.zsh 的 brew PATH，最後在 plugin.zsh 加上 `zcomet compinit`。
 
 - 為何使用 zcomet?  
 語法簡單而且支援直接載入 url，比起 Zinit 更輕量快速，就算遇到問題直接切換到 Zinit 也非常容易
 
 - 為何不用 Zim?  
-語法麻煩而且不支援直接載入 url，最重要的是難以獨立設定哪些插件需要使用 zsh-defer，而沒有使用延遲加載所有插件管理器都會從比較誰更快變成比較誰更慢
+語法麻煩而且不支援直接載入 url，最重要的是難以獨立設定哪些插件需要使用 zsh-defer，沒有使用延遲加載會導致所有插件管理器從比拼誰更快變成比拼誰更慢
 
 - 為何不用 Zinit?  
-Zinit 內建延遲加載整合，但是插件管理器本體太慢，請見 [zsh-plugin-manager-benchmark](https://github.com/rossmacarthur/zsh-plugin-manager-benchmark)
+Zinit 內建延遲加載整合，但是插件管理器本體太慢，請見 [zsh-plugin-manager-benchmark](https://github.com/rossmacarthur/zsh-plugin-manager-benchmark)，同時語法也太複雜，我不需要這麼多功能
 
 - 為何不用 zsh4humans?  
 z4h [是最快的插件管理器](https://github.com/zimfw/zimfw/wiki/Speed)，但是我不想要一個強迫使用 p10k、設定混亂、會覆蓋我 zshrc 的插件管理器，如果沒有這些問題他會是完美的

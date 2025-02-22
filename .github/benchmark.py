@@ -76,14 +76,14 @@ colors = ["b", "g", "r", "c", "m", "y", "k", "w"]
 bar_width = 0.10
 
 metrics_bench_large = [
+    ("Hyperfine Startup->Exit Time", [bench_data[f]["mean_time_ms"] for f in frameworks]),
     ("First Prompt Lag", [bench_data[f]["first_prompt_lag_ms"] for f in frameworks]),
     ("First Command Lag", [bench_data[f]["first_command_lag_ms"] for f in frameworks]),
-    ("Exit Time", [bench_data[f]["exit_time_ms"] for f in frameworks]),
 ]
 x_b_large = np.arange(len(metrics_bench_large))
 center_offset = (NUM_FRAMEWORK - 1) * bar_width / 2
 
-# axs.grid(True, which='major', linestyle='--', alpha=1, axis='y', zorder=0)
+axs.grid(True, which='major', linestyle='-', alpha=0.5, axis='y', zorder=0)
 # axs.grid(True, which='minor', linestyle=':', alpha=0.4, axis='y', zorder=0)
 
 for i in range(NUM_FRAMEWORK):
@@ -103,8 +103,8 @@ axs.set_xticklabels(
     ha="center"
 )
 
-major_ticks = np.arange(0, 681, 100)
-minor_ticks = np.arange(0, 681, 25)
+major_ticks = np.arange(0, 300, 50)
+minor_ticks = np.arange(0, 301, 25)
 
 # Set font size for both x and y axis labels
 axs.tick_params(axis='both', labelsize=FONT_SIZE_TICK)
