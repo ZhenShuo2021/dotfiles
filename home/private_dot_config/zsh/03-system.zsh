@@ -24,7 +24,7 @@ setopt AUTO_LIST
 setopt AUTO_MENU
 setopt MENU_COMPLETE
 setopt NO_LIST_BEEP   # Don't beep on an ambiguous completion
-# setopt NO_BEEP   # 完全關閉 beep
+setopt NO_BEEP   # 完全關閉 beep
 unsetopt CORRECT   # 關閉 zsh 自動修正，不準又很煩
 
 # History completion

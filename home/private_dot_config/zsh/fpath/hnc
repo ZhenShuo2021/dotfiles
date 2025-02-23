@@ -1,4 +1,2 @@
-#!/bin/zsh
-# 
 # use hnc as shortcut for `hugo new content` with auto-completions
 hugo new content $@

@@ -43,6 +43,7 @@
   - colored-man-pages 上色的 man pages
   - extract 自動解壓縮
   - z 快速切換目錄
+  - 自己寫的切換目錄函式 c 可自訂目錄快速跳轉
 - 🌐 LANG、LC_ALL 和 Git 都已經設定好繁體中文
 - ✅ GPG、homebrew 和 Git 等套件的常見問題都已經解決
 - 🎯 正確的設定指令補全
@@ -349,6 +350,16 @@ end
     <td>v</td>
     <td>nvim</td>
     <td>啟動 Neovim Editor</td>
+  </tr>
+  <tr>
+    <td>c</td>
+    <td>N/A</td>
+    <td>自訂的函式可設定目錄快速跳轉</td>
+  </tr>
+  <tr>
+    <td>cn</td>
+    <td>code -n .</td>
+    <td>以編輯器開啟目前目錄，和 c 合併使用非常方便</td>
   </tr>
   <tr>
     <td>e</td>

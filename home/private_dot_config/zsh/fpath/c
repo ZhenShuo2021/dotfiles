@@ -1,16 +1,39 @@
-#!/bin/zsh
-#
-# This lets you quickly jump into a project directory.
-#
-# Type:
-#
-#   c <tab>
-#
-# ...to autocomplete on all of your projects in the directories specified in
-# `functions/_c`. Typically I'm using it like:
-#
-#    c holm<tab>/bo<tab>
-#
-# ...to quickly jump into holman/boom, for example.
+# This allows you to quickly jump into your favorite directory.  
+# The original idea is stolen from Holman's dotfiles.  
+#  
+# Usage:  
+#  
+#   c [tab]  
+#  
+# ...to autocomplete all of your projects in the directories specified in  
+# `functions/_c`. Typically, I use it like this:  
+#  
+#   c b[tab]  
+#  
+# ...to quickly jump into ~/websites/blog. I also use the alias `cn` for `code -n .`  
+# to open a new window in VS Code without moving my hands away from the keyboard.  
 
-cd "$PROJECTS/$1"
+
+c() {
+  local target
+  local dirs=("$PROJECTS" "$HOME/websites" "$HOME/.config/zsh")
+
+  for dir in "${dirs[@]}"; do
+    if [ -d "$dir/$1" ]; then
+      target="$dir/$1"
+      break
+    fi
+  done
+
+  if [ -z "$target" ]; then
+    cd $1
+    return 1
+  fi
+
+  if [ -n "$target" ]; then
+    cd "$target"
+  else
+    echo "Directory '$1' does not exist in favorite subdirectories or direct directories"
+    return 1
+  fi
+}

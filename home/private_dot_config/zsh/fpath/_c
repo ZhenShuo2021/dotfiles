@@ -1,5 +1,13 @@
 #compdef c
-_files -W $PROJECTS -/
-_files -W $GOPATH/src/github.com -/
 
-# See further documentation in `functions/c`.
+_favorite_list() {
+  local -a favorite
+  favorite=("$HOME/.config/zsh" "$HOME/.local/share/chezmoi")   # auto-complete favorite dirs here
+
+  _describe 'Favorite' favorite
+}
+
+_alternative \
+  'favorite:Favorite:_favorite_list' \
+  'projects:Project:_path_files -W "$PROJECTS" -/' \
+  'downloads:Website:_path_files -W "$HOME/websites" -/'
