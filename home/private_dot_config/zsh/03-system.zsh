@@ -23,7 +23,8 @@ setopt NO_BG_NICE # don't nice background tasks
 setopt AUTO_LIST
 setopt AUTO_MENU
 setopt MENU_COMPLETE
-setopt NO_BEEP   # 修正 Tab 補全需要按兩次 (unsetopt BEEP?)
+setopt NO_LIST_BEEP   # Don't beep on an ambiguous completion
+# setopt NO_BEEP   # 完全關閉 beep
 unsetopt CORRECT   # 關閉 zsh 自動修正，不準又很煩
 
 # History completion

@@ -73,7 +73,7 @@ SAVEHIST=10000
 # Load FPATH for functions and completions
 # =============================================================================
 
-fpath=($CM_ZSH_DIR/fpath $fpath)
+fpath=($ZZ/fpath $fpath)
 
 autoload -Uz $HOME/.zcomet/bin/functions/_zcomet   # fix completion due to the zsh-defer
-autoload -U $CM_ZSH_DIR/fpath/*(:t)
+autoload -Uz $ZZ/fpath/*(:t)
