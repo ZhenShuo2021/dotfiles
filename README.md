@@ -94,6 +94,13 @@ zshrc 相關設定在 `~/.local/share/chezmoi/home/private_dot_config/zsh` 中�
 
 編輯方式依照你的習慣是直接編輯 chezmoi 文件還是原始文件，前者可以輸入 `chezmoi cd` 後使用 `v $CM_[tab]` 編輯，最後使用 `make apply` 應用到主目錄；輸入 `v $ZZ[tab]` 則是直接編輯主目錄的點文件，最後再使用 `chezmoi add <file>` 加回儲存庫，常修改的 preference 和 alias 有快捷變數。
 
+## Profiling
+
+內建函式可以方便的進行效能分析，有兩種方式：
+
+1. `zsh_prof_zprof` 使用 `zprof` 指令進行分析，提供數字參數以設定顯示行數，數字以外的參數顯示所有結果。
+2. `zsh_prof_xtrace` 藉由 `XTRACE` 和 `EPOCHREALTIME` 生成更細節的報告，使用 `zsh_prof_xtrace -h` 查看使用方式。
+
 ## 快捷鍵列表
 
 優化直覺性，盡量同步成系統內建用法。

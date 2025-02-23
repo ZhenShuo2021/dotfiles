@@ -1,6 +1,33 @@
 # dot_zshrc would be copied to ~/.config/zsh/.zshrc by chezmoi and symlinked by
 # symlink_dot_zshrc.tmpl. To change it's location, modify both dot_zshrc and .tmpl file
 
+
+# Benchmark Part
+# https://github.com/agkozak/dotfiles/blob/84992bf1fca269bfa3c009fad245fa93cac2bbda/.zshrc#L8
+# =============================================================================
+
+# method 1: zprof
+#   execute zsh_prof_zprof to run
+(( ${ZSH_PROF:-0} )) && zmodload zsh/zprof
+
+# method 2: xtrace
+#   execute zsh_prof_xtrace to generate logfile report
+if (( ${ZSH_XTRACE:-0} )); then
+  (( ${+EPOCHREALTIME} )) || zmodload zsh/datetime
+  setopt PROMPT_SUBST
+  PS4='+$EPOCHREALTIME %N:%i> '
+
+  logfile=$(mktemp "zsh_profile-$(date +%Y-%m-%dT%H:%M:%S)")
+  echo "Logging to $logfile" > /dev/tty
+  exec 3>&2 2>$logfile
+
+  setopt XTRACE
+fi
+
+
+# My dotfiles
+# =============================================================================
+
 # Enable the function of p10k instant prompt
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -24,3 +51,15 @@ zsh-defer source $ZZ/99-alias.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/100-p10k.zsh.
 [[ ! -f ~/.config/zsh/100-p10k.zsh ]] || source ~/.config/zsh/100-p10k.zsh
+
+# End of My Dotfiles
+# =============================================================================
+
+
+# Benchmark Part
+# =============================================================================
+
+if (( ${ZSH_XTRACE:-0} )); then
+  unsetopt XTRACE
+  exec 2>&3 3>&-
+fi

@@ -1,0 +1,165 @@
+#!/usr/bin/env zsh
+# 
+# Visualize the EPOCHREALTIME result
+# Search for log files starting with `zsh_profile` in the current directory and home directory
+
+TOP_N=10
+COMMAND_LEN=77
+let DASH_NUM=COMMAND_LEN+39
+
+
+find_latest_zsh_profile() {
+    local latest_file=""
+    local latest_time=""
+    local fallback_file=""
+
+    local files=($(find "$HOME" "$(pwd)" -maxdepth 1 -name "zsh_profile*" -type f 2>/dev/null))
+
+    if [[ ${#files[@]} -eq 0 ]]; then
+        return 1
+    fi
+
+    for file in "${files[@]}"; do
+        fallback_file="$file"
+        local name=$(basename "$file")
+        local iso_part="${name#zsh_profile}"
+
+        if [[ "$iso_part" =~ ^-[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}$ ]]; then
+            local time_str="${iso_part//[-T:]/}"
+            if [[ -z "$latest_time" || "$time_str" > "$latest_time" ]]; then
+                latest_time="$time_str"
+                latest_file="$file"
+            fi
+        fi
+    done
+
+    if [[ -n "$latest_file" ]]; then
+        echo "$latest_file"
+    elif [[ -n "$fallback_file" ]]; then
+        echo "$fallback_file"
+    else
+        return 1
+    fi
+}
+
+
+process_log() {
+    local input_file="$1"
+    local top_n="$2"
+    typeset -a lines
+    typeset -i prev_time=0 first_time=0 last_time=0 count=1
+    typeset prev_command
+    while read line; do
+        if [[ $line =~ '^.*\+([0-9]{10})\.([0-9]{6})[0-9]* (.+)' ]]; then
+            integer this_time=$match[1]$match[2]
+            (( first_time==0 )) && first_time=$this_time
+            last_time=$this_time
+            if (( prev_time > 0 )); then
+                time_diff=$(( this_time - prev_time ))
+                lines+="$time_diff $prev_command"
+            fi
+            prev_time=$this_time
+            local this_command=$match[3]
+            [[ ${#this_command} -le 80 ]] && prev_command=$this_command || prev_command="${this_command:0:$COMMAND_LEN}..."
+        fi
+    done < "$input_file"
+    total_time=$(( last_time - first_time ))
+    total_time_sec=$(echo "scale=3; $total_time/1000000" | bc -l)
+    sorted_lines=(${(f)"$(print -l ${lines[@]} | sort -n -r)"})
+
+    echo "File: $input_file"
+    echo "Total time: 0${total_time_sec}s"
+    echo ""
+    echo "Order | Ratio (%) | Time (second) | Command"
+    printf '%0.s-' {1..$DASH_NUM}
+    echo ""
+    for entry in ${sorted_lines[@]}; do
+        (( count > top_n )) && break
+        time_diff=$(echo $entry | awk '{print $1}')
+        cmd=$(echo $entry | cut -d' ' -f2-)
+        if (( total_time > 0 )); then
+            ratio=$(echo "scale=1; $time_diff*100/$total_time" | bc -l)
+        else
+            ratio="0.0"
+        fi
+        time_sec=$(echo "scale=6; $time_diff/1000000" | bc -l)
+        printf " %3d. | %9.1f | %13.6f | %s\n" $count $ratio $time_sec "$cmd"
+        (( count++ ))
+    done
+}
+
+
+parse_arguments() {
+    input_file=""
+    top_n=${TOP_N:-10}
+    local run_zsh=false
+
+    if [[ $# -eq 1 && "$1" =~ ^[0-9]+$ ]]; then
+        top_n="$1"
+        input_file=$(find_latest_zsh_profile)
+        if [[ $? -ne 0 ]]; then
+            echo "No zsh_profile* file found." >&2
+            return 1
+        fi
+        return 0
+    fi
+
+    while getopts "han:f:" opt; do
+        case "$opt" in
+            h)
+                echo "Usage: $0 [-a] [-n top_n] [-f input_file] [-h]"
+                echo "  -a              Enable regenerating profiling log file"
+                echo "  -n top_n        Set the number of top entries to show (default: 10)"
+                echo "                  If only an integer is provided without any flag, it will be treated as 'top_n'."
+                echo "  -f input_file   Specify the input file (default: find_latest_zsh_profile)"
+                exit 0
+                ;;
+            a)
+                run_zsh=true
+                ;;
+            n)
+                top_n="$OPTARG"
+                ;;
+            f)
+                input_file="$OPTARG"
+                ;;
+            ?)
+                echo "Usage: $0 [-a] [-n top_n] [-f input_file] [-h]" >&2
+                return 1
+                ;;
+        esac
+    done
+
+    # Shift past the processed options
+    shift $((OPTIND - 1))
+
+    if [[ "$run_zsh" == true ]]; then
+        ZSH_XTRACE=1 zsh -ic "exit 0"
+    fi
+
+    if [[ -z "$input_file" ]]; then
+        input_file=$(find_latest_zsh_profile)
+        if [[ $? -ne 0 ]]; then
+            echo "No zsh_profile* file found." >&2
+            exit 1
+        fi
+    else
+        if [[ ! -f "$input_file" ]]; then
+            echo "Error: '$input_file' does not exist." >&2
+            exit 1
+        fi
+    fi
+}
+
+
+# Global variables
+input_file=""
+top_n=""
+
+
+parse_arguments "$@"
+if [[ $? -eq 0 ]]; then
+    process_log "$input_file" "$top_n"
+else
+    exit 1
+fi

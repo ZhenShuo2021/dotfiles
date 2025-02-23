@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+# 
+# Profile zsh startup using zmodule zsh/zprof
+
+zsh_prof_zprof() {
+    local limit=${1:-10}
+    if [[ "$limit" =~ ^[0-9]+$ && $limit -le 25 ]]; then
+        ZSH_PROF=1 zsh -ic "zprof | head -n $limit "
+    else
+        ZSH_PROF=1 zsh -ic 'zprof'
+    fi
+}
