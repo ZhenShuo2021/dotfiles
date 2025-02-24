@@ -12,10 +12,13 @@ eval $(/opt/homebrew/bin/brew shellenv)
 # Set format for completion descriptions
 zstyle ':completion:*:descriptions' format '%F{green}-- %d --%f'
 
-# Set prompt for interactive completion selection
+# Set format for completion warnings
+zstyle ':completion:*:warnings' format '%F{red}-- No matches found --%f'
+
+# Set prompt for completion selection scroll ratio
 zstyle ':completion:*' select-prompt '%F{green}%p%f'
 
-# separate matches into groups, should be used with description format
+# Separate matches into groups, should be used with description format
 zstyle ':completion:*:matches' group 'yes'
 zstyle ':completion:*' group-name ''
 
@@ -26,18 +29,6 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
 # Allow tab insertion when completion is pending
 zstyle ':completion:*' insert-tab pending
-
-# Not using cache
-# zstyle ':completion:*' use-cache no
-
-# fuzzy matching
-# zstyle ':completion:*' completer _complete _match _approximate
-# zstyle -e ':completion:*:approximate:*' \
-#   max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3))numeric)'
-
-
-# Set format for completion warnings
-zstyle ':completion:*:warnings' format '%F{red}-- No matches found --%f'
 
 # Enable menu selection for completion
 zstyle ':completion:*' menu select
@@ -59,6 +50,14 @@ bindkey -M menuselect 'j' vi-down-line-or-history # bottom
   # ZSHZ_TILDE=1
   ZSHZ_TRAILING_SLASH=1
   ZSHZ_UNCOMMON=1
+
+# Not using cache
+# zstyle ':completion:*' use-cache no
+
+# fuzzy matching
+# zstyle ':completion:*' completer _complete _match _approximate
+# zstyle -e ':completion:*:approximate:*' \
+#   max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3))numeric)'
 
 # Uncomment if $BREW_PATH/share/zsh/site-functions missing in FPATH
 # if type brew &>/dev/null

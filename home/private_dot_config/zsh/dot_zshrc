@@ -4,7 +4,6 @@
 
 # Benchmark Part
 # https://github.com/agkozak/dotfiles/blob/84992bf1fca269bfa3c009fad245fa93cac2bbda/.zshrc#L8
-# =============================================================================
 
 # method 1: zprof
 #   execute zsh_prof_zprof to run
@@ -25,40 +24,24 @@ if (( ${ZSH_XTRACE:-0} )); then
 fi
 
 
-# My dotfiles
-# =============================================================================
+# My dotfile
 
-# Enable the function of p10k instant prompt
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Immediate loading
 source $HOME/.config/zsh/00-basic.zsh
 source $ZZ/01-plugin.zsh
-
-# Deferred loading for performance optimization
 source $ZZ/02-preference.zsh
-
-# Load opt and bindkey
 source $ZZ/03-system.zsh
-
-# Defer slow operations (compinit and eval) to improve startup time
 zsh-defer source $ZZ/04-completion.zsh
-
-# Load aliases last to ensure they override any plugin settings
 zsh-defer source $ZZ/99-alias.zsh
+source $ZZ/100-p10k.zsh
 
-# To customize prompt, run `p10k configure` or edit ~/.config/zsh/100-p10k.zsh.
-[[ ! -f ~/.config/zsh/100-p10k.zsh ]] || source ~/.config/zsh/100-p10k.zsh
-
-# End of My Dotfiles
-# =============================================================================
+# End of my dotfile
 
 
-# Benchmark Part
-# =============================================================================
-
+# Unset xtrace
 if (( ${ZSH_XTRACE:-0} )); then
   unsetopt XTRACE
   exec 2>&3 3>&-

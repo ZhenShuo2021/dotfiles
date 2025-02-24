@@ -50,6 +50,7 @@ setopt inc_append_history     # Write to the history file immediately, not when 
 
 
 # from ohmyzsh
+# I'm not loading all key-bindings since there are bugs on my machine
 # https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/key-bindings.zsh
 
 # Use emacs key bindings
