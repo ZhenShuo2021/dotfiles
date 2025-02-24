@@ -10,14 +10,14 @@
 
 使用專門測試 shell 的 [zsh-bench](https://github.com/romkatv/zsh-bench/) 和直觀易懂的 hyperfine 進行測試[^test-method]，測試項目涵蓋五種框架：
 
-- Oh-My-ZSH: 最多人使用的框架並且加上 zsh-defer 優化
-- Zinit: 講求效能的插件管理器
-- No Plugin Manager: 不使用插件管理器以減少延遲，並且使用 zsh-defer 優化
+- Oh-My-ZSH: 最多人使用的框架
+- Zinit: 內建豐富延遲載入功能的插件管理器
+- No Plugin Manager: 不使用插件管理器以減少延遲
 - Zim: 標榜 [blazing speed](https://github.com/zimfw/zimfw/wiki/Speed) 的插件管理器
 - zcomet: 此份 dotfile
 - Baseline: 基準線，移除 .zshrc，本機能達到的最快速度
 
-測試項目的選擇從最廣泛使用的框架到手動優化，以便準確定位效能，可以看到比 Zinit 更快，基本上追平甚至超越不使用插件管理器的速度，同時又比 Zim 易於設定。
+所有框架都公平的使用 zsh-defer 加速，測試項目的選擇從最廣泛使用的框架到手動優化，以便準確定位效能，可以看到比 Zinit 更快，基本上追平甚至超越不使用插件管理器的速度，同時又比 Zim 易於設定。
 
 <p align="center">
   <img src=".github/benchmark.webp" width="95%" height="95%" alt="benchmark">
@@ -97,7 +97,7 @@ zshrc 相關設定在 `~/.local/share/chezmoi/home/private_dot_config/zsh` 中�
 
 ## Profiling
 
-內建函式可以方便的進行效能分析，有兩種方式：
+內建函式可以方便的進行效能分析，有兩個指令：
 
 1. `zsh_prof_zprof` 使用 `zprof` 指令進行分析，提供數字參數以設定顯示行數，數字以外的參數顯示所有結果。
 2. `zsh_prof_xtrace` 藉由 `XTRACE` 和 `EPOCHREALTIME` 生成更細節的報告，使用 `zsh_prof_xtrace -h` 查看使用方式。
@@ -458,20 +458,24 @@ end
 
 # FAQ
 
-- 有幾種指令建議?  
+- 有哪些指令和補全?  
   - 輸入指令時灰色的字是 zsh-autosuggestion，使用 `<Ctrl>-f` 選擇，設定 `bindkey '<key>' autosuggest-accept` 修改  
-  - 輸入指令時上下按鍵搜尋過往前綴指令是 zsh-history-substring-search，可以在 plugins.zsh 關閉只匹配前綴  
+  - 輸入指令時上下按鍵搜尋過往前綴指令是 zsh-history-substring-search，可以在 plugins.zsh 關閉只匹配前綴
+  - `c <tab>` 可以補全最愛資料夾，在 `.config/zsh/fpath/_c` 設定
+  - 使用 `cn` 使用 VSCode 開啟此目錄，結合 `c` 非常方便
+  - `z <name>` 可以前往常用目錄，例如去過 `Downloads` 後，使用 `z ds` 就可以前往 `Downloads`，按下 `Tab` 可以補全完整路徑
 
-- 自動補全系統  
+- 補全設定  
 Zsh 本身的補全系統很麻煩，大量使用 zsh-defer 又讓偵錯更麻煩，偵錯時建議暫時移除所有 zsh-defer 才會顯示錯誤訊息。使用 `echo _comps[your_function]` 檢查是否印出函式才表示正確啟用，如果問題簡單的話加上 `autoload -Uz /path/to/_zcomet` 設定補全檔案就可解決，麻煩的就要檢查他到底需要哪些指令並且修改載入位置，Zsh 補全系統的載入順序為
   1. 設定 fpath
-  2. 執行 compinit
-  3. 執行 functions requires compdef
-  4. 執行 zsh-syntax-highlighting > zsh-autosuggestions  
+  2. 設定 zstyle
+  3. 執行 compinit
+  4. 執行 functions requires compdef
+  5. 執行 zsh-syntax-highlighting > zsh-autosuggestions  
 這幾項設定加上 `eval $(/opt/homebrew/bin/brew shellenv)` 是影響補全是否成功啟用的關鍵節點，試著把補全設定放在這些指令前後進行測試。  
 
 - 遇到奇怪的問題  
-例如 vscode 無法使用 GPG 等奇怪的問題，原因是延遲載入 brew，如果不想處理這種問題請把 completion.zsh 中的 `eval $(/opt/homebrew/bin/brew shellenv)` 移動到 .zprofile 中，刪除 compinit 那兩行，移除 preference.zsh 的 brew PATH，最後在 plugin.zsh 加上 `zcomet compinit`。
+例如 VSCode 無法使用 GPG 等奇怪的問題，原因是延遲載入 brew，如果不想處理這種問題請把 completion.zsh 的 compinit 兩行，移動 `eval $(/opt/homebrew/bin/brew shellenv)` 到 .zprofile 中，再移除 preference.zsh 的 brew PATH，最後在 plugin.zsh 最後面加上 `zcomet compinit`。
 
 - 為何使用 zcomet?  
 語法簡單而且支援直接載入 url，比起 Zinit 更輕量快速，就算遇到問題直接切換到 Zinit 也非常容易
@@ -480,7 +484,7 @@ Zsh 本身的補全系統很麻煩，大量使用 zsh-defer 又讓偵錯更麻�
 語法麻煩而且不支援直接載入 url，最重要的是難以獨立設定哪些插件需要使用 zsh-defer，沒有使用延遲加載會導致所有插件管理器從比拼誰更快變成比拼誰更慢
 
 - 為何不用 Zinit?  
-Zinit 內建延遲加載整合，但是插件管理器本體太慢，請見 [zsh-plugin-manager-benchmark](https://github.com/rossmacarthur/zsh-plugin-manager-benchmark)，同時語法也太複雜，我不需要這麼多功能
+Zinit 內建延遲加載整合，但是語法太複雜，本體載入速度也太慢，請見 [zsh-plugin-manager-benchmark](https://github.com/rossmacarthur/zsh-plugin-manager-benchmark)
 
 - 為何不用 zsh4humans?  
 z4h [是最快的插件管理器](https://github.com/zimfw/zimfw/wiki/Speed)，但是我不想要一個強迫使用 p10k、設定混亂、會覆蓋我 zshrc 的插件管理器，如果沒有這些問題他會是完美的
@@ -489,14 +493,12 @@ z4h [是最快的插件管理器](https://github.com/zimfw/zimfw/wiki/Speed)，�
 有太多 anti* 的插件管理器了，我不知道他會不會又停止開發，而且正好在換代到 V2
 
 - 怎麼做才能更快?  
-現在的效能瓶頸在主題，但是 p10k 已經是顯示 git status 裡面最快而且最好看的主題了。為一能更快的是在 `p10k configure` 的 `Prompt Style` 中，四個選項 Lean/Classic/Rainbow/Pure 裡面選擇 Pure 還可以更快，但是我不喜歡這個樣式。
+現在的效能瓶頸在主題，但是 p10k 已經是顯示 git status 裡面最快而且最好看的主題了。唯一能更快的是在 `p10k configure` 的 `Prompt Style` 中，四個選項 Lean/Classic/Rainbow/Pure 裡面選擇 Pure 還可以更快，但是我不喜歡這個樣式。
 
 - 我想從根本加速  
 現在就幾乎是最快的設定，不可能更快了，直接改用 fish shell 才能從根本解決問題
 
 - 繪製自己的測試結果：將數據更新在 .github/benchmark.py 後使用 `uv run .github/benchmark.py` 可以直接執行不需建立虛擬環境。
-
-- 找出效能瓶頸：使用我的[腳本](https://gist.github.com/ZhenShuo2021/be33f28acc0e818ecc532a432af08ee5)來可視化效能瓶頸。
 
 # Acknowledgments
 
