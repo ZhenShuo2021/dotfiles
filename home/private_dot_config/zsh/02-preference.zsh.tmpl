@@ -36,6 +36,11 @@ export PATH="/opt/homebrew/bin:$PATH"
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH" 
 {{- end }}
 
+# my path for docker-compose.yml
+{{ if and (eq .chezmoi.os "linux") (eq .chezmoi.osRelease.id "ubuntu") -}}
+export VOL_PATH="/mnt/SSD/photo"
+{{- end }}
+
 # Set Nix path
 export NIX_PATH="nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs"
 
