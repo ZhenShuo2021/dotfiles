@@ -1,0 +1,47 @@
+# Convert the GPS format from ExifTool to decimal format so it can be searched on Google Maps  
+# Usage: get_gps <file>
+
+get_gps() {
+    if [[ -z "$1" ]]; then
+        echo "Error: Please provide a file path"
+        return 1
+    fi
+
+    local file="$1"
+    
+    # format of android phone
+    local coords=($(exiftool -s1 -c "%.6f" -GPSLatitude -GPSLongitude "$file" | awk '{print $3}'))
+    
+    if [[ ${#coords[@]} -eq 2 ]]; then
+        echo "${coords[1]} ${coords[2]}"
+        return 0
+    fi
+    
+    # Try ios format if android format failed
+    # Example: GPSLatitude : 22 deg 37' 29.23" N
+    local lat_raw=$(exiftool -s1 -GPSLatitude "$file" | awk '{$1=$2=""; print $0}' | xargs)
+    local lon_raw=$(exiftool -s1 -GPSLongitude "$file" | awk '{$1=$2=""; print $0}' | xargs)
+    
+    if [[ -n "$lat_raw" && -n "$lon_raw" ]]; then
+        # latitude
+        local lat_deg=$(echo $lat_raw | awk '{print $1}')
+        local lat_min=$(echo $lat_raw | awk '{print $3}')
+        local lat_sec=$(echo $lat_raw | awk '{print $4}' | tr -d '"')
+        local lat_dir=$(echo $lat_raw | awk '{print $5}')
+        local lat_dec=$(echo "scale=4; $lat_deg + $lat_min/60 + $lat_sec/3600" | bc)
+        [[ "$lat_dir" = "S" ]] && lat_dec="-$lat_dec"
+        
+        # longitude
+        local lon_deg=$(echo $lon_raw | awk '{print $1}')
+        local lon_min=$(echo $lon_raw | awk '{print $3}')
+        local lon_sec=$(echo $lon_raw | awk '{print $4}' | tr -d '"')
+        local lon_dir=$(echo $lon_raw | awk '{print $5}')
+        local lon_dec=$(echo "scale=4; $lon_deg + $lon_min/60 + $lon_sec/3600" | bc)
+        [[ "$lon_dir" = "W" ]] && lon_dec="-$lon_dec"
+        
+        printf "%.6f %.6f\n" "$lat_dec" "$lon_dec"
+    else
+        echo "Error: Could not extract GPS coordinates from file"
+        return 1
+    fi
+}

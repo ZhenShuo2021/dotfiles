@@ -35,6 +35,7 @@ source $ZZ/01-plugin.zsh
 source $ZZ/02-preference.zsh
 source $ZZ/03-system.zsh
 zsh-defer source $ZZ/04-completion.zsh
+zsh-defer source $ZZ/05-misc.zsh
 zsh-defer source $ZZ/99-alias.zsh
 source $ZZ/100-p10k.zsh
 

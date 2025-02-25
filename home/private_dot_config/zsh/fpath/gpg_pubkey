@@ -1,0 +1,7 @@
+gpg_pubkey() {
+    if [[ -z "$1" ]]; then
+        echo "Error: Please provide a gpg fingerprint"
+        return 1
+    fi
+    gpg --armor --export $1 | pbcopy | echo '=> Public key copied to pasteboard.'
+}
