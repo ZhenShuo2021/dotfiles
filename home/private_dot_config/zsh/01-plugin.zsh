@@ -15,6 +15,7 @@ zcomet load romkatv/powerlevel10k
 
 # load plugins
 zsh-defer zcomet load ohmyzsh plugins/extract
+zsh-defer zcomet fpath ohmyzsh plugins/docker-compose   # only load completion
 # zsh-defer zcomet load ohmyzsh plugins/git
 # zsh-defer zcomet fpath ohmyzsh plugins/gitfast   # Same as homebrew's git completion
 

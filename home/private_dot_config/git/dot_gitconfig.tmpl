@@ -11,36 +11,13 @@
 [include]
   path = ~/.gitconfig.local
 [alias]
-  nuke = !{{ .chezmoi.destDir -}}/.config/zsh/bin/git-nuke-branch
-  track = !{{ .chezmoi.destDir -}}/.config/zsh/bin/git-track
-  count = !git shortlog -sn
-
   # Credit: https://github.com/mathiasbynens/dotfiles/blob/main/.gitconfig
+  # === 列出資訊類型的指令 ===
   # List aliases.
   aliases = config --get-regexp alias
 
-  # `git d` 和上一次的提交比較差異
-  d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
-
-  # `git di <number>` 和前 <number> 次的提交比較差異
-  di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
-
-  # `git ca` 預存除了子模組的所有修改並且提交
-  ca = !git add ':(exclude,attr:builtin_objectmode=160000)' && git commit -av
-
-  # Show verbose output about tags, branches or remotes
-  tags = tag -l
-  branches = branch --all
-  remotes = remote --verbose
-
-  # Amend the currently staged files to the latest commit.
-  amend = commit --amend --reuse-message=HEAD
-
-  # `git credit <name> [<email>]` 修改前一個提交的作者
-  credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
-
-  # `git reb <number>` 對前 <number> 次提交進行互動式變基
-  rbi = "!r() { git rebase -i HEAD~$1; }; r"
+  # List contributors with number of commits.
+  contributors = shortlog --summary --numbered
 
   # `git ft <commit-ish>` 找到該提交的下一個標籤，並且顯示距離
   ft = "!f() { git describe --always --contains $1; }; f"
@@ -51,13 +28,31 @@
   # `git fm <msg>` 從提交訊息找到標籤
   fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
 
+  # `git d` 和上一次的提交比較差異
+  d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
+
+  # `git di <number>` 和前 <number> 次的提交比較差異
+  di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+
+  # === 修改歷史的指令 ===
+  # 移除本地和遠端分支
+  nuke = !{{ .chezmoi.destDir -}}/.config/zsh/bin/git-nuke-branch
+  
+  # 自動追蹤遠端分支
+  track = !{{ .chezmoi.destDir -}}/.config/zsh/bin/git-track
+
+  # 預存除了子模組的所有修改並且提交
+  ca = !git add ':(exclude,attr:builtin_objectmode=160000)' && git commit -av
+
+  # `git credit <name> [<email>]` 修改前一個提交的作者
+  credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
+
+  # `git reb <number>` 對前 <number> 次提交進行互動式變基
+  rbi = "!r() { git rebase -i HEAD~$1; }; r"
+
   # `git dm` 移除所有已經被合併到 main 的分支
   # a.k.a. ‘delete merged’
   dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
-
-  # List contributors with number of commits.
-  contributors = shortlog --summary --numbered
-
 
 [init]
   defaultBranch = main
@@ -91,7 +86,7 @@
   ui = auto
 [color "branch"]
   current = green reverse
-  remote = red reverse
+  remote = blue
 [color "diff"]
   meta = yellow bold
   frag = magenta bold # line info

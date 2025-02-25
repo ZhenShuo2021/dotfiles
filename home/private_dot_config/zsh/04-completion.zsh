@@ -15,7 +15,7 @@ zstyle ':completion:*:descriptions' format '%F{green}-- %d --%f'
 # Set format for completion warnings
 zstyle ':completion:*:warnings' format '%F{red}-- No matches found --%f'
 
-# Set prompt for completion selection scroll ratio
+# Set prompt for interactive completion selection
 zstyle ':completion:*' select-prompt '%F{green}%p%f'
 
 # Separate matches into groups, should be used with description format
@@ -36,20 +36,11 @@ zstyle ':completion:*' menu select
 # Set cache path for completion
 zstyle ':completion::complete:*' cache-path "$XDG_CACHE_HOME/zsh/zcompcache"
 
-# Set hjkl for completions
-(( ${+modules[zsh/complist]} )) || zmodload zsh/complist
-bindkey -M menuselect 'h' vi-backward-char        # left
-bindkey -M menuselect 'k' vi-up-line-or-history   # up
-bindkey -M menuselect 'l' vi-forward-char         # right
-bindkey -M menuselect 'j' vi-down-line-or-history # bottom
-  ZSHZ_DEBUG=1
-  ZSHZ_CASE='smart'
-  ZSHZ_ECHO=1
-  # In FreeBSD, /home is /usr/home
-  [[ $OSTYPE == freebsd* ]] && typeset -g ZSHZ_NO_RESOLVE_SYMLINKS=1
-  # ZSHZ_TILDE=1
-  ZSHZ_TRAILING_SLASH=1
-  ZSHZ_UNCOMMON=1
+# Misc
+zstyle ':completion:*' list-separator ' ➤ '
+# zstyle ':completion:*' list-dirs-first true
+# zstyle ':completion:*' list-packed true
+# zstyle ':completion:*' rehash true
 
 # Not using cache
 # zstyle ':completion:*' use-cache no
@@ -76,10 +67,8 @@ bindkey -M menuselect 'j' vi-down-line-or-history # bottom
 # completions and doesn't require to move the `eval $(/opt/homebrew/bin/brew shellenv)`.
 
 autoload -Uz compinit
-compinit -d "$ZSH_COMPDUMP"   # ZSH_COMPDUMP is configured in .zshenv
+compinit
 
-
-# Completions that require compdef must be loaded last
 
 # uv (python)
 eval "$(uv generate-shell-completion zsh)"
