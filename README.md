@@ -20,7 +20,7 @@
 所有框架都公平的使用 zsh-defer 加速，測試項目的選擇從最廣泛使用的框架到手動優化，以便準確定位效能，可以看到比 Zinit 更快，基本上追平甚至超越不使用插件管理器的速度，同時又比 Zim 易於設定。
 
 <p align="center">
-  <img src=".github/benchmark.webp" width="95%" height="95%" alt="benchmark">
+  <img src=".github/benchmark.webp" width="90%" height="90%" alt="benchmark">
 </p>
 
 [^test-method]: 測試執行於 M1 MacBook Pro 8G RAM，zsh-bench 使用預設值，測試總共載入的插件有 powerlevel10k, zsh-defer, zsh-syntax-highlighting, zsh-autosuggestions, zsh-completions, zsh-z, zsh-history-substring-search, extract, git，每個測試都確保 brew/docker/docker-compose/yarn/npm 的指令補全必須正常運作。hyperfine 使用 `hyperfine --runs 100 --warmup 3 'zsh -i -c exit 0'` 測試，請注意 hyperfine 測試是超級簡化的測試[沒有特別意義](https://github.com/romkatv/zsh-bench?tab=readme-ov-file#how-not-to-benchmark)，他只告訴你執行這行指令的平均時間，不代表真正的體感時間。
@@ -72,8 +72,6 @@ zimfw install
 
 - 清除 chezmoi run_once 狀態  
 chezmoi state delete-bucket --bucket=scriptState
-- 進入設定檔目錄  
-chezmoi cd
 - 應用設定檔，環境變數可選  
 ASK=1 SETPASS=1 chezmoi init --apply
 
@@ -90,10 +88,11 @@ zshrc 相關設定在 `~/.local/share/chezmoi/home/private_dot_config/zsh` 中�
 3. 02-preference.zsh: 各種路徑和常數設定
 4. 03-system.zsh: 設定 `setopt` 和 `bindkey`
 5. 04-completion.zsh: 設定自動補全
-6. 99-alias.zsh: 設定別名，可以任意修改
-7. 100-p10k.zsh: p10k 設定檔
+6. 05-misc.zsh: 其餘雜項，如 zsh-hook
+7. 99-alias.zsh: 設定別名，可以任意修改
+8. 100-p10k.zsh: p10k 設定檔
 
-編輯方式依照你的習慣是直接編輯 chezmoi 文件還是原始文件，前者可以輸入 `chezmoi cd` 後使用 `v $CM_[tab]` 編輯，最後使用 `make apply` 應用到主目錄；輸入 `v $ZZ[tab]` 則是直接編輯主目錄的點文件，最後再使用 `chezmoi add <file>` 加回儲存庫，常修改的 preference 和 alias 有快捷變數。
+我的編輯方式是使用 `c [tab]` 跳轉到 chezmoi 目錄編輯，`cn` 開啟 VSCode 修改，最後使用 `make apply` 應用到主目錄。
 
 ## Profiling
 
@@ -458,21 +457,14 @@ end
 
 # FAQ
 
-- 有哪些指令和補全?  
-  - 輸入指令時灰色的字是 zsh-autosuggestion，使用 `<Ctrl>-f` 選擇，設定 `bindkey '<key>' autosuggest-accept` 修改  
-  - 輸入指令時上下按鍵搜尋過往前綴指令是 zsh-history-substring-search，可以在 plugins.zsh 關閉只匹配前綴
-  - `c <tab>` 可以補全最愛資料夾，在 `.config/zsh/fpath/_c` 設定
-  - 使用 `cn` 使用 VSCode 開啟此目錄，結合 `c` 非常方便
-  - `z <name>` 可以前往常用目錄，例如去過 `Downloads` 後，使用 `z ds` 就可以前往 `Downloads`，按下 `Tab` 可以補全完整路徑
-
 - 補全設定  
-Zsh 本身的補全系統很麻煩，大量使用 zsh-defer 又讓偵錯更麻煩，偵錯時建議暫時移除所有 zsh-defer 才會顯示錯誤訊息。使用 `echo _comps[your_function]` 檢查是否印出函式才表示正確啟用，如果問題簡單的話加上 `autoload -Uz /path/to/_zcomet` 設定補全檔案就可解決，麻煩的就要檢查他到底需要哪些指令並且修改載入位置，Zsh 補全系統的載入順序為
+Zsh 本身的補全系統很麻煩，大量使用 zsh-defer 又讓偵錯更麻煩，偵錯時建議暫時移除所有 zsh-defer 才會顯示錯誤訊息。使用 `echo _comps[your_function]` 檢查是否印出函式才表示正確啟用，Zsh 補全系統的載入順序為
   1. 設定 fpath
   2. 設定 zstyle
   3. 執行 compinit
   4. 執行 functions requires compdef
   5. 執行 zsh-syntax-highlighting > zsh-autosuggestions  
-這幾項設定加上 `eval $(/opt/homebrew/bin/brew shellenv)` 是影響補全是否成功啟用的關鍵節點，試著把補全設定放在這些指令前後進行測試。  
+這幾項設定加上 `eval $(/opt/homebrew/bin/brew shellenv)` 是影響補全是否成功啟用的關鍵節點，試著把補全設定放在這些指令前後進行測試，或者是手動載入 `autoload -Uz /path/to/_completion-file` 補全檔案。  
 
 - 遇到奇怪的問題  
 例如 VSCode 無法使用 GPG 等奇怪的問題，原因是延遲載入 brew，如果不想處理這種問題請把 completion.zsh 的 compinit 兩行，移動 `eval $(/opt/homebrew/bin/brew shellenv)` 到 .zprofile 中，再移除 preference.zsh 的 brew PATH，最後在 plugin.zsh 最後面加上 `zcomet compinit`。
@@ -481,10 +473,10 @@ Zsh 本身的補全系統很麻煩，大量使用 zsh-defer 又讓偵錯更麻�
 語法簡單而且支援直接載入 url，比起 Zinit 更輕量快速，就算遇到問題直接切換到 Zinit 也非常容易
 
 - 為何不用 Zim?  
-語法麻煩而且不支援直接載入 url，最重要的是難以獨立設定哪些插件需要使用 zsh-defer，沒有使用延遲加載會導致所有插件管理器從比拼誰更快變成比拼誰更慢
+需要額外管理 .zimrc 而且不支援直接載入 url，最重要的是難以獨立設定哪些插件需要使用 zsh-defer，沒有使用延遲加載會導致所有插件管理器從比拼誰更快變成比拼誰更慢
 
 - 為何不用 Zinit?  
-Zinit 內建延遲加載整合，但是語法太複雜，本體載入速度也太慢，請見 [zsh-plugin-manager-benchmark](https://github.com/rossmacarthur/zsh-plugin-manager-benchmark)
+語法過於複雜，本體載入速度也太慢，請見 [zsh-plugin-manager-benchmark](https://github.com/rossmacarthur/zsh-plugin-manager-benchmark)
 
 - 為何不用 zsh4humans?  
 z4h [是最快的插件管理器](https://github.com/zimfw/zimfw/wiki/Speed)，但是我不想要一個強迫使用 p10k、設定混亂、會覆蓋我 zshrc 的插件管理器，如果沒有這些問題他會是完美的
@@ -493,7 +485,7 @@ z4h [是最快的插件管理器](https://github.com/zimfw/zimfw/wiki/Speed)，�
 有太多 anti* 的插件管理器了，我不知道他會不會又停止開發，而且正好在換代到 V2
 
 - 怎麼做才能更快?  
-現在的效能瓶頸在主題，但是 p10k 已經是顯示 git status 裡面最快而且最好看的主題了。唯一能更快的是在 `p10k configure` 的 `Prompt Style` 中，四個選項 Lean/Classic/Rainbow/Pure 裡面選擇 Pure 還可以更快，但是我不喜歡這個樣式。
+現在的效能瓶頸在主題和插件管理器，但是 p10k 已經是顯示 git status 裡面最快最好看的主題了；不使用插件管理器就是自己寫腳本，例如 [zsh_unplugged](https://github.com/mattmc3/zsh_unplugged/)，研究後覺得最後會變成一個簡陋的插件管理器，同時現在的啟動速度已經達到體感不可感知於是放棄。
 
 - 我想從根本加速  
 現在就幾乎是最快的設定，不可能更快了，直接改用 fish shell 才能從根本解決問題
