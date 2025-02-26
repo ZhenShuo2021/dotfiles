@@ -5,7 +5,16 @@
 
 # shellenv MUST run before compinit
 # put this in .zprofile if get something wrong in your completion
-eval $(/opt/homebrew/bin/brew shellenv)
+
+{{- if eq .chezmoi.os "darwin" }}
+BREW_PATH=/opt/homebrew
+eval "$("$BREW_PATH/bin/brew" shellenv)"
+{{- else if and (eq .chezmoi.os "linux") (eq .chezmoi.osRelease.id "ubuntu") }}
+BREW_PATH=/home/linuxbrew/.linuxbrew
+eval "$("$BREW_PATH/bin/brew" shellenv)"
+{{- else }}
+{{- end }}
+
 
 # Setup completion styles
 
@@ -66,9 +75,13 @@ zstyle ':completion:*' list-separator ' ➤ '
 # If `<plugin-manager> compinit` is called, we can run compinit here again to trigger none-activated
 # completions and doesn't require to move the `eval $(/opt/homebrew/bin/brew shellenv)`.
 
+# brew pyenv completion
+if type pyenv &> /dev/null; then
+    source "$BREW_PATH/opt/pyenv/completions/pyenv.zsh"
+fi
+
 autoload -Uz compinit
 compinit
-
 
 # uv (python)
 eval "$(uv generate-shell-completion zsh)"

@@ -2,10 +2,11 @@
 # =============================================================================
 
 # Install plugin manager and source it
-if [[ ! -f ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh ]]; then
-  git clone https://github.com/agkozak/zcomet.git ${ZDOTDIR:-${HOME}}/.zcomet/bin
+zstyle ':zcomet:*' home-dir ~/.config/zsh/zcomet
+if [[ ! -f ${ZDOTDIR:-${HOME}}/.config/zsh/zcomet/bin/zcomet.zsh ]]; then
+  git clone https://github.com/agkozak/zcomet.git ${ZDOTDIR:-${HOME}}/.config/zsh/zcomet/bin
 fi
-source ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh
+source ${ZDOTDIR:-${HOME}}/.config/zsh/zcomet/bin/zcomet.zsh
 
 
 # load p10k
