@@ -1,0 +1,47 @@
+[bench_data.Oh-My-ZSH]
+mean_time_ms = 148.1
+first_prompt_lag_ms = 23.260
+first_command_lag_ms = 270.265
+command_lag_ms = 26.156
+input_lag_ms = 20.797
+exit_time_ms = 639.359
+
+[bench_data.Zinit]
+mean_time_ms = 66.2
+first_prompt_lag_ms = 23.160
+first_command_lag_ms = 123.458
+command_lag_ms = 23.491
+input_lag_ms = 20.264
+exit_time_ms = 64.808
+
+[bench_data."No Plugin Manager"]
+mean_time_ms = 42.8
+first_prompt_lag_ms = 27.441
+first_command_lag_ms = 99.687
+command_lag_ms = 22.966
+input_lag_ms = 20.195
+exit_time_ms = 41.054
+
+[bench_data.Zim]
+mean_time_ms = 40.9
+first_prompt_lag_ms = 23.341
+first_command_lag_ms = 101.787
+command_lag_ms = 23.417
+input_lag_ms = 20.083
+exit_time_ms = 42.571
+
+[bench_data."This dotfile (zcomet)"]
+mean_time_ms = 42.9
+first_prompt_lag_ms = 24.194
+first_command_lag_ms = 98.126
+command_lag_ms = 23.173
+input_lag_ms = 22.092
+exit_time_ms = 43.568
+
+[bench_data."Baseline (Empty .zshrc)"]
+mean_time_ms = 11.1
+first_prompt_lag_ms = 16.612
+first_command_lag_ms = 16.776
+command_lag_ms = 0.071
+input_lag_ms = 0.199
+exit_time_ms = 15.626
