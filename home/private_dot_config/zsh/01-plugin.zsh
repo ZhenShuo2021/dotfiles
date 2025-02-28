@@ -3,6 +3,8 @@
 
 # Install plugin manager and source it
 zstyle ':zcomet:*' home-dir ~/.config/zsh/zcomet
+zstyle ':zcomet:compinit' arguments -d "$ZSH_COMPDUMP"
+
 if [[ ! -f ${ZDOTDIR:-${HOME}}/.config/zsh/zcomet/bin/zcomet.zsh ]]; then
   git clone https://github.com/agkozak/zcomet.git ${ZDOTDIR:-${HOME}}/.config/zsh/zcomet/bin
 fi
@@ -44,10 +46,6 @@ zsh-defer zcomet load agkozak/zsh-z
 zsh-defer zcomet load zsh-users/zsh-completions
 zsh-defer zcomet load zsh-users/zsh-syntax-highlighting
 zsh-defer zcomet load zsh-users/zsh-autosuggestions; bindkey '^f' autosuggest-accept
-
-
-# zcomet compinit doesn't help in my zshrc, see completion.zsh
-# zsh-defer zcomet compinit
 
 
 # optional plugins
