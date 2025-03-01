@@ -63,8 +63,10 @@ alias 'gcn!'='git commit --no-verify --amend'
 alias 'gcnn!'='git commit --no-verify --amend --no-edit'
 
 # change both committer date and author date
-#   usage: gct "2025-02-24 15:30:00"
-alias gct='gct(){ git commit --amend --date="${1}" --no-edit && GIT_COMMITTER_DATE="${1}" git commit --amend --no-edit }; noglob gct'
+#   usage: 
+#     gcd "2025-02-24 15:30:00"
+#     gcd now
+alias gcd='gcd(){ DATE=${1:-"now"}; [ "$DATE" = "now" ] && DATE=$(date "+%Y-%m-%d %H:%M:%S"); GIT_COMMITTER_DATE="$DATE" git commit --amend --date="$DATE" --allow-empty --no-edit; }; gcd'
 
 alias gtl='gtl(){ git tag --sort=-v:refname -n --list "${1}*" }; noglob gtl'
 alias 'gtll'='gtll(){ git tag --sort=-v:refname -n10 --format="[%(refname:short)] %(contents:lines=10)%0a" --list "${1}*" }; noglob gtll'
