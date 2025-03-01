@@ -23,11 +23,11 @@
 
 {{- else -}}
 {{-   writeToStdout "✅ Minimum mode disabled\n" -}}
-{{-   $computer_name := promptString "Computer Name" "" -}}
-{{-   $hostname := promptString "Hostname" "" -}}
-{{-   $name := promptString "Full Name" "" -}}
-{{-   $email := promptString "Email" "" -}}
-{{-   $github_user := promptString "GitHub Username" "" -}}
+{{-   $computer_name = promptString "Computer Name" $computer_name -}}
+{{-   $hostname = promptString "Hostname" $hostname -}}
+{{-   $name = promptString "Full Name" $name -}}
+{{-   $email = promptString "Email" $email -}}
+{{-   $github_user = promptString "GitHub Username" $github_user -}}
 {{- end -}}
 
 {{- end }}
