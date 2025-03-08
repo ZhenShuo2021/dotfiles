@@ -18,10 +18,8 @@
 {{- $minimum = promptBool "Minimum install (only install zsh plugins, T/F)" false -}}
 
 {{- if $minimum -}}
-{{-   writeToStdout "✅ Minimum mode enabled\n" -}}
 
 {{- else -}}
-{{-   writeToStdout "✅ Minimum mode disabled\n" -}}
 {{-   $computer_name = promptString "Computer Name" $computer_name -}}
 {{-   $hostname = promptString "Hostname" $hostname -}}
 {{-   $name = promptString "Full Name" $name -}}
@@ -41,6 +39,17 @@
 {{- if (contains "delta" (output "bash" "-c" "command -v delta || true")) }}
 {{-   $delta_is_not_installed = false }}
 {{- end }}
+
+{{- if (env "MINIMUM") -}}
+{{- $minimum = true -}}
+{{- end -}}
+
+{{- if $minimum -}}
+{{-   writeToStdout "✅ Minimum mode enabled\n" -}}
+
+{{- else -}}
+{{-   writeToStdout "✅ Minimum mode disabled\n" -}}
+{{- end -}}
 
 # chezmoi data
 data:

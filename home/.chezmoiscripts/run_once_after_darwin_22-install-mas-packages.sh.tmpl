@@ -1,7 +1,7 @@
-{{- if (eq .chezmoi.os "darwin") -}}
 #!/bin/bash
 
 echo "Running install-mas-packages.sh"
+{{- if (eq .chezmoi.os "darwin") -}}
 source $HOME/.cache/chezmoi-utils.sh
 
 printf "${green}[22 - macOS] ${reset}"
