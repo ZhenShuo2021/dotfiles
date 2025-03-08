@@ -25,39 +25,24 @@
 
 [^test-method]: 測試執行於 M1 MacBook Pro 8G RAM，zsh-bench 使用預設值，測試總共載入的插件有 powerlevel10k, zsh-defer, zsh-syntax-highlighting, zsh-autosuggestions, zsh-completions, zsh-z, zsh-history-substring-search, extract, git，每個測試都確保 brew/docker/docker-compose/yarn/npm 的指令補全必須正常運作。hyperfine 使用 `hyperfine --runs 100 --warmup 3 'zsh -i -c exit 0'` 測試，請注意 hyperfine 測試是超級簡化的測試[沒有特別意義](https://github.com/romkatv/zsh-bench?tab=readme-ov-file#how-not-to-benchmark)，他只告訴你執行這行指令的平均時間，不代表真正的體感時間。
 
-## 特色
+## Feature
 
-不只是快而且功能齊全，所有設定都基於簡單原則完成，外觀設定模仿 vscode 預設主題，一律使用 nerd font (MesloLGS NF) 字體。
+不只快而且功能齊全。
 
-- 🚀 快速啟動：使用 zsh-defer 延遲加載實現 0.04s 的 prompt 載入延遲， 0.1s 的首次指令延遲
-- 📂 集中管理：不需要把安裝腳本和設定檔分開管理，一次完成安裝和設定
-- 📚 完整註解：保證你看得懂 zshrc 在寫什麼以及為何這樣寫
-- 🛠️ 易於調整：.zshrc 乾淨簡潔，讓你不會每次修改頭都很痛
-- 🔄 簡單更新：執行 `dotfile-update` 就可輕鬆更新所有插件和系統套件
+- 🚀 0.04s 的首次命令延遲
+- 📂 集中管理安裝腳本和設定檔
+- 📚 完整註解
+- 🛠️ 易於調整
 - 🔲 極簡風格：沒有花花綠綠的分散注意力
-- 🎨 已配置完成的 Powerlevel10k 主題
-- 📦 多個預先配置的插件
-  - zsh-syntax-highlighting 語法上色
-  - zsh-autosuggestions 指令歷史建議
-  - zsh-completions 指令補全
-  - colored-man-pages 上色的 man pages
-  - extract 自動解壓縮
-  - z 快速切換目錄
-  - 自己寫的切換目錄函式 c 可自訂目錄快速跳轉
-- 🌐 LANG、LC_ALL 和 Git 都已經設定好繁體中文
+- 🎨 WezTerm 主題
+- ✏️ neovim 設定檔
+- ✅ zsh-syntax-highlighting 語法上色
+- ✅ zsh-autosuggestions 指令歷史建議
+- ✅ zsh-completions 指令補全
+- ✅ zsh-z 快速切換目錄
+- ✅ colored-man-pages
 - ✅ GPG、homebrew 和 Git 等套件的常見問題都已經解決
-- 🎯 正確的設定指令補全
-- ⚙️ 完善設定的 gitconfig，大量借鑒 [mathiasbynens](https://github.com/mathiasbynens/dotfiles)
-- 🖥️ 現代化終端機
-  - 使用現代終端機，分割視窗不再需要 tmux 並且設定好外觀主題和鍵盤映射
-  - wezterm: [binwenwu/wezterm-config](https://github.com/binwenwu/wezterm-config/)
-  - warp: [warpdotdev/themes](https://github.com/warpdotdev/themes)
-- ✏️ 文字編輯
-  - neovim: 使用 Lazyvim 設定檔，鍵盤映射 Ctrl+d 為黑洞刪除
-  - helix: onedarker 主題，並且整合 ruff lsp
-- 🔧 工具
-  - gallery-dl: 精心設計的 config.json，只需修改路徑即可使用
-  - yt-dlp: 設定檔為最高畫質和音質，開箱即用
+- ✅ 指令補全
 
 ## 安裝
 
@@ -67,12 +52,7 @@ ASK=1 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ZhenShuo2021/dotfile
 
 首次執行不會完整安裝，因為 GPG 等需要進一步設定，移除 `ASK=1` 會使用預設名稱作為電腦和用戶名，再次執行 `chezmoi -k apply` 可以進行後續部分的安裝。
 
-其他指令為：
-
-- 清除 chezmoi run_once 狀態  
-chezmoi state delete-bucket --bucket=scriptState
-- 應用設定檔，環境變數可選  
-ASK=1 SETPASS=1 chezmoi init --apply
+其他常用的 chezmoi 指令為請查看 Makefile。
 
 ## 最簡安裝
 
@@ -91,7 +71,7 @@ zshrc 相關設定在 `~/.local/share/chezmoi/home/private_dot_config/zsh` 中�
 7. 99-alias.zsh: 設定別名，可以任意修改
 8. 100-p10k.zsh: p10k 設定檔
 
-我的編輯方式是使用 `c [tab]` 跳轉到 chezmoi 目錄編輯，`cn` 開啟 VSCode 修改，最後使用 `make apply` 應用到主目錄。
+我的工作流程是使用 `c [tab]` 跳轉到 chezmoi 目錄，`cn` 開啟 VSCode，最後使用 `make apply` 應用到主目錄。
 
 ## Profiling
 
@@ -99,6 +79,10 @@ zshrc 相關設定在 `~/.local/share/chezmoi/home/private_dot_config/zsh` 中�
 
 1. `zsh_prof_zprof` 使用 `zprof` 指令進行分析，提供數字參數以設定顯示行數，數字以外的參數顯示所有結果。
 2. `zsh_prof_xtrace` 藉由 `XTRACE` 和 `EPOCHREALTIME` 生成更細節的報告，使用 `zsh_prof_xtrace -h` 查看使用方式。
+
+<p align="center">
+<img width="90%" height="90%" alt="profiling" src="https://github.com/user-attachments/assets/5240c98d-f693-47b3-865b-40bfebb2efb7" />
+</p>
 
 ## 快捷鍵列表
 
@@ -466,28 +450,28 @@ Zsh 本身的補全系統很麻煩，大量使用 zsh-defer 又讓偵錯更麻�
 這幾項設定加上 `eval $(/opt/homebrew/bin/brew shellenv)` 是影響補全是否成功啟用的關鍵節點，試著把補全設定放在這些指令前後進行測試，或者是手動載入 `autoload -Uz /path/to/_completion-file` 補全檔案。  
 
 - 遇到奇怪的問題  
-例如 VSCode 無法使用 GPG 等奇怪的問題，原因是延遲載入 brew，如果不想處理這種問題請把 completion.zsh 的 compinit 兩行，移動 `eval $(/opt/homebrew/bin/brew shellenv)` 到 .zprofile 中，再移除 preference.zsh 的 brew PATH，最後在 plugin.zsh 最後面加上 `zcomet compinit`。
+通常原因是延遲載入 brew，如果不想處理就改為不使用 zsh-defer 載入補全系統，方式是將補全系統初始化 compinit 移動到 plugin.zsh 中，並且把 eval brew shellenv 移動到 .zprofile，最後移除 preference.zsh 的 brew PATH。
 
 - 為何使用 zcomet?  
-語法簡單而且支援直接載入 url，比起 Zinit 更輕量快速，就算遇到問題直接切換到 Zinit 也非常容易
+語法簡單而且支援直接載入 url，比起 Zinit 更輕量快速，就算遇到問題直接切換到 Zinit 也非常容易。
 
 - 為何不用 Zim?  
-需要額外管理 .zimrc 而且不支援直接載入 url，最重要的是難以獨立設定哪些插件需要使用 zsh-defer，沒有使用延遲加載會導致所有插件管理器從比拼誰更快變成比拼誰更慢
+Zim 需要管理額外的 .zimrc 文件，也不支援直接載入 url，最重要的是難以獨立設定哪些插件需要使用 zsh-defer，如果不使用延遲加載，所有插件管理器都差不多慢。
 
 - 為何不用 Zinit?  
-語法過於複雜，本體載入速度也太慢，請見 [zsh-plugin-manager-benchmark](https://github.com/rossmacarthur/zsh-plugin-manager-benchmark)
+語法過於複雜，本體載入速度也太慢，請見 [zsh-plugin-manager-benchmark](https://github.com/rossmacarthur/zsh-plugin-manager-benchmark)。
 
 - 為何不用 zsh4humans?  
-z4h [是最快的插件管理器](https://github.com/zimfw/zimfw/wiki/Speed)，但是我不想要一個強迫使用 p10k、設定混亂、會覆蓋我 zshrc 的插件管理器，如果沒有這些問題他會是完美的
+z4h [是最快的插件管理器](https://github.com/zimfw/zimfw/wiki/Speed)，但是我不想要一個強迫使用 p10k、設定混亂、會覆蓋我 zshrc 的插件管理器，如果沒有這些問題他會是完美的。
 
 - 為何不用 antidote?  
-有太多 anti* 的插件管理器了，我不知道他會不會又停止開發，而且正好在換代到 V2
+有太多 anti* 的插件管理器了，我不知道他會不會又停止開發，而且正好在換代到 V2。
 
-- 怎麼做才能更快?  
-現在的效能瓶頸在主題和插件管理器，但是 p10k 已經是顯示 git status 裡面最快最好看的主題了；不使用插件管理器就是自己寫腳本，例如 [zsh_unplugged](https://github.com/mattmc3/zsh_unplugged/)，研究後覺得最後會變成一個簡陋的插件管理器，同時現在的啟動速度已經達到體感不可感知於是放棄。
+- 如何更快?  
+現在的效能瓶頸在主題和插件管理器本身的載入，現在的啟動速度已經足夠快沒有進一步優化的必要，兩個優化方法是主題改用 [pure](https://github.com/sindresorhus/pure)，並且移除插件管理器[手動管理插件](https://github.com/romkatv/zsh-bench/blob/661fc46c74fd970f00346d285f5ae434130491f0/configs/diy%2B%2B/skel/.zshrc)（如果你不使用 diy++ 的方式設定，速度會比使用插件管理器還慢）。
 
 - 我想從根本加速  
-現在就幾乎是最快的設定，不可能更快了，直接改用 fish shell 才能從根本解決問題
+現在就幾乎是最快的設定，不可能更快了，直接改用 fish shell 才能從根本解決問題。
 
 - 繪製自己的測試結果：將數據更新在 .github/benchmark.py 後使用 `uv run .github/benchmark.py` 可以直接執行不需建立虛擬環境。
 
