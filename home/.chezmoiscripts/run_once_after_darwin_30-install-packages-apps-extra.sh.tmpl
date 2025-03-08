@@ -6,8 +6,8 @@
 echo "Running install-packages-extra.sh"
 source $HOME/.cache/chezmoi-utils.sh
 
-printf "${green}[90 - macOS] ${reset}"
-{{- if or (lt 90 (atoi (env "SCRIPTS_START_AT"))) (env "SKIP_APPS") }}
+printf "${green}[30 - macOS] ${reset}"
+{{- if or (lt 30 (atoi (env "SCRIPTS_START_AT"))) (env "SKIP_APPS") }}
 echo "Skip installing extra Mac Apps"
 exit 0
 {{ else }}

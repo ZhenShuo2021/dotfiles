@@ -1,5 +1,4 @@
 #!/bin/sh
-echo "Running inject-utils.sh"
 
 # do not put in /tmp for permission issue in some OSs
 cache_dir="$HOME/.cache"

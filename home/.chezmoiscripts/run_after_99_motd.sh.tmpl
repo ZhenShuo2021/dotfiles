@@ -1,6 +1,6 @@
 #!/bin/sh
 echo "Running motd.sh"
-{{- if .flags.is_codespace -}}
+{{ if .flags.is_codespace -}}
 
 echo ""
 echo "=== Dotfiles installed on Codespaces! ==="

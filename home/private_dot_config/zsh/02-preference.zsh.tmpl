@@ -1,17 +1,13 @@
-# Chezmoi cached variables
-export CM_computer_name={{ .computer_name }}
-export CM_hostname={{ .hostname }}
-
-if [[ -a $HOME/.localrc ]]; then source $HOME/.localrc; fi   # for sensitive information
+if [[ -a $HOME/.localrc ]]; then source $HOME/.localrc; fi   # load sensitive information
 
 
-# User Preferences
-# =============================================================================
-# This area is freely modifiable
+###############################################################################
+#                              User Preferences                               #
+###############################################################################
 
 # Setup your locale
-export LANG=zh_TW.UTF-8
-export LC_ALL=zh_TW.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
 # Other settings
 # Auto-refresh GPG terminal detection
@@ -20,14 +16,22 @@ export GPG_TTY=$(tty)
 # Clear text after exiting git pager mode
 export LESS=FR
 
+# Disable homebrew auto-update
+export HOMEBREW_NO_AUTO_UPDATE=1
+
+# Disable hints
+export HOMEBREW_NO_ENV_HINTS=1
+
+# Default editor
+export EDITOR='nvim'
+
+
+###############################################################################
+#                            Path Configurations                              #
+###############################################################################
+
 # Add paths
 export PATH="$HOME/.local/bin:$PATH"
-
-# Add paths
-export PATH="$ZZ/bin:$PATH"
-
-# Add paths
-export PATH="/run/current-system/sw/bin:$PATH"
 
 # fix gpg not found issue in vscode caused by zsh-defer brew shellenv
 {{- if (eq .chezmoi.os "darwin") }}
@@ -35,14 +39,6 @@ export PATH="/opt/homebrew/bin:$PATH"
 {{ else }}
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH" 
 {{- end }}
-
-# my path for docker-compose.yml
-{{ if and (eq .chezmoi.os "linux") (eq .chezmoi.osRelease.id "ubuntu") -}}
-export VOL_PATH="/mnt/SSD/photo"
-{{- end }}
-
-# Set Nix path
-export NIX_PATH="nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs"
 
 # Change zsh-z .z location
 export ZSHZ_DATA="$XDG_CACHE_HOME/zsh/.z"
@@ -53,21 +49,22 @@ export LESSHISTFILE="$XDG_CACHE_HOME/zsh/.lesshst"
 # Change .vimrc location
 # export VIMINIT="$XDG_CONFIG_HOME/vim/.vimrc"
 
+# Setup XDG path for mac
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_CONFIG_HOME="$HOME/.config"
+
+# change .zcompdump directory
+# see https://github.com/ohmyzsh/ohmyzsh/issues/7332#issuecomment-2537406196
+export ZSH_COMPDUMP="$HOME/.cache/zsh/zcompcache/.zcompdump"
+
 # Change .gitconfig location
 export GIT_CONFIG_GLOBAL="$XDG_CONFIG_HOME/git/.gitconfig"
 
 # Change .matplotlib location
 export MPLCONFIGDIR="$XDG_CONFIG_HOME/.matplotlib"
 
-# Disable homebrew auto-update
-export HOMEBREW_NO_AUTO_UPDATE=1
-
-# Disable hints
-export HOMEBREW_NO_ENV_HINTS=1
-
 # your project folder that we can `c [tab]` to
 export PROJECTS=~/Code
-export EDITOR='nvim'
 
 # zsh history
 HISTFILE="$HOME/.zsh_history"
@@ -75,10 +72,11 @@ HISTSIZE=10000
 SAVEHIST=10000
 
 
-# Load FPATH for functions and completions
-# =============================================================================
+###############################################################################
+#                  Load FPATH for functions and completions                   #
+###############################################################################
 
-fpath=($ZZ/fpath $fpath)
+fpath=($HOME/.local/fpath $fpath)
 
 autoload -Uz $HOME/.config/zsh/zcomet/bin/functions/_zcomet   # fix completion due to the zsh-defer
-autoload -Uz $ZZ/fpath/*(:t)
+autoload -Uz $HOME/.local/fpath/*(:t)

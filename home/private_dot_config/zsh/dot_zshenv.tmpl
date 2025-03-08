@@ -5,13 +5,6 @@
 # https://github.com/sambacha/dotfiles2
 # https://gist.github.com/Linerre/f11ad4a6a934dcf01ee8415c9457e7b2
 
-{{ if not (and (eq .chezmoi.os "linux") (eq .chezmoi.osRelease.id "ubuntu")) -}}
+{{ if and (eq .chezmoi.os "linux") (eq .chezmoi.osRelease.id "ubuntu") -}}
 skip_global_compinit=1
 {{- end }}
-
-export XDG_CACHE_HOME="$HOME/.cache"
-export XDG_CONFIG_HOME="$HOME/.config"
-
-# change .zcompdump directory
-# see https://github.com/ohmyzsh/ohmyzsh/issues/7332#issuecomment-2537406196
-export ZSH_COMPDUMP="$HOME/.cache/zsh/zcompcache/.zcompdump"
