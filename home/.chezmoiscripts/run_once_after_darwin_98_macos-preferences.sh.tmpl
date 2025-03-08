@@ -25,6 +25,9 @@ chflags nohidden ~/Library
 # Set a really fast key repeat.
 defaults write NSGlobalDomain KeyRepeat -int 1
 
+# Set initial repeat blank.
+defaults write -g InitialKeyRepeat -int 25
+
 # Set the Finder prefs for showing a few different volumes on the Desktop.
 defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
 defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
@@ -45,7 +48,7 @@ defaults write com.apple.dock wvous-bl-modifier -int 0
 
 # Finder
 # 顯示隱藏檔案
-defaults write com.apple.finder AppleShowAllFiles -bool true
+# defaults write com.apple.finder AppleShowAllFiles -bool true
 
 # 不顯示副檔名
 defaults write NSGlobalDomain AppleShowAllExtensions -bool false
