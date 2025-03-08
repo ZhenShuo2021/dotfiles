@@ -8,3 +8,7 @@
 {{ if and (eq .chezmoi.os "linux") (eq .chezmoi.osRelease.id "ubuntu") -}}
 skip_global_compinit=1
 {{- end }}
+
+# Setup XDG path for mac
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_CONFIG_HOME="$HOME/.config"
