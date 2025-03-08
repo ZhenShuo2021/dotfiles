@@ -1,22 +1,26 @@
-
-{{ if .flags.minimum }}
-**/.chezmoiscripts/*
-**/.local
-**/.warp
-{{ end }}
-
 */README.md
+
+
+{{- if .flags.minimum }}
+**
+!.config
+!.config/zsh
+!.config/zsh/*
+{{- end }}
+
 
 {{ if ne .chezmoi.os "darwin" }}
 .config/sketchybar
 .local/macos
 {{ end }}
 
+
 {{ if ne .chezmoi.os "linux" }}
 .local/linux
 .hushlogin
 .local/share/fonts
 {{ end }}
+
 
 {{ if ne .chezmoi.os "windows" }}
 Documents

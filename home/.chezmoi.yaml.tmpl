@@ -7,7 +7,7 @@
 {{- $is_codespace := false }}
 {{- $nas_mount_path := default "~/mnt/leonas" (env "NAS_PATH") -}}
 {{- $passphrase := default "change me with 'SETPASS=1 chezmoi init'" (index . "passphrase") -}}
-{{- $devcontainer := or (env "REMOTE_CONTAINERS") (env "CODESPACES") (env "VSCODE_REMOTE_CONTAINERS_SESSION") (env "GITPOD_HOST") | not | not | not -}}
+{{- $devcontainer := or (env "REMOTE_CONTAINERS") (env "CODESPACES") (env "VSCODE_REMOTE_CONTAINERS_SESSION") (env "GITPOD_HOST") | not | not -}}
 
 # Check if we are in codespace
 {{- $is_codespace:= env "CODESPACES" | not | not -}}
@@ -15,8 +15,7 @@
 
 # Command line prompt
 {{- if (env "ASK") }}
-{{- $question := "Minimum install (only install zsh plugins, T/F)" -}}
-{{- $minimum := promptBool $question false -}}
+{{- $minimum = promptBool "Minimum install (only install zsh plugins, T/F)" false -}}
 
 {{- if $minimum -}}
 {{-   writeToStdout "✅ Minimum mode enabled\n" -}}
@@ -56,7 +55,7 @@ data:
   flags:
     delta_is_not_installed: {{ $delta_is_not_installed }}
     is_codespace: {{ $is_codespace }}
-    minimum: {{ $minimum | quote }}
+    minimum: {{ $minimum }}
 
 encryption: gpg
 gpg:
