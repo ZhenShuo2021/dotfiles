@@ -3,7 +3,7 @@
     url = "https://github.com/ZhenShuo2021/starter.git"
     clone.args = ["--depth", "1"]
     refreshPeriod = "168h"
-{{- if not (and (eq .chezmoi.os "linux") (eq .chezmoi.osRelease.id "ubuntu")) }}
+{{ if not (and (eq .chezmoi.os "linux") (eq .chezmoi.osRelease.id "ubuntu")) }}
 [".config/wezterm"]
     type = "git-repo"
     url = "https://github.com/ZhenShuo2021/wezterm-config.git"
@@ -14,4 +14,4 @@
     url = "https://github.com/ZhenShuo2021/warp-themes.git"
     clone.args = ["--depth", "1"]
     refreshPeriod = "168h"
-{{- end }}
+{{ end }}

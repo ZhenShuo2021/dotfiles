@@ -20,7 +20,12 @@ curl -sS https://webi.sh/delta | sh
 # asdf direnv setup --version latest # Setup script
 
 # neovim
+handle_error() {
+  exit 0
+}
+
 set -e
+trap handle_error EXIT
 
 mkdir -p $HOME/.local/bin
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
@@ -28,6 +33,7 @@ tar -C $HOME/.local/bin -xzf nvim-linux-x86_64.tar.gz
 mv $HOME/.local/bin/nvim-linux-x86_64 $HOME/.local/bin/neovim
 ln -s $HOME/.local/bin/neovim/bin/nvim $HOME/.local/bin/nvim
 rm -f nvim-linux-x86_64.tar.gz
-if ! type nvim &>/dev/null; then echo 'PATH="$PATH:$HOME/.local/bin"' >> $HOME/.zshrc ; fi
+
+trap - EXIT
 
 {{ end -}}

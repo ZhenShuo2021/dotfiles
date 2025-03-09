@@ -2,11 +2,13 @@
 
 
 {{- if .flags.minimum }}
-**
-!.config
+.chezmoiscripts/*
+!.chezmoiscripts/ubuntu_20_basic_tools.sh
+.local/share/fileicons
+.config/*
+!.config/nvim
+!.config/wezterm
 !.config/zsh
-!.config/zsh/**
-!.chezmoiexternal.toml
 {{- end }}
 
 

@@ -66,7 +66,8 @@ data:
     is_codespace: {{ $is_codespace }}
     minimum: {{ $minimum }}
 
-scriptTempDir: ~/tmp
+# It doesn't work for first remote install
+scriptTempDir: "~/tmp"
 encryption: gpg
 gpg:
   symmetric: true
