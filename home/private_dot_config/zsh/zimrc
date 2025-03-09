@@ -1,4 +1,3 @@
-zmodule romkatv/zsh-defer
 zmodule ohmyzsh/ohmyzsh --root plugins/extract
 zmodule completion
 zmodule ohmyzsh/ohmyzsh --root plugins/git

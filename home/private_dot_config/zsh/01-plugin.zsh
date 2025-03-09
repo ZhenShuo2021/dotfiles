@@ -21,6 +21,11 @@ if [[ ! -d ${ZIM_HOME}/modules/powerlevel10k ]]; then
   git clone --depth=10 https://github.com/romkatv/powerlevel10k ${ZIM_HOME}/modules/powerlevel10k
 fi
 
+# Install zsh-defer if not installed
+if [[ ! -d ${ZIM_HOME}/modules/zsh-defer ]]; then
+  git clone --depth=10 https://github.com/romkatv/zsh-defer ${ZIM_HOME}/modules/zsh-defer
+fi
+
 # load zsh-defer and p10k
 source ${ZIM_HOME}/modules/zsh-defer/zsh-defer.plugin.zsh
 source ${ZIM_HOME}/modules/powerlevel10k/powerlevel10k.zsh-theme
