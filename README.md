@@ -8,7 +8,7 @@
 
 ## How Fast Is It
 
-使用專門測試 shell 的 [zsh-bench](https://github.com/romkatv/zsh-bench/) 和直觀易懂的 hyperfine 進行測試[^test-method]，測試項目涵蓋五種框架：
+使用專門測試 shell 的 [zsh-bench](https://github.com/romkatv/zsh-bench/) 進行測試[^test-method]，測試項目涵蓋五種框架：
 
 - Oh-My-ZSH: 最多人使用的框架
 - Zinit: 內建豐富延遲載入功能的插件管理器
@@ -23,13 +23,13 @@
   <img src=".github/benchmark-defer.svg" width="90%" height="90%" alt="benchmark">
 </p>
 
-[^test-method]: 測試執行於 M1 MacBook Pro 8G RAM，zsh-bench 使用預設值，測試總共載入的插件有 powerlevel10k, zsh-defer, zsh-syntax-highlighting, zsh-autosuggestions, zsh-completions, zsh-z, zsh-history-substring-search, extract, git，每個測試都確保 brew/docker/docker-compose/yarn/npm 的指令補全必須正常運作。hyperfine 使用 `hyperfine --runs 100 --warmup 3 'zsh -i -c exit 0'` 測試，請注意 hyperfine 測試是超級簡化的測試[沒有特別意義](https://github.com/romkatv/zsh-bench?tab=readme-ov-file#how-not-to-benchmark)，他只告訴你執行這行指令的平均時間，不代表真正的體感時間。
+[^test-method]: 測試執行於 M1 MacBook Pro 8G RAM，zsh-bench 使用預設值，測試總共載入的插件有 powerlevel10k, zsh-defer, zsh-syntax-highlighting, zsh-autosuggestions, zsh-completions, zsh-z, zsh-history-substring-search, extract, git。
 
 ## Feature
 
 不只快而且功能齊全。
 
-- 🚀 0.04s 的首次命令延遲
+- 🚀 0.03s 的首次命令延遲
 - 📂 集中管理安裝腳本和設定檔
 - 📚 完整註解
 - 🛠️ 易於調整

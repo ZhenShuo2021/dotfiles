@@ -32,7 +32,7 @@ colors = ["b", "g", "r", "c", "m", "y", "k", "w"]
 bar_width = 0.10
 
 metrics_bench_large = [
-    ('zsh -i -c "exit 0"', [bench_data[f]["mean_time_ms"] for f in frameworks]),
+    ('zsh -lic "exit"', [bench_data[f]["exit_time_ms"] for f in frameworks]),
     ("First Command Lag", [bench_data[f]["first_command_lag_ms"] for f in frameworks]),
     ("First Prompt Lag", [bench_data[f]["first_prompt_lag_ms"] for f in frameworks]),
 ]

@@ -1,47 +1,41 @@
 [bench_data.Oh-My-ZSH]
-mean_time_ms = 148.1
-first_prompt_lag_ms = 23.260
-first_command_lag_ms = 270.265
-command_lag_ms = 26.156
-input_lag_ms = 20.797
-exit_time_ms = 639.359
+first_prompt_lag_ms = 23.718
+first_command_lag_ms = 209.631
+command_lag_ms = 17.940
+input_lag_ms = 20.518
+exit_time_ms = 377.806
 
 [bench_data.Zinit]
-mean_time_ms = 66.2
-first_prompt_lag_ms = 23.160
-first_command_lag_ms = 123.458
-command_lag_ms = 23.491
-input_lag_ms = 20.264
-exit_time_ms = 64.808
+first_prompt_lag_ms = 16.408
+first_command_lag_ms = 88.077
+command_lag_ms = 15.466
+input_lag_ms = 12.771
+exit_time_ms = 42.832
 
 [bench_data."No Plugin Manager"]
-mean_time_ms = 42.8
-first_prompt_lag_ms = 27.441
-first_command_lag_ms = 99.687
-command_lag_ms = 22.966
-input_lag_ms = 20.195
-exit_time_ms = 41.054
+first_prompt_lag_ms = 23.367
+first_command_lag_ms = 78.865
+command_lag_ms = 15.794
+input_lag_ms = 15.877
+exit_time_ms = 30.441
 
 [bench_data.Zim]
-mean_time_ms = 40.9
-first_prompt_lag_ms = 23.341
-first_command_lag_ms = 101.787
-command_lag_ms = 23.417
-input_lag_ms = 20.083
-exit_time_ms = 42.571
+first_prompt_lag_ms = 18.633
+first_command_lag_ms = 75.597
+command_lag_ms = 15.183
+input_lag_ms = 14.785
+exit_time_ms = 29.204
 
-[bench_data."This dotfile (zcomet)"]
-mean_time_ms = 42.9
-first_prompt_lag_ms = 24.194
-first_command_lag_ms = 98.126
-command_lag_ms = 23.173
-input_lag_ms = 22.092
-exit_time_ms = 43.568
+[bench_data."This dotfile"]
+first_prompt_lag_ms = 20.697
+first_command_lag_ms = 79.508
+command_lag_ms = 16.337
+input_lag_ms = 12.071
+exit_time_ms = 30.972
 
-[bench_data."Baseline (Empty .zshrc)"]
-mean_time_ms = 11.1
-first_prompt_lag_ms = 16.612
-first_command_lag_ms = 16.776
-command_lag_ms = 0.071
-input_lag_ms = 0.199
-exit_time_ms = 15.626
+[bench_data."Baseline (No .zshrc)"]
+first_prompt_lag_ms = 14.343
+first_command_lag_ms = 14.479
+command_lag_ms = 0.064
+input_lag_ms = 0.201
+exit_time_ms = 15.237
