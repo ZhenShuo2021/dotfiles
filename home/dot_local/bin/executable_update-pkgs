@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/zsh
 #
 # dotfile-update
 #
@@ -40,15 +40,17 @@ while test $# -gt 0; do
 done
 
 # Update zsh plugins
-if type zcomet &>/dev/null; then
-echo "Update zsh plugins"
-command zcomet self-update
-command zcomet update
+if [ -d "$HOME/.config/zsh/zcomet" ]; then
+  echo "Updating zsh plugins"
+  source $HOME/.config/zsh/zcomet/bin/zcomet.zsh
+  zcomet self-update
+  zcomet update
 fi
 
 # Upgrade brew packages
 if command -v brew &> /dev/null; then
   echo "Updating Homebrew packages"
+  brew upgrade
   brew update
 fi
 
