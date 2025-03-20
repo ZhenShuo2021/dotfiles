@@ -3,7 +3,6 @@
 
 # Install plugin manager and source it
 zstyle ':zcomet:*' home-dir ~/.config/zsh/zcomet
-zstyle ':zcomet:compinit' arguments -d "$ZSH_COMPDUMP"
 
 if [[ ! -f ${ZDOTDIR:-${HOME}}/.config/zsh/zcomet/bin/zcomet.zsh ]]; then
   git clone https://github.com/agkozak/zcomet.git ${ZDOTDIR:-${HOME}}/.config/zsh/zcomet/bin
@@ -18,7 +17,7 @@ zcomet load romkatv/powerlevel10k
 
 # load plugins
 zsh-defer zcomet load ohmyzsh plugins/extract
-zsh-defer zcomet fpath ohmyzsh plugins/docker-compose   # only load completion
+zsh-defer zcomet load ohmyzsh plugins/docker-compose   # only load completion
 # zsh-defer zcomet load ohmyzsh plugins/git
 # zsh-defer zcomet fpath ohmyzsh plugins/gitfast   # Same as homebrew's git completion
 
@@ -44,7 +43,8 @@ bindkey '^[[B' history-substring-search-down
 # plugins that must be loaded last
 zsh-defer zcomet load agkozak/zsh-z
 zsh-defer zcomet load zsh-users/zsh-completions
-zsh-defer zcomet load zsh-users/zsh-syntax-highlighting
+# zsh-defer zcomet load zsh-users/zsh-syntax-highlighting
+zsh-defer zcomet load zdharma-continuum/fast-syntax-highlighting
 zsh-defer zcomet load zsh-users/zsh-autosuggestions; bindkey '^f' autosuggest-accept
 
 

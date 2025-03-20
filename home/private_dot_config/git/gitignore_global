@@ -45,6 +45,8 @@ dump.rdb
 .githooks
 .local
 .history
+.env
+.secret
 
 *.gitignored.*
 
