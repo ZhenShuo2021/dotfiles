@@ -23,6 +23,7 @@ setopt NO_BG_NICE # don't nice background tasks
 setopt AUTO_LIST
 setopt AUTO_MENU
 setopt MENU_COMPLETE
+setopt INTERACTIVE_COMMENTS   # Recognize comments on the command line
 setopt NO_LIST_BEEP   # Don't beep on an ambiguous completion
 setopt NO_BEEP   # 完全關閉 beep
 unsetopt CORRECT   # 關閉 zsh 自動修正，不準又很煩
@@ -31,15 +32,15 @@ unsetopt CORRECT   # 關閉 zsh 自動修正，不準又很煩
 # https://wiki.zshell.dev/docs/guides/customization#history-optimization
 setopt append_history         # Allow multiple sessions to append to one Zsh command history.
 # setopt extended_history       # Show timestamp in history.
-setopt hist_expire_dups_first # Expire A duplicate event first when trimming history.
-setopt hist_find_no_dups      # Do not display a previously found event.
-setopt hist_ignore_all_dups   # Remove older duplicate entries from history.
-setopt hist_ignore_dups       # Do not record an event that was just recorded again.
-setopt hist_ignore_space      # Do not record an Event Starting With A Space.
-setopt hist_reduce_blanks     # Remove superfluous blanks from history items.
-setopt hist_save_no_dups      # Do not write a duplicate event to the history file.
-setopt hist_verify            # Do not execute immediately upon history expansion.
-setopt inc_append_history     # Write to the history file immediately, not when the shell exits.
+setopt HIST_EXPIRE_DUPS_FIRST # Expire A duplicate event first when trimming history.
+setopt HIST_FIND_NO_DUPS      # Do not display a previously found event.
+setopt HIST_IGNORE_ALL_DUPS   # Remove older duplicate entries from history.
+setopt HIST_IGNORE_DUPS       # Do not record an event that was just recorded again.
+setopt HIST_IGNORE_SPACE      # Do not record an Event Starting With A Space.
+setopt HIST_REDUCE_BLANKS     # Remove superfluous blanks from history items.
+setopt HIST_SAVE_NO_DUPS      # Do not write a duplicate event to the history file.
+setopt HIST_VERIFY            # Do not execute immediately upon history expansion.
+setopt INC_APPEND_HISTORY     # Write to the history file immediately, not when the shell exits.
 
 # bindkey '^[^[[D' backward-word
 # bindkey '^[^[[C' forward-word

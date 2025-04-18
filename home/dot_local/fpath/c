@@ -27,13 +27,8 @@ c() {
 
   if [ -z "$target" ]; then
     cd $1
-    return 1
-  fi
-
-  if [ -n "$target" ]; then
-    cd "$target"
+    return
   else
-    echo "Directory '$1' does not exist in favorite subdirectories or direct directories"
-    return 1
+    cd "$target"
   fi
 }

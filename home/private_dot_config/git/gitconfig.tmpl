@@ -3,7 +3,7 @@
   email = {{ .email }}
   signingkey = E7138AD2BF8D57AE11E5C41136197E3F894A8361
 [core]
-  excludesfile = ~/.config/git/.gitignore_global
+  excludesfile = {{ .chezmoi.destDir }}/.config/git/gitignore_global
   {{ if .flags.delta_is_not_installed -}} # [git-delta not installed] # {{ end -}}
   pager = delta
   editor = nvim

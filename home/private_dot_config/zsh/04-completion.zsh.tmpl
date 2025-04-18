@@ -71,10 +71,9 @@ if type pyenv &> /dev/null; then
     source "$BREW_PATH/opt/pyenv/completions/pyenv.zsh"
 fi
 
-
 # initialize completion system
+zstyle ':zcomet:compinit' arguments -d "$ZSH_COMPDUMP"
 zcomet compinit
-
 
 # use zcomet compinit in plugin.zsh
 # autoload -Uz compinit
