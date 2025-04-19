@@ -10,3 +10,10 @@ CM_ZSH_ALIAS=$CM_ZSH_DIR/99-alias.zsh.tmpl
 ZZ=$HOME/.config/zsh
 ZZ_PREFERENCE=$ZZ/02-preference.zsh
 ZZ_ALIAS=$ZZ/99-alias.zsh
+
+{{- if eq .chezmoi.os "darwin" }}
+export BREW_PATH=/opt/homebrew
+{{- else if and (eq .chezmoi.os "linux") (eq .chezmoi.osRelease.id "ubuntu") }}
+export BREW_PATH=/home/linuxbrew/.linuxbrew
+{{- else }}
+{{- end }}

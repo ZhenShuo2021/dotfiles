@@ -54,17 +54,28 @@ zstyle ':completion:*' list-separator ' ➤ '
 
 
 # shellenv MUST run before compinit
-# put this in .zprofile if get something wrong in your completion
+# eval shellenv in .zprofile if get something wrong in your completion
+if [[ -f "$BREW_PATH/bin/brew" ]]; then
+    eval "$("$BREW_PATH/bin/brew" shellenv)"
+fi
 
-{{- if eq .chezmoi.os "darwin" }}
-BREW_PATH=/opt/homebrew
-eval "$("$BREW_PATH/bin/brew" shellenv)"
-{{- else if and (eq .chezmoi.os "linux") (eq .chezmoi.osRelease.id "ubuntu") }}
-BREW_PATH=/home/linuxbrew/.linuxbrew
-eval "$("$BREW_PATH/bin/brew" shellenv)"
-{{- else }}
-{{- end }}
+if [[ -d "$BREW_PATH" ]]; then
+    site_func_path="$BREW_PATH/share/zsh/site-functions"
 
+    setup_completion() {
+        local cmd="$1"
+        local file="_$cmd"
+        local target="$site_func_path/$file"
+
+        if [[ -f "$target" ]]; then return; fi
+        if ! type "$cmd" &> /dev/null; then return; fi
+
+        "$cmd" completion zsh > "$target"
+    }
+
+    setup_completion hugo
+    setup_completion pnpm
+fi
 
 # brew pyenv completion
 if type pyenv &> /dev/null; then
