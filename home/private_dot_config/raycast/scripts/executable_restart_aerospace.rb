@@ -16,8 +16,5 @@ system('pkill -9 AeroSpace')
 sleep 0.5
 system('open -a AeroSpace')
 
-# Also restart sketchybar
-system('brew services restart sketchybar')
-
 # Notify macOS that the app is restarted
 system("osascript -e 'display notification \"AeroSpace restarted\" with title \"AeroSpace\"'")
