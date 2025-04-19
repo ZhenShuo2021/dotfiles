@@ -3,7 +3,10 @@
 
 {{- if .flags.minimum }}
 .chezmoiscripts/*
+# Detect Windows
+{{ if not (eq .chezmoi.os "windows") }}
 !.chezmoiscripts/ubuntu_20_basic_tools.sh
+{{ end }}
 .local/share/fileicons
 .config/*
 !.config/nvim

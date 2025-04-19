@@ -1,66 +1,54 @@
 # Preload anything we need for the rest of the rc scripts
 # =============================================================================
 
-# Install plugin manager and source it
-zstyle ':zcomet:*' home-dir ~/.config/zsh/zcomet
+# setup zimfw dir
+ZIM_CONFIG_FILE=~/.config/zsh/zimrc
+ZIM_HOME=~/.config/zsh/zim
 
-if [[ ! -f ${ZDOTDIR:-${HOME}}/.config/zsh/zcomet/bin/zcomet.zsh ]]; then
-  git clone https://github.com/agkozak/zcomet.git ${ZDOTDIR:-${HOME}}/.config/zsh/zcomet/bin
+# Install zimfw if not installed
+if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
+  if (( ${+commands[curl]} )); then
+    curl -fsSL --create-dirs -o ${ZIM_HOME}/zimfw.zsh \
+        https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+  else
+    mkdir -p ${ZIM_HOME} && wget -nv -O ${ZIM_HOME}/zimfw.zsh \
+        https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+  fi
 fi
-source ${ZDOTDIR:-${HOME}}/.config/zsh/zcomet/bin/zcomet.zsh
 
+# Install p10k if not installed
+if [[ ! -d ${ZIM_HOME}/modules/powerlevel10k ]]; then
+  git clone --depth=10 https://github.com/romkatv/powerlevel10k ${ZIM_HOME}/modules/powerlevel10k
+fi
 
-# load p10k
-zcomet load romkatv/zsh-defer
-zcomet load romkatv/powerlevel10k
+# Install zsh-defer if not installed
+if [[ ! -d ${ZIM_HOME}/modules/zsh-defer ]]; then
+  git clone --depth=10 https://github.com/romkatv/zsh-defer ${ZIM_HOME}/modules/zsh-defer
+fi
 
+# load zsh-defer and p10k
+source ${ZIM_HOME}/modules/zsh-defer/zsh-defer.plugin.zsh
+source ${ZIM_HOME}/modules/powerlevel10k/powerlevel10k.zsh-theme
 
-# load plugins
-zsh-defer zcomet load ohmyzsh plugins/extract
-zsh-defer zcomet load ohmyzsh plugins/docker-compose   # only load completion
-# zsh-defer zcomet load ohmyzsh plugins/git
-# zsh-defer zcomet fpath ohmyzsh plugins/gitfast   # Same as homebrew's git completion
+# load other plugins
+if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZIM_CONFIG_FILE:-${ZDOTDIR:-${HOME}}/.zimrc} ]]; then
+  zsh-defer source ${ZIM_HOME}/zimfw.zsh init -q
+fi
+zsh-defer source ${ZIM_HOME}/init.zsh
 
-
-# configure zsh-history-substring-search
-zsh-defer zcomet load zsh-users/zsh-history-substring-search
-
-# Only search full prefix match
-HISTORY_SUBSTRING_SEARCH_PREFIXED=1
-
-# custom substring highlight color
+# Substring search
+# Bind ^[[A/^[[B manually so up/down works both before and after zle-line-init
 # HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='fg=white,bold,bg=cyan'
 # HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='fg=white,bold,bg=red'
 # HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_TIMEOUT=2
+# zsh-defer zmodload -F zsh/terminfo +p:terminfo
+# for key ('^[[A' '^P' ${terminfo[kcuu1]}) zsh-defer bindkey ${key} history-substring-search-up
+# for key ('^[[B' '^N' ${terminfo[kcud1]}) zsh-defer bindkey ${key} history-substring-search-down
+# for key ('k') zsh-defer bindkey -M vicmd ${key} history-substring-search-up
+# for key ('j') zsh-defer bindkey -M vicmd ${key} history-substring-search-down
+# zsh-defer unset key
 
-# disable substring match highlighting
-zsh-defer unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND
-zsh-defer unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND
+# Prefix search
+HISTORY_SUBSTRING_SEARCH_PREFIXED=1
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
-
-
-# plugins that must be loaded last
-zsh-defer zcomet load agkozak/zsh-z
-zsh-defer zcomet load zsh-users/zsh-completions
-# zsh-defer zcomet load zsh-users/zsh-syntax-highlighting
-zsh-defer zcomet load zdharma-continuum/fast-syntax-highlighting
-zsh-defer zcomet load zsh-users/zsh-autosuggestions; bindkey '^f' autosuggest-accept
-
-
-# optional plugins
-# zcomet load lukechilds/zsh-better-npm-completion
-
-
-# deprecated plugins
-# zcomet load ohmyzsh lib completion.zsh   # brew fpath and zsh-completions are better
-
-
-# colored manpage
-export LESS_TERMCAP_mb=$'\e[1;32m'
-export LESS_TERMCAP_md=$'\e[1;32m'
-export LESS_TERMCAP_me=$'\e[0m'
-export LESS_TERMCAP_se=$'\e[0m'
-export LESS_TERMCAP_so=$'\e[01;33m'
-export LESS_TERMCAP_ue=$'\e[0m'
-export LESS_TERMCAP_us=$'\e[1;4;31m'

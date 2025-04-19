@@ -13,11 +13,10 @@
 - Oh-My-ZSH: 最多人使用的框架
 - Zinit: 內建豐富延遲載入功能的插件管理器
 - No Plugin Manager: 不使用插件管理器以減少延遲
-- Zim: 標榜 [blazing speed](https://github.com/zimfw/zimfw/wiki/Speed) 的插件管理器
-- zcomet: 此份 dotfile
+- Zim: 此份 dotfile
 - Baseline: 基準線，移除 .zshrc，本機能達到的最快速度
 
-所有框架都公平的使用 zsh-defer 加速，測試項目的選擇從最廣泛使用的框架到手動優化，以便準確定位效能，可以看到比 Zinit 更快，基本上追平甚至超越不使用插件管理器的速度，同時又比 Zim 易於設定。
+所有框架都公平的使用 zsh-defer 加速，測試項目的選擇從最廣泛使用的框架到手動優化，以便準確定位效能，可以看到比 Zinit 更快，基本上追平甚至超越不使用插件管理器的速度。
 
 <p align="center">
   <img src=".github/benchmark-defer.svg" width="90%" height="90%" alt="benchmark">
@@ -56,7 +55,11 @@ ASK=1 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ZhenShuo2021/dotfile
 
 ## 最簡安裝
 
-最簡安裝只會修改 shell 設定不會進行任何額外安裝，在第一個問題輸入 T/F 選擇是否啟用。
+最簡安裝只會複製 Shell 設定不會進行任何額外安裝。
+
+```sh
+MINIMUM=1 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ZhenShuo2021/dotfiles/main/remote_install.sh) -k -v"
+```
 
 ## 修改
 
@@ -452,11 +455,8 @@ Zsh 本身的補全系統很麻煩，大量使用 zsh-defer 又讓偵錯更麻�
 - 遇到奇怪的問題  
 通常原因是延遲載入 brew，如果不想處理就改為不使用 zsh-defer 載入補全系統，方式是將補全系統初始化 compinit 移動到 plugin.zsh 中，並且把 eval brew shellenv 移動到 .zprofile，最後移除 preference.zsh 的 brew PATH。
 
-- 為何使用 zcomet?  
-語法簡單而且支援直接載入 url，比起 Zinit 更輕量快速，就算遇到問題直接切換到 Zinit 也非常容易。
-
-- 為何不用 Zim?  
-Zim 需要管理額外的 .zimrc 文件，也不支援直接載入 url，最重要的是難以獨立設定哪些插件需要使用 zsh-defer，如果不使用延遲加載，所有插件管理器都差不多慢。
+- 為何不用 zcomet?  
+語法簡單而且支援直接載入 url，比起 Zinit 更輕量快速，但是在 Windows 的 Git Bash 上會有問題。
 
 - 為何不用 Zinit?  
 語法過於複雜，本體載入速度也太慢，請見 [zsh-plugin-manager-benchmark](https://github.com/rossmacarthur/zsh-plugin-manager-benchmark)。
