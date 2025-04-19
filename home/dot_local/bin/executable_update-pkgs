@@ -50,8 +50,8 @@ fi
 # Upgrade brew packages
 if command -v brew &> /dev/null; then
   echo "Updating Homebrew packages"
-  brew upgrade
   brew update
+  brew upgrade
 fi
 
 exit ${exit_code:-0}

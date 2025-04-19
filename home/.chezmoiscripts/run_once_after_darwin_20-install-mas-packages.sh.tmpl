@@ -14,7 +14,7 @@ echo "Install Mac App Store apps via mas"
 
 set -ufo pipefail
 
-brew bundle --no-lock --file=/dev/stdin <<EOF
+brew bundle --file=/dev/stdin <<EOF
 
 mas "Pocket", id: 568494494
 
