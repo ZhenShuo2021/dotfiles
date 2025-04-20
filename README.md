@@ -56,7 +56,32 @@ ASK=1 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ZhenShuo2021/dotfile
 
 ## 最簡安裝
 
-最簡安裝只會修改 shell 設定不會進行任何額外安裝，在第一個問題輸入 T/F 選擇是否啟用。
+最簡安裝只會複製 Shell 設定不會安裝額外工具。
+
+```sh
+MINIMUM=1 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ZhenShuo2021/dotfiles/main/remote_install.sh) -k -v"
+```
+
+如果使用 Git Bash 安裝完成後還要手動完成以下步驟：
+
+```sh
+# 開啟 Git Bash
+
+# 設定檔捷徑
+ln -s ~/.config/zsh/zshrc ~/.zshrc
+ln -s ~/.config/zsh/zshenv ~/.zshenv
+
+# 預設使用 Zsh
+$ echo "if [ -t 1 ]; then exec zsh; fi" > ~/.bashrc
+
+# 移動 Git 設定位置
+mkdir -p ~/.config/git
+mv ~/.gitconfig ~/.config/git/gitconfig
+mv ~/.gitignore_global ~/.config/git/gitignore_global
+
+# 啟用 Zsh 完成後續插件安裝
+exec zsh
+```
 
 ## 修改
 
