@@ -56,7 +56,11 @@ ASK=1 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ZhenShuo2021/dotfile
 
 ## 最簡安裝
 
-最簡安裝只會修改 shell 設定不會進行任何額外安裝，在第一個問題輸入 T/F 選擇是否啟用。
+最簡安裝只會複製 Shell 設定不會安裝額外工具。
+
+```sh
+MINIMUM=1 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ZhenShuo2021/dotfiles/main/remote_install.sh) -k -v"
+```
 
 ## 修改
 

@@ -22,5 +22,22 @@ else
   chezmoi=chezmoi
 fi
 
+while true; do
+  read -p "Are you using Git Bash? (y/n): " use_git_bash
+  case "$use_git_bash" in
+    y|Y)
+      branch="git-bash"
+      break
+      ;;
+    n|N)
+      branch="main"
+      break
+      ;;
+    *)
+      echo "Invalid input. Please enter 'y' or 'n'."
+      ;;
+  esac
+done
+
 # exec: replace current process with chezmoi init
-exec "$chezmoi" init https://github.com/ZhenShuo2021/dotfiles.git --branch main --apply --keep-going
+exec "$chezmoi" init https://github.com/ZhenShuo2021/dotfiles.git --branch "$branch" --apply --keep-going
