@@ -78,6 +78,7 @@ alias 'gtlll'='gtlll(){ git tag --sort=-v:refname -n999 --format="[%(objectname:
 # alias 'gtlll'='gtlll(){ git tag --sort=-v:refname -n10 --format="[%(objectname:short) %(refname:short)] %(subject)" --list "${1}*" }; noglob gtlll'
 alias gca='git commit -a'
 alias gco='git checkout'
+alias gsw='git switch'
 alias gcp='git cherry-pick'
 alias grb='git rebase'
 alias grbi='git rbi'
@@ -85,8 +86,6 @@ alias grba='git rebase --abort'
 alias grbc='git rebase --continue'
 alias grbo='git rebase --onto'
 alias grbs='git rebase --skip'
-alias ga='git add'
-alias gaa='git add --all'
 alias gb='git branch'
 alias gs='git status -sb'
 
@@ -95,3 +94,35 @@ alias gloga="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgr
 alias gp='git push'
 alias 'gp!'='git push --force-with-lease --force-if-includes'
 # alias gd='git diff --color | sed "s/^\([^-+ ]*\)[-+ ]/\\1/" | less -r'
+
+# Example:
+    # delete_merged_branch                # 只刪除本地已合併分支
+    # delete_merged_branch true           # 刪除本地與遠端（使用 origin）
+    # delete_merged_branch true upstream  # 刪除本地與遠端 upstream
+delete_merged_branch() {
+  local delete_remote="${1:-false}"
+  local remote_name="${2:-origin}"
+
+  local branches=$(git branch --merged | grep -vE "^\*|master|main")
+
+  if [ -z "$branches" ]; then
+    echo "No merged branches found."
+    return 0
+  fi
+
+  for b in $branches; do
+    git branch -d "$b"
+    if [ "$delete_remote" = "true" ]; then
+      git push "$remote_name" --delete "$b"
+    fi
+  done
+}
+
+# Too lazy to type ga .
+ga() {
+  if [[ -z "$1" ]]; then
+    git add --all
+  else
+    git add "$@"
+  fi
+}

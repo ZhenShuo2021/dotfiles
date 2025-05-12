@@ -28,18 +28,18 @@
   # `git fm <msg>` 從提交訊息找到標籤
   fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
 
-  # `git d` 和上一次的提交比較差異
-  d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
+  # `git d` 比較未提交的變更
+  d = !"git diff-index --quiet HEAD -- || git --no-pager diff --patch-with-stat"
 
   # `git di <number>` 和前 <number> 次的提交比較差異
-  di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+  di = !"d() { git diff --patch-with-stat HEAD~$1 HEAD; }; git diff-index --quiet HEAD -- || d"
 
   # === 修改歷史的指令 ===
   # 移除本地和遠端分支
-  nuke = !{{ .chezmoi.destDir -}}/.config/zsh/bin/git-nuke-branch
+  nuke = !{{ .chezmoi.destDir -}}/.local/bin/git-nuke-branch
   
   # 自動追蹤遠端分支
-  track = !{{ .chezmoi.destDir -}}/.config/zsh/bin/git-track
+  track = !{{ .chezmoi.destDir -}}/.local/bin/git-track
 
   # 預存除了子模組的所有修改並且提交
   ca = !git add ':(exclude,attr:builtin_objectmode=160000)' && git commit -av

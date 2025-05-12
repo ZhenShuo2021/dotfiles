@@ -24,9 +24,10 @@ setopt AUTO_LIST
 setopt AUTO_MENU
 setopt MENU_COMPLETE
 setopt INTERACTIVE_COMMENTS   # Recognize comments on the command line
-setopt NO_LIST_BEEP   # Don't beep on an ambiguous completion
-setopt NO_BEEP   # 完全關閉 beep
-unsetopt CORRECT   # 關閉 zsh 自動修正，不準又很煩
+setopt NO_LIST_BEEP           # Don't beep on an ambiguous completion
+setopt NO_BEEP                # 完全關閉 beep
+unsetopt CORRECT              # 關閉 zsh 自動修正，很煩又不準
+setopt SH_WORD_SPLIT          # 改為和 Bash 相同的字串切割
 
 # History completion
 # https://wiki.zshell.dev/docs/guides/customization#history-optimization

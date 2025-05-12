@@ -16,3 +16,74 @@ normal.family = "MesloLGS NF"
 # bold_italic.family = "Cascadia Code PL"
 
 size = 14.0
+[[colors.indexed_colors]]
+color = "#DC8A78"
+index = 16
+
+[[colors.indexed_colors]]
+color = "#4C4F69"
+index = 17
+
+[colors.primary]
+background = "#EFF1F5"
+foreground = "#4C4F69"
+bright_foreground = "#4C4F69"
+dim_foreground = "#4C4F69"
+
+[colors.normal]
+black = "#5C5F77"
+red = "#D20F39"
+green = "#40A02B"
+yellow = "#DF8E1D"
+blue = "#1E66F5"
+magenta = "#EA76CB"
+cyan = "#179299"
+white = "#ACB0BE"
+
+[colors.bright]
+black = "#6C6F85"
+red = "#D20F39"
+green = "#40A02B"
+yellow = "#DF8E1D"
+blue = "#1E66F5"
+magenta = "#EA76CB"
+cyan = "#179299"
+white = "#BCC0CC"
+
+[colors.dim]
+black = "#5C5F77"
+red = "#C4403C"
+green = "#3A6E44"
+yellow = "#A96B2D"
+blue = "#3458A6"
+magenta = "#944B81"
+cyan = "#3B747C"
+white = "#9CA0B0"
+
+[colors.cursor]
+text = "#EFF1F5"
+cursor = "#4C4F69"
+
+[colors.vi_mode_cursor]
+text = "#EFF1F5"
+cursor = "#209FB5"
+
+[colors.selection]
+text = "#4C4F69"
+background = "#CCD0DA"
+
+[colors.search.matches]
+foreground = "#4C4F69"
+background = "#DF8E1D"
+
+[colors.search.focused_match]
+foreground = "#EFF1F5"
+background = "#40A02B"
+
+[colors.hints.start]
+foreground = "#EFF1F5"
+background = "#DF8E1D"
+
+[colors.hints.end]
+foreground = "#EFF1F5"
+background = "#ACB0BE"
