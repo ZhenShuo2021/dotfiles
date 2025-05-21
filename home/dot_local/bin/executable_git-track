@@ -1,8 +1,0 @@
-#!/bin/sh
-#
-# 把目前分支的 upstream 設定為 origin/目前分支名稱
-# Sets up your branch to track a remote branch. Assumes you mean
-# `origin/$branch-name`.
-
-branch=$(git rev-parse --abbrev-ref HEAD)
-git branch $branch --set-upstream-to origin/$branch

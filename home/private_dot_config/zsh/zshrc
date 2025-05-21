@@ -12,22 +12,22 @@
 # method 2: xtrace
 #   execute zsh_prof_xtrace to generate logfile report
 if (( ${ZSH_XTRACE:-0} )); then
-  (( ${+EPOCHREALTIME} )) || zmodload zsh/datetime
-  setopt PROMPT_SUBST
-  PS4='+$EPOCHREALTIME %N:%i> '
+    (( ${+EPOCHREALTIME} )) || zmodload zsh/datetime
+    setopt PROMPT_SUBST
+    PS4='+$EPOCHREALTIME %N:%i> '
 
-  logfile=$(mktemp "zsh_profile-$(date +%Y-%m-%dT%H:%M:%S)")
-  echo "Logging to $logfile" > /dev/tty
-  exec 3>&2 2>$logfile
+    logfile=$(mktemp "zsh_profile-$(date +%Y-%m-%dT%H:%M:%S)")
+    echo "Logging to $logfile" > /dev/tty
+    exec 3>&2 2>$logfile
 
-  setopt XTRACE
+    setopt XTRACE
 fi
 
 
 # My dotfile
 
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
 source $HOME/.config/zsh/00-basic.zsh
@@ -44,6 +44,6 @@ source $ZZ/100-p10k.zsh
 
 # Unset xtrace
 if (( ${ZSH_XTRACE:-0} )); then
-  unsetopt XTRACE
-  exec 2>&3 3>&-
+    unsetopt XTRACE
+    exec 2>&3 3>&-
 fi

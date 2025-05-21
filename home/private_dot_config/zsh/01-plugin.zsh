@@ -45,6 +45,9 @@ zsh-defer zcomet load agkozak/zsh-z
 zsh-defer zcomet load zsh-users/zsh-completions
 # zsh-defer zcomet load zsh-users/zsh-syntax-highlighting
 zsh-defer zcomet load zdharma-continuum/fast-syntax-highlighting
+typeset -A FAST_HIGHLIGHT_STYLES
+FAST_HIGHLIGHT_STYLES[comment]='fg=#6A9955'
+
 zsh-defer zcomet load zsh-users/zsh-autosuggestions; bindkey '^f' autosuggest-accept
 
 

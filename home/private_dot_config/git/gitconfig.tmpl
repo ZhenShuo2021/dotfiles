@@ -1,146 +1,158 @@
 [user]
-  name = {{ .name }}
-  email = {{ .email }}
-  signingkey = E7138AD2BF8D57AE11E5C41136197E3F894A8361
+    name = {{ .name }}
+    email = {{ .email }}
+    signingkey = E7138AD2BF8D57AE11E5C41136197E3F894A8361
 [core]
-  excludesfile = {{ .chezmoi.destDir }}/.config/git/gitignore_global
-  {{ if .flags.delta_is_not_installed -}} # [git-delta not installed] # {{ end -}}
-  pager = delta
-  editor = nvim
-  quotepath = false
+    excludesfile = {{ .chezmoi.destDir }}/.config/git/gitignore_global
+    {{ if not .flags.delta_is_not_installed -}}
+    pager = delta
+    {{ else -}}
+    # pager = delta  # disabled, git-delta not installed
+    {{ end -}}
+    editor = nvim
+    quotepath = false
 [include]
-  path = ~/.gitconfig.local
+    path = ~/.gitconfig.local
 [alias]
-  # Credit: https://github.com/mathiasbynens/dotfiles/blob/main/.gitconfig
-  # === 列出資訊類型的指令 ===
-  # List aliases.
-  aliases = config --get-regexp alias
+    # Credit: https://github.com/mathiasbynens/dotfiles/blob/main/.gitconfig
+    # === 列出資訊類型的指令 ===
+    # List aliases.
+    aliases = config --get-regexp alias
 
-  # List contributors with number of commits.
-  contributors = shortlog --summary --numbered
+    # List contributors with number of commits.
+    contributors = shortlog --summary --numbered
 
-  # `git ft <commit-ish>` 找到該提交的下一個標籤，並且顯示距離
-  ft = "!f() { git describe --always --contains $1; }; f"
+    # `git ft <commit-ish>` 找到該提交的下一個標籤，並且顯示距離
+    ft = "!f() { git describe --always --contains $1; }; f"
 
-  # `git fc <any>` 從原始碼找到標籤
-  fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
+    # `git fc <any>` 從原始碼找到標籤
+    fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
 
-  # `git fm <msg>` 從提交訊息找到標籤
-  fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
+    # `git fm <msg>` 從提交訊息找到標籤
+    fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
 
-  # `git d` 比較未提交的變更
-  d = !"git diff-index --quiet HEAD -- || git --no-pager diff --patch-with-stat"
+    # `git wip` 比較未提交的變更 (work in progress)
+    wip = !"git diff --cached --patch-with-stat"
 
-  # `git di <number>` 和前 <number> 次的提交比較差異
-  di = !"d() { git diff --patch-with-stat HEAD~$1 HEAD; }; git diff-index --quiet HEAD -- || d"
+    # `git dn [<NUM>]` 和前 NUM 次的提交比較差異
+    dn = !"d() { git diff --patch-with-stat HEAD~$1 HEAD; }; git diff-index --quiet HEAD -- || d"
 
-  # === 修改歷史的指令 ===
-  # 移除本地和遠端分支
-  nuke = !{{ .chezmoi.destDir -}}/.local/bin/git-nuke-branch
-  
-  # 自動追蹤遠端分支
-  track = !{{ .chezmoi.destDir -}}/.local/bin/git-track
+    # === 修改歷史的指令 ===
+    # 預存除了子模組的所有修改並且提交
+    ca = !git add ':(exclude,attr:builtin_objectmode=160000)' && git commit -av
 
-  # 預存除了子模組的所有修改並且提交
-  ca = !git add ':(exclude,attr:builtin_objectmode=160000)' && git commit -av
+    # `git credit <name> [<email>]` 修改前一個提交的作者
+    credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
 
-  # `git credit <name> [<email>]` 修改前一個提交的作者
-  credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
+    # === 分支相關的指令 ===
+    # 移除本地和遠端分支
+    nuke = "!git branch -D $1 && git push origin :$1"
 
-  # `git reb <number>` 對前 <number> 次提交進行互動式變基
-  rbi = "!r() { git rebase -i HEAD~$1; }; r"
+    # 自動追蹤遠端分支
+    track = "!branch=$(git rev-parse --abbrev-ref HEAD); git branch $branch --set-upstream-to origin/$branch"
 
-  # `git dm` 移除所有已經被合併到 main 的分支
-  # a.k.a. ‘delete merged’
-  dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+    # `git reb <number>` 對前 <number> 次提交進行互動式變基
+    rbi = "!r() { git rebase -i HEAD~$1; }; r"
+
+    # `git dm` 移除所有已經被合併到 main 的分支
+    # a.k.a. ‘delete merged’
+    dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+
+    # `git stack` 列出所有堆疊的分支
+    # `git push-stack` 一次推送所有堆疊的分支
+    # https://andrewlock.net/pushing-a-whole-stack-of-branches-with-a-single-git-command/#pushing-part-of-the-stack-with-git-push-stack
+    default-branch = "!git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'"
+    merge-base-origin ="!f() { git merge-base ${1-HEAD} origin/$(git default-branch); };f "
+    stack = "!f() { \
+        BRANCH=${1-HEAD}; \
+        MERGE_BASE=$(git merge-base-origin $BRANCH); \
+        git log --decorate-refs=refs/heads --simplify-by-decoration --pretty=format:\"%(decorate:prefix=,suffix=,tag=,separator=%n)\" $MERGE_BASE..$BRANCH; \
+    };f "
+    push-stack = "!f() { \
+        BRANCH=${1-HEAD}; \
+        git stack $BRANCH | xargs -I {} git push --force-with-lease origin {}; \
+    };f "
 
 [init]
-  defaultBranch = main
+    defaultBranch = main
 [commit]
-  gpgsign = true
+    gpgsign = true
 [delta]
-  navigate = true  # use n and N to move between diff sections
-  line-numbers = true
+    navigate = true  # use n and N to move between diff sections
+    line-numbers = true
 [merge]
-  conflictstyle = diff3
+    conflictstyle = diff3
 [diff]
-  colorMoved = default
+    colorMoved = default
 [gui]
-  encoding = utf-8
+    encoding = utf-8
 [i18n "commit"]
-  encoding = utf-8
+    encoding = utf-8
 [i18n]
-  logoutputencoding = utf-8
+    logoutputencoding = utf-8
 [rebase]
-  autoStash = true
+    autoStash = true
 [rerere]
-  enabled = 1
+    enabled = 1
 [pull]
-  rebase = true
+    rebase = true
 
 
 [color]
-  diff = auto
-  status = auto
-  branch = auto
-  ui = auto
+    diff = auto
+    status = auto
+    branch = auto
+    ui = auto
 [color "branch"]
-  current = green reverse
-  remote = blue
+    current = green reverse
+    remote = blue
 [color "diff"]
-  meta = yellow bold
-  frag = magenta bold # line info
-  old = red # deletions
-  new = green # additions
+    meta = yellow bold
+    frag = magenta bold # line info
+    old = red # deletions
+    new = green # additions
 [color "status"]
-  added = green
-  changed = blue
+    added = green
+    changed = blue
 
 
 [apply]
-  whitespace = nowarn
+    whitespace = nowarn
 [mergetool]
-  keepBackup = false
+    keepBackup = false
 [help]
-  autocorrect = 1
+    autocorrect = 1
 [push]
-  # See `git help config` (search for push.default)
-  # for more information on different options of the below setting.
-  #
-  # Setting to git 2.0 default to suppress warning message
-  default = simple
-  followTags = true
+    # See `git help config` (search for push.default)
+    # for more information on different options of the below setting.
+    #
+    # Setting to git 2.0 default to suppress warning message
+    default = simple
+    followTags = true
 [ghq]
-  root = ~/Code
+    root = ~/Code
 [interactive]
-  {{ if .flags.delta_is_not_installed -}} # [git-delta not installed] # {{ end -}}
-  diffFilter = delta --color-only
+    {{ if .flags.delta_is_not_installed -}} # [git-delta not installed] # {{ end -}}
+    diffFilter = delta --color-only
 [filter "lfs"]
-  required = true
-  clean = git-lfs clean -- %f
-  smudge = git-lfs smudge -- %f
-  process = git-lfs filter-process
+    required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
 
-
-{{ if .flags.is_codespace -}} # [Disable since it's codespace] # {{ end -}}
-[url "ssh://git@github.com/{{ .github_user }}"]
-{{ if .flags.is_codespace -}} # [Disable since it's codespace] #   {{ end -}}
-  insteadOf = https://github.com/{{ .github_user }}
-
-
-{{/* Added from gh auth setup-git */}}
-{{- if (env "CODER") }}
-[credential "https://github.com"]
-  helper =
-  helper = !gh auth git-credential
-[credential "https://gist.github.com"]
-  helper =
-  helper = !gh auth git-credential
-{{ end -}}
+    {{/* Added from gh auth setup-git */}}
+    {{- if (env "CODER") }}
+    [credential "https://github.com"]
+    helper =
+    helper = !gh auth git-credential
+    [credential "https://gist.github.com"]
+    helper =
+    helper = !gh auth git-credential
+    {{ end -}}
 
 {{ if eq .chezmoi.os "darwin" }}
 [credential]
-  helper = osxkeychain
+    helper = osxkeychain
 [diff "spaceman-diff"]
-  command = /opt/homebrew/bin/spaceman-diff
+    command = /opt/homebrew/bin/spaceman-diff
 {{ end -}}

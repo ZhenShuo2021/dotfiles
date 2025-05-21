@@ -25,23 +25,32 @@ alias "cd-"="cd -"
 alias "cd.."="cd .."
 alias "cd..."="cd ../.."
 alias "cd...."="cd ../../.."
+alias "grep"="grep --color=auto"
 
 export LS_COLORS='di=0;34:ex=0;31:'
 
 {{ if (eq .chezmoi.os "darwin") -}}
 if type gls &>/dev/null
 then
-  alias  l="gls --color=auto --group-directories-first"
-  alias ls='gls --color=auto --group-directories-first'
-  alias ll="gls --color=auto -A --group-directories-first"
-  alias l3="gls --color=auto -lAh --time-style=+'' --group-directories-first"
-  alias l4="gls --color=auto -lahF --time-style='+[%Y-%m-%d %H:%M:%S]' --group-directories-first"
+    alias  l="gls --color=auto --group-directories-first"
+    alias ls='gls --color=auto --group-directories-first'
+    alias ll="gls --color=auto -A --group-directories-first"
+    alias l3="gls --color=auto -lAh --time-style=+'' --group-directories-first"
+    alias l4="gls --color=auto -lahF --time-style='+[%Y-%m-%d %H:%M:%S]' --group-directories-first"
+
+	alias "cut"="gcut"
+	alias "paste"="gpaste"
+	alias "tr"="gtr"
+	alias "sort"="gsort"
+	alias "uniq"="guniq"
+
+    alias "brew_clear_all_you_can_think"="brew cleanup -s && brew autoremove && rm -rf "$(brew --cache)" && brew cleanup --prune=all"
 else
-  alias  l="ls -G"
-  alias ls='ls -G'
-  alias ll="ls -AG"
-  alias l3="ls -lAGh"
-  alias l4="ls -laGhF"
+    alias  l="ls -G"
+    alias ls='ls -G'
+    alias ll="ls -AG"
+    alias l3="ls -lAGh"
+    alias l4="ls -laGhF"
 fi
 {{ else }}
 alias  l="ls --color=auto --group-directories-first"
@@ -60,6 +69,8 @@ alias gpg_delete_key='gpg --delete-secret-and-public-keys'
 
 ### Git
 alias g=git
+alias ga='git add'
+alias gaa='git add --all'
 alias gc='git commit'
 alias 'gcn'='git commit --no-verify'
 alias 'gcn!'='git commit --no-verify --amend'
@@ -100,29 +111,19 @@ alias 'gp!'='git push --force-with-lease --force-if-includes'
     # delete_merged_branch true           # 刪除本地與遠端（使用 origin）
     # delete_merged_branch true upstream  # 刪除本地與遠端 upstream
 delete_merged_branch() {
-  local delete_remote="${1:-false}"
-  local remote_name="${2:-origin}"
+    local delete_remote="${1:-false}"
+    local remote_name="${2:-origin}"
+    local branches=$(git branch --merged | grep -vE "^\*|master|main")
 
-  local branches=$(git branch --merged | grep -vE "^\*|master|main")
-
-  if [ -z "$branches" ]; then
-    echo "No merged branches found."
-    return 0
-  fi
-
-  for b in $branches; do
-    git branch -d "$b"
-    if [ "$delete_remote" = "true" ]; then
-      git push "$remote_name" --delete "$b"
+    if [ -z "$branches" ]; then
+        echo "No merged branches found."
+        return 0
     fi
-  done
-}
 
-# Too lazy to type ga .
-ga() {
-  if [[ -z "$1" ]]; then
-    git add --all
-  else
-    git add "$@"
-  fi
+    for b in $branches; do
+        git branch -d "$b"
+    if [ "$delete_remote" = "true" ]; then
+        git push "$remote_name" --delete "$b"
+    fi
+    done
 }

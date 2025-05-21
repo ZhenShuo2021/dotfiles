@@ -36,7 +36,9 @@ export PATH="$HOME/.local/bin:$PATH"
 # fix gpg not found issue in vscode caused by zsh-defer brew shellenv
 {{- if (eq .chezmoi.os "darwin") }}
 export PATH="/opt/homebrew/bin:$PATH" 
-{{ else }}
+export PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"
+export PATH="/opt/homebrew/opt/findutils/libexec/gnubin:$PATH"
+{{- else if (eq .chezmoi.os "linux") }}
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH" 
 {{- end }}
 
