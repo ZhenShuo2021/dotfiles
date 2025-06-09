@@ -22,20 +22,40 @@
     # List contributors with number of commits.
     contributors = shortlog --summary --numbered
 
+    # `git ff <filename>` 寬鬆比對檔案名稱並顯示對應提交及標籤
+    # [ -t 1 ]: 確保 wc -l 計算正確，只有不是直接輸出到終端才加上換行符
+    ff = "!f() { \
+        files=$(git ls-tree -r --name-only HEAD); \
+        for file in $files; do \
+            case \"$file\" in \
+                *\"$1\"*) \
+                    [ -t 1 ] || printf '\\n'; \
+                    git log --pretty=format:'%C(yellow)%h%Creset  %Cgreen%cs %C(auto)%d%Creset %s  %C(bold blue)<%an>%Creset' --decorate \"$@\"; \
+                ;; \
+            esac; \
+        done; \
+    }; f"
+
+    # `git ff-exact <filename>` 從精確的檔案名稱找到提交及其標籤
+    ff-exact = "!f() { [ -t 1 ] || printf '\\n'; git log --pretty=format:'%C(yellow)%h%Creset  %Cgreen%cs %C(auto)%d%Creset %s  %C(bold blue)<%an>%Creset' --decorate \"$@\"; }; f"
+
+    # find tag
     # `git ft <commit-ish>` 找到該提交的下一個標籤，並且顯示距離
     ft = "!f() { git describe --always --contains $1; }; f"
 
+    # find code
     # `git fc <any>` 從原始碼找到標籤
-    fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
+    fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cgreen%cs  %Creset%s  %C(bold blue)<%an>%Creset %Cred%d' --decorate -S$1; }; f"
 
+    # find message
     # `git fm <msg>` 從提交訊息找到標籤
-    fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
+    fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cgreen%cs  %Creset%s  %C(bold blue)<%an>%Creset %Cred%d' --decorate --grep=$1; }; f"
 
     # `git wip` 比較未提交的變更 (work in progress)
     wip = !"git diff --cached --patch-with-stat"
 
     # `git dn [<NUM>]` 和前 NUM 次的提交比較差異
-    dn = !"d() { git diff --patch-with-stat HEAD~$1 HEAD; }; git diff-index --quiet HEAD -- || d"
+    dn = "!f() { NUM=${1:-1}; git diff --patch-with-stat HEAD~$NUM HEAD; }; f"
 
     # === 修改歷史的指令 ===
     # 預存除了子模組的所有修改並且提交
@@ -54,9 +74,15 @@
     # `git reb <number>` 對前 <number> 次提交進行互動式變基
     rbi = "!r() { git rebase -i HEAD~$1; }; r"
 
-    # `git dm` 移除所有已經被合併到 main 的分支
-    # a.k.a. ‘delete merged’
-    dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+    # 顯示被合併的分支
+    show-merged = "git branch --merged"
+
+    # 移除所有已經被合併的分支
+    # Usage：
+    #   delete-merged-branch                   # 只刪除本地已合併分支
+    #   delete-merged-branch true              # 刪除本地與遠端（使用 origin）
+    #   delete-merged-branch true upstream     # 刪除本地與遠端 upstream
+    dm = "!delete_merged_branch"
 
     # `git stack` 列出所有堆疊的分支
     # `git push-stack` 一次推送所有堆疊的分支

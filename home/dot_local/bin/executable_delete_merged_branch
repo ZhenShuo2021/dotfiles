@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+# delete_merged_branch - 刪除已合併的 Git 分支
+#
+# Usage：
+#   delete-merged-branch                   # 只刪除本地已合併分支
+#   delete-merged-branch true              # 刪除本地與遠端（使用 origin）
+#   delete-merged-branch true upstream     # 刪除本地與遠端 upstream
+
+set -e
+
+DELETE_REMOTE="${1:-false}"
+REMOTE_NAME="${2:-origin}"
+
+COLOR_YELLOW='\033[33m'
+COLOR_RESET='\033[0m'
+
+if ! git rev-parse --git-dir >/dev/null 2>&1; then
+    echo "Error: Not in a Git repository"
+    exit 1
+fi
+
+BRANCHES=$(git branch --merged | grep -v -E "^[[:space:]]*\\*|[[:space:]]*(master|main)[[:space:]]*$" | sed 's/^[[:space:]]*//')
+
+if [ -z "$BRANCHES" ]; then
+    echo "No merged branches found."
+    exit 0
+fi
+
+echo "Found merged branches:"
+echo "$BRANCHES" | while IFS= read -r branch; do
+    [ -n "$branch" ] && printf "  ${COLOR_YELLOW}%s${COLOR_RESET}\n" "$branch"
+done
+echo
+
+BRANCH_ARRAY=()
+while IFS= read -r branch; do
+    [ -n "$branch" ] && BRANCH_ARRAY+=("$branch")
+done <<<"$BRANCHES"
+
+for branch in "${BRANCH_ARRAY[@]}"; do
+    if [ "$DELETE_REMOTE" = "true" ]; then
+        printf "Delete merged branch '${COLOR_YELLOW}%s${COLOR_RESET}' locally and from remote '${COLOR_YELLOW}%s${COLOR_RESET}'? [y/N] " "$branch" "$REMOTE_NAME"
+    else
+        printf "Delete merged branch '${COLOR_YELLOW}%s${COLOR_RESET}' locally? [y/N] " "$branch"
+    fi
+
+    read -r ans
+
+    case "$ans" in
+    [Yy] | [Yy][Ee][Ss])
+        # 本地分支刪除成功才會刪遠端
+        if git branch -d "$branch"; then
+            if [ "$DELETE_REMOTE" = "true" ]; then
+                if git push "$REMOTE_NAME" --delete "$branch" 2>/dev/null; then
+                    printf "Deleting remote branch '${COLOR_YELLOW}%s${COLOR_RESET}' from '${COLOR_YELLOW}%s${COLOR_RESET}' successfully." "$branch" "$REMOTE_NAME"
+                else
+                    printf "Fail to delete remote branch '${COLOR_YELLOW}%s${COLOR_RESET}' from '${COLOR_YELLOW}%s${COLOR_RESET}'." "$branch" "$REMOTE_NAME"
+                fi
+            fi
+        else
+            printf "Failed to delete local branch '${COLOR_YELLOW}%s${COLOR_RESET}'\n" "$branch"
+        fi
+        ;;
+    *)
+        printf "Skip branch: ${COLOR_YELLOW}%s${COLOR_RESET}\n" "$branch"
+        ;;
+    esac
+done
+
+printf "\nBranch cleanup completed.\n"
