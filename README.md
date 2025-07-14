@@ -2,9 +2,7 @@
 
 </br>
 
-<p align="center">
-  <img src=".github/dotfiles-demo.webp" width="90%" height="90%" alt="demo">
-</p>
+![](.github/dotfiles-demo.webp)
 
 ## How Fast Is It
 
@@ -19,9 +17,7 @@
 
 所有框架都公平的使用 zsh-defer 加速，測試項目的選擇從最廣泛使用的框架到手動優化，以便準確定位效能，可以看到比 Zinit 更快，基本上追平甚至超越不使用插件管理器的速度，同時又比 Zim 易於設定。
 
-<p align="center">
-  <img src=".github/benchmark-defer.svg" width="90%" height="90%" alt="benchmark">
-</p>
+![](.github/benchmark-defer.svg)
 
 [^test-method]: 測試執行於 M1 MacBook Pro 8G RAM，zsh-bench 使用預設值，測試總共載入的插件有 powerlevel10k, zsh-defer, zsh-syntax-highlighting, zsh-autosuggestions, zsh-completions, zsh-z, zsh-history-substring-search, extract, git。
 
