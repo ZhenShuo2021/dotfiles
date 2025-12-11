@@ -30,7 +30,7 @@
             case \"$file\" in \
                 *\"$1\"*) \
                     [ -t 1 ] || printf '\\n'; \
-                    git log --pretty=format:'%C(yellow)%h%Creset  %Cgreen%cs %C(auto)%d%Creset %s  %C(bold blue)<%an>%Creset' --decorate \"$@\"; \
+                    git log --pretty=format:'%C(yellow)%h%Creset  %Cgreen%cs %C(auto)%d%Creset %s  %C(bold blue)<%an>%Creset' --decorate \"$file\"; \
                 ;; \
             esac; \
         done; \

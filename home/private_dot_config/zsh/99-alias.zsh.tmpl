@@ -16,6 +16,7 @@ alias e="exit 0"
 alias reload!=". ~/.zshrc"
 alias switch_en="export LC_ALL='en_US.UTF-8'; export LANG='en_US.UTF-8'"
 alias switch_tw="export LC_ALL='zh_TW.UTF-8'; export LANG='zh_TW.UTF-8'"
+alias mount_r2="rclone mount 'cloudflarer2:/webimage/2025' '/Users/leo/rclone'"
 
 alias "cls"="clear"
 alias ".."="cd .."
@@ -79,6 +80,7 @@ alias 'gcnn!'='git commit --no-verify --amend --no-edit'
 # change both committer date and author date
 #   usage: 
 #     gcd "2025-02-24 15:30:00"
+#     gcd "20250224 153000"
 #     gcd now
 alias gcd='gcd(){ DATE=${1:-"now"}; [ "$DATE" = "now" ] && DATE=$(date "+%Y-%m-%d %H:%M:%S"); GIT_COMMITTER_DATE="$DATE" git commit --amend --date="$DATE" --allow-empty --no-edit; }; gcd'
 
@@ -89,6 +91,13 @@ alias 'gtlll'='gtlll(){ git tag --sort=-v:refname -n999 --format="[%(objectname:
 # alias 'gtlll'='gtlll(){ git tag --sort=-v:refname -n10 --format="[%(objectname:short) %(refname:short)] %(subject)" --list "${1}*" }; noglob gtlll'
 alias gca='git commit -a'
 alias gco='git checkout'
+gccd() {
+    git clone --recurse-submodules "$@" && cd "$(basename "$1" .git)"
+}
+
+gccdd1() {
+    git clone --recurse-submodules --shallow-submodules --depth=1 "$@" && cd "$(basename "$1" .git)"
+}
 alias gsw='git switch'
 alias gcp='git cherry-pick'
 alias grb='git rebase'
@@ -100,30 +109,9 @@ alias grbs='git rebase --skip'
 alias gb='git branch'
 alias gs='git status -sb'
 
-alias glog="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset'"
-alias gloga="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' --all"
+alias glog="git log --graph --pretty='%C(yellow)%h%Creset  %Cgreen%cs %C(auto)%d%Creset %s  %C(bold blue)<%an>%Creset %C(240)(%ar)%Creset'"
+alias gloga="git log --graph --pretty='%C(yellow)%h%Creset  %Cgreen%cs %C(auto)%d%Creset %s  %C(bold blue)<%an>%Creset %C(240)(%ar)%Creset' --all"
+alias glog-tag="git log --tags --simplify-by-decoration --pretty=format:'%C(yellow)%h  %Cgreen%cs  %Creset%s  %C(bold blue)<%an>%Creset %Cred%d'"
 alias gp='git push'
 alias 'gp!'='git push --force-with-lease --force-if-includes'
 # alias gd='git diff --color | sed "s/^\([^-+ ]*\)[-+ ]/\\1/" | less -r'
-
-# Example:
-    # delete_merged_branch                # 只刪除本地已合併分支
-    # delete_merged_branch true           # 刪除本地與遠端（使用 origin）
-    # delete_merged_branch true upstream  # 刪除本地與遠端 upstream
-delete_merged_branch() {
-    local delete_remote="${1:-false}"
-    local remote_name="${2:-origin}"
-    local branches=$(git branch --merged | grep -vE "^\*|master|main")
-
-    if [ -z "$branches" ]; then
-        echo "No merged branches found."
-        return 0
-    fi
-
-    for b in $branches; do
-        git branch -d "$b"
-    if [ "$delete_remote" = "true" ]; then
-        git push "$remote_name" --delete "$b"
-    fi
-    done
-}
