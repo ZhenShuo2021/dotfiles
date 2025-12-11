@@ -94,10 +94,17 @@ zcomet compinit
 eval "$(uv generate-shell-completion zsh)"
 eval "$(uvx --generate-shell-completion zsh)"
 
-# https://github.com/astral-sh/uv/issues/8432#issuecomment-2453494736
+# https://github.com/astral-sh/uv/issues/8432#issuecomment-3072615855
 _uv_run_mod() {
     if [[ "$words[2]" == "run" && "$words[CURRENT]" != -* ]]; then
-        _arguments '*:filename:_files'
+        # Check if any previous argument after 'run' ends with .py
+        if [[ ${words[3,$((CURRENT-1))]} =~ ".*\.py" ]]; then
+            # Already have a .py file, complete any files
+            _arguments '*:filename:_files'
+        else
+            # No .py file yet, complete only .py files
+            _arguments '*:filename:_files -g "*.py"'
+        fi
     else
         _uv "$@"
     fi
