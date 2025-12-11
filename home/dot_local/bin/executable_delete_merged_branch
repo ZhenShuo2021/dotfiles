@@ -53,9 +53,9 @@ for branch in "${BRANCH_ARRAY[@]}"; do
         if git branch -d "$branch"; then
             if [ "$DELETE_REMOTE" = "true" ]; then
                 if git push "$REMOTE_NAME" --delete "$branch" 2>/dev/null; then
-                    printf "Deleting remote branch '${COLOR_YELLOW}%s${COLOR_RESET}' from '${COLOR_YELLOW}%s${COLOR_RESET}' successfully." "$branch" "$REMOTE_NAME"
+                    printf "Deleting remote branch '${COLOR_YELLOW}%s${COLOR_RESET}' from '${COLOR_YELLOW}%s${COLOR_RESET}' successfully.\n" "$branch" "$REMOTE_NAME"
                 else
-                    printf "Fail to delete remote branch '${COLOR_YELLOW}%s${COLOR_RESET}' from '${COLOR_YELLOW}%s${COLOR_RESET}'." "$branch" "$REMOTE_NAME"
+                    printf "Fail to delete remote branch '${COLOR_YELLOW}%s${COLOR_RESET}' from '${COLOR_YELLOW}%s${COLOR_RESET}'.\n" "$branch" "$REMOTE_NAME"
                 fi
             fi
         else
